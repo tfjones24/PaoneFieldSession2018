@@ -1,10 +1,10 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Class Name</title>
-
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
@@ -15,11 +15,12 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
+
 </head>
-<body>
+<body >
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <div class="navbar-header">
+            <div class="navbar-header" style= "background-color: #21314d">
                 <!--
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -28,7 +29,7 @@
                     <span class="icon-bar"></span>
                 </button>
                     -->
-                <a asp-area="" asp-controller="Movies" asp-action="Index" class="navbar-brand">Class Name:</a>
+                <a asp-area="" asp-controller="Movies" asp-action="Index" class="navbar-brand" style="color: white">Class Name:</a>
             </div>
             <!--
             <div class="navbar-collapse collapse">
@@ -45,7 +46,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2018 - Movie App</p>
+            <p>&copy; 2018 - Field Session</p>
         </footer>
     </div>
 
