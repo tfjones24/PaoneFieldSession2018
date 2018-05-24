@@ -10,22 +10,36 @@
     <input name="filter" type="radio" value="Students" /> Students <br />
 </form>
 
+<div>
+    <h2>Section</h2>
 
-<h2>Section</h2>
-<form>
-    <select>
-        <option selected="selected" value="1">Section Dropdown</option>
-        <option value="2">No</option>
-    </select>
-</form>
-<h2>Quiz</h2>
-<form>
-    <select>
-        <option selected="selected" value="1">Quiz Dropdown</option>
-        <option value="2">No</option>
-    </select>
-</form>
+    <form>
+        <input checked="checked" type="checkbox" id="allsections" name="section" value="all">
+        <label for="allsections">Select All(add functionality later)</label>
+    </form>
+    <form>
+        <input type="checkbox" id="section1" name="section" value="all">
+        <label for="section2">A</label>
+    </form>
 
+    <form>
+        <input type="checkbox" id="section2" name="section" value="all">
+        <label for="section1">B</label>
+    </form>
+</div>
+
+<div>
+
+    <h2>Quiz</h2>
+    <form>
+        <select>
+            <option selected="selected" value="1">Quiz Dropdown</option>
+            <option value="2">No</option>
+        </select>
+    </form>
+</div>
+
+<div>
 <h2>Question</h2>
 <form>
     <select>
@@ -33,4 +47,4 @@
         <option value="2">No</option>
     </select>
 </form>
-
+</div>
