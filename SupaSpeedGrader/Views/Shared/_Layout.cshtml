@@ -10,7 +10,7 @@
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top" style= "background-color: #21314d">
+    <div class="navbar navbar-inverse navbar-fixed-top" style="background-color: #21314d">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -31,14 +31,35 @@
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer style="position:fixed">
-            <p>&copy; 2018 - Colorado School of Mines Computer Science Field Session Project tempProj </p>
-        </footer>
+
     </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
 
     @RenderSection("Scripts", required: false)
+    <style>
+        .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: red;
+            color: white;
+            text-align: center;
+        }
+    </style>
+
+    <div class="footer">
+        <p>Footer</p>
+    </div>
+    
+    <!--<footer style="position:fixed">
+        <p>&copy; 2018 - Colorado School of Mines Computer Science Field Session Project tempProj </p>
+    </footer>-->
 </body>
+
+
+
+
 </html>
