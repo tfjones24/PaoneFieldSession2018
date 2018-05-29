@@ -16,6 +16,10 @@ namespace SupaSpeedGrader.Controllers
             return View();
         }
 
+        public ActionResult Grade()
+        {
+            return View();
+        }
 
         // Following code copied in as a base
 
