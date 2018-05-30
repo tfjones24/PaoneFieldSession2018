@@ -3,9 +3,15 @@
     ViewBag.Title = "Grade";
 }
 
-<body style="width:100%">
-    <div>
-        <h1 style="color: #21314d"> Question Name </h1>
+<body>
+    <div style="display: flex; border-bottom:1px solid black">
+        <div style="float:left; width:30%">
+            <h3 style="color: #21314d"> Question Name </h3>
+        </div>
+        <div style="float:left; width:70%">
+            <p>NAVIGATION WOULD BE HERE</p>
+        </div>
+        
     </div>
     <p></p>
     <div>
@@ -20,27 +26,27 @@
                 <div style="float:left; width:20%">
                     <p>Picture</p>
                 </div>
-                <div style="float:left; width:60%">
+                <div style="float:left; width:60%;  border:1px solid black; border-radius:5px">
                     <p> Answer</p>
                 </div>
                 <div style="float:left; width:20%; ">
-                    <p>Grade: 10/20</p>
+                    <p> Grade : <input type="text" style="height:20px; width:20px; border:1px solid black; " name="grade" /> / 20 </p>
                     
                 </div>
             </div>
 
         </div>
         <!--- right column--->
-        <div style="float:left; width: 25%">
+        <div style="float:left; width: 25%;">
             <!--- top row--->
-            <div>
-                <div style="float:left; width:33%">
+            <div style="display: flex"> 
+                <div style="float:left; width:33%; border:1px solid black;">
                     <p style="color: blue">Highlight Keyword</p>
                 </div>
-                <div style="float:left; width:33%">
+                <div style="float:left; width:33%; border:1px solid black;">
                     <p style="color: blue"> Jump to...</p>
                 </div>
-                <div style="float:left; width:33%">
+                <div style="float:left; width:33%; border:1px solid black;">
                     <p style="color: blue"> Autograde and Filter</p>
                 </div>
             </div>
@@ -49,24 +55,25 @@
                 <p> RUBIC WOULD BE HERE </p>
             </div>
             <!--- next row--->
-            <div>
-                <div style="float:left; width:33%">
-                    <p style="background-color: #D3D3D3">Revert</p>
+            <div style="display: flex">
+                <div style="float:left; width:33%; border:1px solid black;background-color: #D3D3D3;">
+                    <p style="text-align:center">Revert</p>
                 </div>
-                <div style="float:left; width:33%">
-                    <p style="background-color: #D3D3D3"> Save</p>
+                <div style="float:left; width:33%; border:1px solid black; background-color: #D3D3D3">
+                    <p style="text-align:center"> Save</p>
                 </div>
-                <div style="float:left; width:33%">
-                    <p style="background-color: #D3D3D3"> Save and Next</p>
+                <div style="float:left; width:33%; background-color: #D3D3D3; border:1px solid black">
+                    <p style="text-align:center"> Save and Next</p>
                 </div>
             </div>
+            <p></p>
             <!--- Comment Box--->
             <div>
-                <p> Comment box </p>
+                <input type="text" style="height:100px; width:100%; border:1px solid black; border-radius:5px" name="comment"/>
             </div>
             <!--- Grade Box-->
-            <div>
-                <p> Grade</p>
+            <div style="height:10%">
+                <p> Grade : <input type="text" style="height:20px; width:20px; border:1px solid black; " name="grade" /> / 20 </p>
             </div>
         </div>
     </div>
