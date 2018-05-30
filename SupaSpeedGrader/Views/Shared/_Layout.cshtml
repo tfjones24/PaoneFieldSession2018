@@ -9,31 +9,26 @@
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top" style="background-color: #21314d">
-        <div class="container">
-            <div class="navbar-header" style=" color:white">
-                <!--             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-    </button>
-        @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-        --->
-            <h1 style=" color:white">Section Name</h1>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                </ul>
+<body >
+    <div class="navbar navbar-inverse navbar-fixed-top" style="background-color:#21314d">
+        <div class="container" >
+            <div class="navbar-header" style=" color:white; width:100%" >
+                <div style="float:left; width:80%">
+                    <h1 style=" color:white">Section Name</h1>
+                </div>
+                <div style=" float:left; width:10%;">
+                    <form action="../Home/Index"> <input type="image" src="https://image.flaticon.com/icons/png/512/61/61972.png" alt="HOME" height="40" width="40" /> </form>
+                </div>
+                <div style=" float:left; width:10%;">
+                    <form action="../Home/Help"> <input type="image" src="https://cdn3.iconfinder.com/data/icons/line/36/question-512.png" alt="HELP" height="40" width="40" /> </form>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="container body-content">
+    <div class="container body-content" style=" width:100%">
         @RenderBody()
         <hr />
-
     </div>
 
     @Scripts.Render("~/bundles/jquery")
@@ -41,7 +36,7 @@
 
     @RenderSection("Scripts", required: false)
     <style>
-        .footer {
+        .footer{
             position: fixed;
             left: 0;
             bottom: 0;
