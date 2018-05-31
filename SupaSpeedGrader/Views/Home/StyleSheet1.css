@@ -30,3 +30,13 @@
 .pagination{
     margin: 20px 0;
 }
+element.style{
+    width:678px;
+}
+.quiz-nav ul.nav, .quiz-nav-fullpage ul.nav{
+    overflow: hidden;
+    height:30px;
+    width: 984px;
+    position: relative;
+    z-index:10;
+}
