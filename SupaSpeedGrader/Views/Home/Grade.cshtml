@@ -1,14 +1,16 @@
 ﻿
 @{
     ViewBag.Title = "Grade";
+    int numStudent = 5;
+    int gradeOutOf = 20;
+    string answer1 = "Answer";
+    string name1 = "Name";
 }
 
 <head>
     <link rel="stylesheet" type = "text/css" href="StyleSheet1.css" />
     <script type="text/javascript">
-        var gradeOutOf = 20;
-        var answer1 = "Answer";
-        var name1 = "Name";
+        
     </script>
     <style>
         /* Style The Dropdown Button */
@@ -90,22 +92,23 @@
             </div>
             <!--- answer box --->
             <ul style=" list-style-type: none; padding: 0;">
+                @for (int x = 0; x < numStudent; x++)
+                {
                 <li>
-                    <div>
+                    <div style="display:flex">
                         <div style="float:left; width:15%">
-                            <p>
-                            <script type="text/javascript">document.write(name1)</script></p>
+                            <p> @name1  </p>
                         </div>
                         <div style="float:left; width:50%;  border:1px solid black; border-radius:5px">
-                            <p>
-                            <script type="text/javascript">document.write(answer1)</script></p>
+                            <p>@answer1</p>
                         </div>
                         <div style="float:left; width:35%; ">
-                            <p style="text-align:center">Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " name="grade" /> /
-                            <script type="text/javascript">document.write(gradeOutOf)</script> </p>
+                            <p style="text-align:center">Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " name="grade" /> / @gradeOutOf</p>
                         </div>
                     </div>
                 </li>
+                <p></p>
+                }
             </ul>
 
         </div>
@@ -146,7 +149,7 @@
             </div>
             <!--- Grade Box-->
             <div style="height:10%">
-                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " name="grade" /> / <script type="text/javascript"> document.write(gradeOutOf)</script></p >
+                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " name="grade" /> /@gradeOutOf</p >
                 </div >
             </div >
         </div >
