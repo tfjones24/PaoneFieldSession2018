@@ -1,4 +1,7 @@
-﻿using SupaSpeedGrader.Helpers;
+﻿using Newtonsoft.Json.Linq;
+using SupaSpeedGrader.API;
+using SupaSpeedGrader.Helpers;
+using SupaSpeedGrader.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -79,5 +82,33 @@ namespace SupaSpeedGrader.Controllers
             return View();
         }
 
+        // OH GOD WILLS authentication token: 9802~jT11gMJZiaByfs7vBVI2PFQje0YhKwtunlzpw8h6HAMuELHGXodejJzT2mONVMdS
+
+        public async Task<ActionResult> willName()
+        {
+            oauthHelper oauth = new oauthHelper(Request);
+
+            /***********************************************************/
+            //	Make sure the LTI signature is valid
+            /***********************************************************/
+            if (oauth.verifySignature())
+            {
+                string user_id = Request.Form.Get("custom_canvas_user_id");
+
+                Uri testUri = Request.Url;
+
+                JObject rval = await userCalls.getUserData("9802~jT11gMJZiaByfs7vBVI2PFQje0YhKwtunlzpw8h6HAMuELHGXodejJzT2mONVMdS", "https://" + Request.UrlReferrer.Host, user_id);
+
+                
+
+                willNameModel model = new willNameModel();
+                model.name = "SUCCESSish";
+                model.id = jsonHelpers.GetJArrayValue(rval, "name");
+                return View(model);
+            }
+            return View(new willNameModel());
+        }
+
+        
     }
 }
