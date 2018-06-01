@@ -21,14 +21,6 @@
         namesGrade.Add(names[x], "0");
     }
 }
-@{Boolean gradeChange(int y)
-    {
-        string a = Request.Form["grade"];
-        namesAnswer[names[y]] = "Graded";
-        namesGrade[names[y]] = a;
-        return true; 
-    }
-}
 
 <head>
     <link rel="stylesheet" type="text/css" href="StyleSheet1.css" />
@@ -126,8 +118,13 @@
                                 <p>@namesAnswer[names[x]]</p>
                             </div>
                             <div style="float:left; width:35%; ">
-                                <p style="text-align:center">Grade : <input type="number" style="height:20px; width:100px; border:1px solid black; " id="grade" value="@namesGrade[names[x]]" oninput="@gradeChange(x)"/> / @gradeOutOf</p>
-
+                                <p style="text-align:center">Grade : <input type="number" style="height:20px; width:100px; border:1px solid black; " id="grade" value="@namesGrade[names[x]]" oninput="myFunction(x)" /> / @gradeOutOf</p>
+                                <script> function myFunction(var x) {
+                                        @{string a = Request.Form["grade"];
+                                            namesAnswer[names[x]] = "Graded";
+                                            namesGrade[names[x]] = a;
+                                        }
+                                }</script>
                             </div>
                         </div>
                     </li>
