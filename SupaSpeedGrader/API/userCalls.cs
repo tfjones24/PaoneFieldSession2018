@@ -46,5 +46,119 @@ namespace SupaSpeedGrader.API
 
             return rval;
         }
+        /**
+         * Gets a list of all the quizes in the given course, to be used for quiz selection.  
+         * TODO we need to taransfer the quiz ID that is selected into the next function to get that specific quiz
+        */
+        public static async Task<dynamic> getListQuizzesInCourse(string accessToken, string baseUrl, string canvasCourseId)
+        {
+            dynamic rval = null;
+            string urlCommand = "/api/v1/courses/:course_id/quizzes";
+
+            urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
+
+            using (HttpResponseMessage response = await clsHttpMethods.httpGET(baseUrl, urlCommand, accessToken))
+            {
+                string result = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    rval = JsonConvert.DeserializeObject(result);
+                }
+                else
+                {
+                    throw new Exception(result);
+                }
+            }
+
+            return rval;
+
+        }
+
+        /**
+         * Gets a single quiz object, given the courseID and QuizID
+         * 
+        */
+        public static async Task<dynamic> getQuizInCourse(string accessToken, string baseUrl, string canvasCourseId, string canvasQuizId)
+        {
+            dynamic rval = null;
+            string urlCommand = "/api/v1/courses/:course_id/quizzes/:id";
+
+            urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
+            urlCommand = urlCommand.Replace(":id", canvasQuizId);
+
+            using (HttpResponseMessage response = await clsHttpMethods.httpGET(baseUrl, urlCommand, accessToken))
+            {
+                string result = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    rval = JsonConvert.DeserializeObject(result);
+                }
+                else
+                {
+                    throw new Exception(result);
+                }
+            }
+
+            return rval;
+
+        }
+        /**
+         * Gets a single quiz question given the CourseID, QuizID, and QuestionID
+         * 
+        */ 
+        public static async Task<dynamic> getQuizQuestion(string accessToken, string baseUrl, string canvasCourseId, string canvasQuizId, string canvasQuizQuestionId)
+        {
+            dynamic rval = null;
+            string urlCommand = "/api/v1/courses/:course_id/quizzes/:quiz_id/questions/:id";
+
+            urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
+            urlCommand = urlCommand.Replace(":quiz_id", canvasQuizId);
+            urlCommand = urlCommand.Replace(":id", canvasQuizQuestionId);
+
+            using (HttpResponseMessage response = await clsHttpMethods.httpGET(baseUrl, urlCommand, accessToken))
+            {
+                string result = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    rval = JsonConvert.DeserializeObject(result);
+                }
+                else
+                {
+                    throw new Exception(result);
+                }
+            }
+
+            return rval;
+
+        }
+
+        /**
+         * Quiz submission IDs and student ids need to be tied somehow.  
+         * This function should get the answers for a specific quiz submission, which should be tied to the student.  It will also contain the correct answers depending on the question type
+        */
+        public static async Task<dynamic> getQuizSubmissionQuestions(string accessToken, string baseUrl, string canvasQuizSubmissionId)
+        {
+            dynamic rval = null;
+            string urlCommand = "/api/v1/quiz_submissions/:quiz_submission_id/questions";
+
+            urlCommand = urlCommand.Replace(":quiz_submission_id", canvasQuizSubmissionId);
+
+            using (HttpResponseMessage response = await clsHttpMethods.httpGET(baseUrl, urlCommand, accessToken))
+            {
+                string result = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    rval = JsonConvert.DeserializeObject(result);
+                }
+                else
+                {
+                    throw new Exception(result);
+                }
+            }
+
+            return rval;
+
+        }
+
     }
 }
