@@ -48,11 +48,11 @@
                     </script>
                     <input checked="checked" onClick="toggle(this)" type="checkbox" id="allsections" name="section" value="all">
                     <label for="allsections">Select All(add functionality later)</label>
-                   
+
                     @{ for (int i = 0; i < sections.Count; i++)
                         {
-                    <input type="checkbox" checked="checked" id="section" name="foo" value="all">
-                    <label for="section">@sections[i]</label>
+                            <input type="checkbox" checked="checked" id="section" name="foo" value="all">
+                            <label for="section">@sections[i]</label>
                         }
                     }
                 </form>
@@ -60,27 +60,28 @@
             <div>
                 <h2>Quiz</h2>
                 <form>
-                    <select>
-                        @{ 
+                    <select id="quiz" onchange="quizFunction()">
+                        @{
                             for (int i = 0; i < quizzes.Count; i++)
                             {
-                        <option value=i+1>@quizzes[i]</option>
+                                <option value=@quizzes[i]>@quizzes[i]</option>
                             }
-                            }
+                        }
                     </select>
+                    <p id="demo"></p>
                 </form>
             </div>
             <div>
                 <h2>Question</h2>
                 <form>
                     <select>
-                        @{ 
+                        @{
                             for (int i = 0; i < questions.Count; i++)
                             {
-                    
-                        <option value=i+1>@questions[i]</option>
-                                }
+
+                                <option value=@questions[i]>@questions[i]</option>
                             }
+                        }
                     </select>
                 </form>
             </div>
@@ -97,4 +98,11 @@
             <p></p>
         </div>
     </div>
+    <script>
+        function quizFunction() {
+            var x = document.getElementById("quiz").value;
+            document.getElementById("demo").innerHTML = "You selected: " + x;
+        }
+    </script>
+
 </body>
