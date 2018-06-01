@@ -1,5 +1,31 @@
 ﻿@{
     ViewData["Title"] = "Movie List";
+
+
+    List<string> sections = new List<string>();
+    sections.Add("A");
+    sections.Add("B");
+    sections.Add("C");
+    List<string> quizzes = new List<string>();
+    quizzes.Add("Apple");
+    quizzes.Add("Banana");
+    quizzes.Add("Cucumber");
+    List<string> questions = new List<string>();
+    questions.Add("Alpha");
+    questions.Add("Bravo");
+    questions.Add("Charlie");
+    Dictionary<string, List<string>> quizdata = new Dictionary<string, List<string>>();
+
+
+    /* this needs to be better coded when we actually pull in data to match questions to quizzes*/
+
+
+    for (int i = 0; i < quizzes.Count; i++)
+    {
+        quizdata.Add(quizzes[i], questions);
+    }
+
+
 }
 
 <body>
@@ -9,26 +35,38 @@
             <div>
                 <h2>Section</h2>
 
-                <form>
-                    <input checked="checked" type="checkbox" id="allsections" name="section" value="all">
-                    <label for="allsections">Select All(add functionality later)</label>
-                </form>
-                <form>
-                    <input type="checkbox" id="section1" name="section" value="all">
-                    <label for="section2">A</label>
-                </form>
+
 
                 <form>
-                    <input type="checkbox" id="section2" name="section" value="all">
-                    <label for="section1">B</label>
+                    <script language="JavaScript">
+                        function toggle(source) {
+                            checkboxes = document.getElementsByName('foo');
+                            for (var i = 0, n = checkboxes.length; i < n; i++) {
+                                checkboxes[i].checked = source.checked;
+                            }
+                        }
+                    </script>
+                    <input checked="checked" onClick="toggle(this)" type="checkbox" id="allsections" name="section" value="all">
+                    <label for="allsections">Select All(add functionality later)</label>
+                   
+                    @{ for (int i = 0; i < sections.Count; i++)
+                        {
+                    <input type="checkbox" checked="checked" id="section" name="foo" value="all">
+                    <label for="section">@sections[i]</label>
+                        }
+                    }
                 </form>
             </div>
             <div>
                 <h2>Quiz</h2>
                 <form>
                     <select>
-                        <option selected="selected" value="1">Quiz Dropdown</option>
-                        <option value="2">No</option>
+                        @{ 
+                            for (int i = 0; i < quizzes.Count; i++)
+                            {
+                        <option value=i+1>@quizzes[i]</option>
+                            }
+                            }
                     </select>
                 </form>
             </div>
@@ -36,8 +74,13 @@
                 <h2>Question</h2>
                 <form>
                     <select>
-                        <option selected="selected" value="1">Question Dropdown</option>
-                        <option value="2">No</option>
+                        @{ 
+                            for (int i = 0; i < questions.Count; i++)
+                            {
+                    
+                        <option value=i+1>@questions[i]</option>
+                                }
+                            }
                     </select>
                 </form>
             </div>
