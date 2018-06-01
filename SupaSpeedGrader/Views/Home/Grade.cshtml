@@ -15,13 +15,25 @@
     namesAnswer.Add(names[2], "Charlie");
     namesAnswer.Add(names[3], "Delta");
     namesAnswer.Add(names[4], "Epsilon");
-    Dictionary<string, int> namesGrade = new Dictionary<string, int>();
+    Dictionary<string, string> namesGrade = new Dictionary<string, string>();
+    for (int x = 0; x < names.Count(); ++x)
+    {
+        namesGrade.Add(names[x], "0");
+    }
+}
+@{Boolean gradeChange(int y)
+    {
+        string a = Request.Form["grade"];
+        namesAnswer[names[y]] = "Graded";
+        namesGrade[names[y]] = a;
+        return true; 
+    }
 }
 
 <head>
-    <link rel="stylesheet" type = "text/css" href="StyleSheet1.css" />
+    <link rel="stylesheet" type="text/css" href="StyleSheet1.css" />
     <script type="text/javascript">
-        
+
     </script>
     <style>
         /* Style The Dropdown Button */
@@ -72,7 +84,6 @@
         .dropdown:hover .dropbtn {
             background-color: #3e8e41;
         }
-
     </style>
 
 </head>
@@ -106,20 +117,21 @@
             <ul style=" list-style-type: none; padding: 0;">
                 @for (int x = 0; x < numStudent; x++)
                 {
-                <li>
-                    <div style="display:flex">
-                        <div style="float:left; width:15%">
-                            <p> @names[x]  </p>
+                    <li>
+                        <div style="display:flex">
+                            <div style="float:left; width:15%">
+                                <p> @names[x]  </p>
+                            </div>
+                            <div style="float:left; width:50%;  border:1px solid black; border-radius:5px">
+                                <p>@namesAnswer[names[x]]</p>
+                            </div>
+                            <div style="float:left; width:35%; ">
+                                <p style="text-align:center">Grade : <input type="number" style="height:20px; width:100px; border:1px solid black; " id="grade" value="@namesGrade[names[x]]" oninput="@gradeChange(x)"/> / @gradeOutOf</p>
+
+                            </div>
                         </div>
-                        <div style="float:left; width:50%;  border:1px solid black; border-radius:5px">
-                            <p>@namesAnswer[names[x]]</p>
-                        </div>
-                        <div style="float:left; width:35%; ">
-                            <p style="text-align:center">Grade : <input type="number" style="height:20px; width:100px; border:1px solid black; " name="grade" /> / @gradeOutOf</p>
-                        </div>
-                    </div>
-                </li>
-                <p></p>
+                    </li>
+                    <p></p>
                 }
             </ul>
 
@@ -127,7 +139,7 @@
         <!--- right column--->
         <div style="float:left; width: 25%;">
             <!--- top row--->
-            <div style="display: flex"> 
+            <div style="display: flex">
                 <div style="float:left; width:33%; border-right:2px solid black;">
                     <form> <p style="color: blue; font-size:70%">Highlight Keyword</p></form>
                 </div>
@@ -161,11 +173,11 @@
             </div>
             <!--- Grade Box-->
             <div style="height:10%">
-                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " name="grade" /> /@gradeOutOf</p >
-                </div >
-            </div >
-        </div >
-</body >
+                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " name="grade" /> /@gradeOutOf</p>
+            </div>
+        </div>
+    </div>
+</body>
 
 
 
