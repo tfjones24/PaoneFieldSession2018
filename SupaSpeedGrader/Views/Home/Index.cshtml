@@ -2,8 +2,6 @@
     ViewData["Title"] = "Movie List";
 
 
-    Dictionary<string, Dictionary<string, List<string>>> fulldata = new Dictionary<string, Dictionary<string, List<string>>>();
-
     List<string> sections = new List<string>();
     sections.Add("A");
     sections.Add("B");
@@ -17,18 +15,17 @@
     questions.Add("Bravo");
     questions.Add("Charlie");
     Dictionary<string, List<string>> quizdata = new Dictionary<string, List<string>>();
-    for (int x = 0; x < sections.Count; x++)
+
+
+    /* this needs to be better coded when we actually pull in data to match questions to quizzes*/
+
+
+    for (int i = 0; i < quizzes.Count; i++)
     {
-
-        /* this needs to be better coded when we actually pull in data to match questions to quizzes*/
-        quizdata.Clear();
-
-        for (int i = 0; i < quizzes.Count; i++)
-        {
-                quizdata.Add(quizzes[i], questions);
-        }
-        fulldata.Add(sections[x], quizdata);
+        quizdata.Add(quizzes[i], questions);
     }
+
+
 }
 
 <body>
@@ -51,18 +48,25 @@
                     </script>
                     <input checked="checked" onClick="toggle(this)" type="checkbox" id="allsections" name="section" value="all">
                     <label for="allsections">Select All(add functionality later)</label>
-                    <input type="checkbox" checked="checked" id="section1" name="foo" value="all">
-                    <label for="section2">A</label>
-                    <input type="checkbox" checked="checked" id="section2" name="foo" value="all">
-                    <label for="section1">B</label>
+                   
+                    @{ for (int i = 0; i < sections.Count; i++)
+                        {
+                    <input type="checkbox" checked="checked" id="section" name="foo" value="all">
+                    <label for="section">@sections[i]</label>
+                        }
+                    }
                 </form>
             </div>
             <div>
                 <h2>Quiz</h2>
                 <form>
                     <select>
-                        <option selected="selected" value="1">Quiz Dropdown</option>
-                        <option value="2">No</option>
+                        @{ 
+                            for (int i = 0; i < quizzes.Count; i++)
+                            {
+                        <option value=i+1>@quizzes[i]</option>
+                            }
+                            }
                     </select>
                 </form>
             </div>
@@ -70,8 +74,13 @@
                 <h2>Question</h2>
                 <form>
                     <select>
-                        <option selected="selected" value="1">Question Dropdown</option>
-                        <option value="2">No</option>
+                        @{ 
+                            for (int i = 0; i < questions.Count; i++)
+                            {
+                    
+                        <option value=i+1>@questions[i]</option>
+                                }
+                            }
                     </select>
                 </form>
             </div>
