@@ -1,5 +1,34 @@
 ﻿@{
     ViewData["Title"] = "Movie List";
+
+
+    Dictionary<string, Dictionary<string, List<string>>> fulldata = new Dictionary<string, Dictionary<string, List<string>>>();
+
+    List<string> sections = new List<string>();
+    sections.Add("A");
+    sections.Add("B");
+    sections.Add("C");
+    List<string> quizzes = new List<string>();
+    quizzes.Add("Apple");
+    quizzes.Add("Banana");
+    quizzes.Add("Cucumber");
+    List<string> questions = new List<string>();
+    questions.Add("Alpha");
+    questions.Add("Bravo");
+    questions.Add("Charlie");
+    Dictionary<string, List<string>> quizdata = new Dictionary<string, List<string>>();
+    for (int x = 0; x < sections.Count; x++)
+    {
+
+        /* this needs to be better coded when we actually pull in data to match questions to quizzes*/
+        quizdata.Clear();
+
+        for (int i = 0; i < quizzes.Count; i++)
+        {
+                quizdata.Add(quizzes[i], questions);
+        }
+        fulldata.Add(sections[x], quizdata);
+    }
 }
 
 <body>
