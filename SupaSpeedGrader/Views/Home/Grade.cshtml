@@ -21,7 +21,6 @@
         namesGrade.Add(names[x], "0");
     }
 }
-
 <head>
     <link rel="stylesheet" type="text/css" href="StyleSheet1.css" />
     <script type="text/javascript">
@@ -118,13 +117,12 @@
                                 <p>@namesAnswer[names[x]]</p>
                             </div>
                             <div style="float:left; width:35%; ">
-                                <p style="text-align:center">Grade : <input type="number" style="height:20px; width:100px; border:1px solid black; " id="grade" value="@namesGrade[names[x]]" oninput="myFunction(x)" /> / @gradeOutOf</p>
-                                <script> function myFunction(var x) {
-                                        @{string a = Request.Form["grade"];
-                                            namesAnswer[names[x]] = "Graded";
-                                            namesGrade[names[x]] = a;
-                                        }
-                                }</script>
+                                @{string demo = "demo" + x;
+                                }
+                                <p style="text-align:center"> Grade :<input type="number" style="height:20px; width:100px; border:1px solid black; " id="@names[x]" value="@namesGrade[names[x]]" oninput="myFunction('@names[x]','@demo')" /> / @gradeOutOf</p>
+
+                                <p id="@demo"></p>
+
                             </div>
                         </div>
                     </li>
@@ -174,6 +172,14 @@
             </div>
         </div>
     </div>
+
+    <p></p>
+    <script>
+        function myFunction(x,z) {
+            var y = document.getElementById(x).value ;
+            document.getElementById(z).innerHTML = "You wrote: " + y;
+        }
+    </script>
 </body>
 
 
