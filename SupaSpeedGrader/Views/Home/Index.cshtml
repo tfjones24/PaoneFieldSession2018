@@ -28,7 +28,7 @@
                     @{ for (int i = 0; i < Model.sections.Count; i++)
                         {
                          <br />
-                            <input type="checkbox" checked="checked" id="section" name="foo" value=@sections[i]>
+                            <input type="checkbox" checked="checked" id="section" name="foo" value=@Model.sections[i]>
                             <label for="section">@Model.sections[i]</label>
                         }
                     }
@@ -53,10 +53,11 @@
                 <h2>Question</h2>
                 <form>
                     <select>
+                        @TODO: parse selected quiz name and use to fill questions
                         @{
-                            for (int i = 0; i < Model.questions.Count; i++)
+                            for (int i = 0; i < Model.quizdata[SELECTEDQUIZNAME].Count; i++)
                             {
-                                <option value=@Model.questions[i]>@Model.questions[i]</option>
+                                <option value=@Model.quizdata[SELECTEDQUIZNAME][i]>@Model.quizdata[SELECTEDQUIZNAME][i]</option>
                             }
                         }
                     </select>

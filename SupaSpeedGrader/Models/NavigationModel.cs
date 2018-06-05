@@ -7,19 +7,21 @@ namespace SupaSpeedGrader.Models
 {
     public class NavigationModel
     {
-
+        //Public data to fill from API calls
         public List<string> sections = new List<string>();
         public List<string> quizzes = new List<string>();
-        public List<string> questions = new List<string>();
 
         public Dictionary<string, List<string>> quizdata = new Dictionary<string, List<string>>();
+
+        //Garbage to ignore, only for hardcoded bullshit
+        private List<string> questions = new List<string>();
 
         public NavigationModel()
         {
         }
 
-        //Rebuilds quizdata dictionary with quiz data
-        public void updateQuizData()
+        //Rebuilds quizdata dictionary with quiz data FOR HARDCODING ONLY
+        private void updateQuizData()
         {
             quizdata = new Dictionary<string, List<string>>();
 
