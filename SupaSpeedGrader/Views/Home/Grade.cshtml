@@ -136,7 +136,8 @@
             <!--- top row--->
             <div style="display: flex">
                 <div style="float:left; width:33%; border-right:2px solid black;">
-                    <form> <p style="color: blue; font-size:70%">Highlight Keyword</p></form>
+                    <form><p style="color: blue; font-size:70%">Highlight Keyword</p></form>
+
                 </div>
                 <div style="float:left; width:33%; border-right:2px solid black;">
                     <form><p style="color: blue;font-size:70%"> Jump to...</p></form>
@@ -150,17 +151,17 @@
                 <p> RUBIC WOULD BE HERE </p>
             </div>
             <!--- next row--->
-            <div style="display: flex">
-                <div style="float:left; width:33%; border:1px solid black;background-color: #D3D3D3;">
-                    <form><p style="text-align:center">Revert</p> </form>
+                <div style="display: flex">
+                    <div style="float:left; width:33%;">
+                        <form><input type="button" style="width:100%; background-color:#D3D3D3" value=" Revert" onclick="revert();" /></form>
+                    </div>
+                    <div style="float:left; width:33%;">
+                        <form><input type="button" style="width:100%; background-color:#D3D3D3" value="Save" onclick="save();"/></form>
+                    </div>
+                    <div style="float:left; width:33%;">
+                        <form ><input type="button" style="width:100%; background-color:#D3D3D3" value="Save&Next"onclick="saveNext();"/></form>
+                    </div>
                 </div>
-                <div style="float:left; width:33%; border:1px solid black; background-color: #D3D3D3">
-                    <form><p style="text-align:center"> Save</p> </form>
-                </div>
-                <div style="float:left; width:33%; background-color: #D3D3D3; border:1px solid black">
-                    <form><p style="text-align:center"> Save and Next</p></form>
-                </div>
-            </div>
             <p></p>
             <!--- Comment Box--->
             <div>
@@ -173,11 +174,20 @@
         </div>
     </div>
 
-    <p></p>
+    <p id="action"></p>
     <script>
         function myFunction(x,z) {
             var y = document.getElementById(x).value ;
             document.getElementById(z).innerHTML = "You wrote: " + y;
+        }
+        function revert() {
+            document.getElementById(action).innerHTML = "You pressed revert";
+        }
+        function save() {
+            document.getElementById(action).innerHTML = "You pressed save";
+        }
+        function saveNext() {
+            document.getElementById(action).innerHTML = "You pressed save&next";
         }
     </script>
 </body>
