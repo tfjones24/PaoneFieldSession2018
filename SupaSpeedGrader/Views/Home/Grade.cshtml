@@ -43,6 +43,13 @@
 
     </script>
     <style>
+        #response {
+            background-color: white;
+        }
+        #potato{
+            background-color: lightgreen;
+        }
+
      
         /* Style The Dropdown Button */
         .dropbtn {
@@ -122,31 +129,34 @@
                 <p> Question </p>
             </div>
             <!--- answer box --->
-            <ul style=" list-style-type: none; padding: 0;">
-                @for (int x = 0; x < numStudent; x++)
-                {
-                    <li>
-                        <div style="display:flex">
-                            <div style="float:left; width:15%">
-                                <p> @names[x]  </p>
-                            </div>
-                            <div style="float:left; width:50%;  border:1px solid black; border-radius:5px">
-                                <p>@namesAnswer[names[x]]</p>
-                            </div>
-                            <div style="float:left; width:35%; ">
-                                @{
-                                    string demo = "demo" + x;
-                                }
-                                <p style="text-align:center"> Grade :<input type="number" style="height:20px; width:100px; border:1px solid black; " id='@names[x]' value='@namesGrade[names[x]]' onchange="myFunction('@names[x]','@demo')" /> / @gradeOutOf</p>
-
-                                <p id="@demo"></p>
-
-                            </div>
-                        </div>
-                    </li>
-                    <p></p>
+            
+            <div >
+                <ul style=" list-style-type: none; padding: 0;">
+                    @for (int x = 0; x < numStudent; x++)
+                    {
+                        <li>
+                            <div style="display:flex" id='response' onMouseOver="highlightResponse(this)">
+                                <div style="float:left; width:15%; background-color:transparent">
+                                    <p> @names[x]  </p>
+                                </div>
+                                <div style="float:left; width:50%;  border:1px solid black; border-radius:5px; background-color:transparent">
+                                    <p>@namesAnswer[names[x]]</p>
+                                </div>
+                                <div style="float:left; width:35%; ">
+                                    @{
+                                        string demo = "demo" + x;
                                     }
-            </ul>
+                                    <p style="text-align:center"> Grade :<input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='@names[x]' value='@namesGrade[names[x]]' onchange="myFunction('@names[x]','@demo')" /> / @gradeOutOf</p>
+
+                                    <p id="@demo"></p>
+
+                                </div>
+                            </div>
+                        </li>
+                        <p></p>
+                    }
+                </ul>
+            </div>
 
         </div>
         <!--- right column--->
@@ -176,7 +186,7 @@
                                 string clap = "rubr" + i;
                            
                             <div style=" float:left; width:@width%;border:1px solid black" >
-                                <input onclick="highlight(this)" type="button"  style="width:100%; background-color:white; border:none"value="@rubic[i][j]" id='@clap' />
+                                <input onclick="highlightRubic(this)" type="button"  style="width:100%; background-color:white; border:none"value="@rubic[i][j]" id='@clap' />
                             </div>
                         }
                     </div>
@@ -226,7 +236,7 @@
             document.getElementById("action").innerHTML = "You pressed save&next";
         }
 
-        function highlight(source) {
+        function highlightRubic(source) {
 
             var buttons = document.querySelectorAll('#' + source.id);
 
@@ -237,6 +247,15 @@
             }
 
             source.style = "width:100%; background-color:lightgreen; border:none"
+
+        }
+        function highlightResponse(source) {
+            //var responses = document.querySelectAll('#' + source.id)
+          //  for (var i = 0; i < responses.length; i++) {
+        //        responses[i] = 
+            //}
+            document.getElementById('potato').id='response';
+            source.id = 'potato';
 
         }
     </script>
