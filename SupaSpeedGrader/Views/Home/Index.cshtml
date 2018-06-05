@@ -3,6 +3,18 @@
 @{
     ViewData["Title"] = "Not a Movie List";
 }
+<style>
+    .hidden {
+        visibility: hidden;
+        overflow: hidden;
+        width: 0px;
+        height: 0px;
+    }
+    .visible {
+        visibility: visible;
+        overflow: visible;
+    }
+</style>
 
 <body>
     <p></p>
@@ -51,16 +63,16 @@
             </div>
             <div>
                 <h2>Question</h2>
-                <form>
-                    <select>
-                        @TODO: parse selected quiz name and use to fill questions
+                <form >
+                    <select id="questionDrop" class="hidden">
+                        
                         @{
-                            for (int i = 0; i < Model.quizdata[SELECTEDQUIZNAME].Count; i++)
+                            for (int i = 0; i < Model.quizdata.Count; i++)
                             {
-                                <option value=@Model.quizdata[SELECTEDQUIZNAME][i]>@Model.quizdata[SELECTEDQUIZNAME][i]</option>
+                                <option value=@Model.questions[i]>@Model.questions[i]</option>
                             }
                         }
-                    </select>
+                    </select id="questionDrop">
                 </form>
             </div>
             <p></p>
@@ -76,11 +88,20 @@
             <p></p>
         </div>
     </div>
+
+
     <script>
         function quizFunction() {
             var x = document.getElementById("quiz").value;
             if (x != "") {
                 document.getElementById("demo").innerHTML = "You selected: " + x;
+                document.getElementById("questionDrop").className = "visible";
+                document.getElementById("demo").innerHTML = "You chose: " + x;
+            }
+            else {
+                document.getElementById("questionDrop").className = "hidden";
+                document.getElementById("questionDrop").value = "";
+                document.getElementById("demo").innerHTML = "";
             }
         }
     </script>

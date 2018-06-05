@@ -16,7 +16,9 @@ namespace SupaSpeedGrader.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            NavigationModel nav = new NavigationModel();
+            nav.addHardValue();
+            return View(nav);
         }
 
         public ActionResult Grade()
