@@ -14,7 +14,7 @@ namespace SupaSpeedGrader.Models
         public Dictionary<string, List<string>> quizdata = new Dictionary<string, List<string>>();
 
         //Garbage to ignore, only for hardcoded bullshit
-        private List<string> questions = new List<string>();
+        public List<string> questions = new List<string>();
 
         public NavigationModel()
         {
