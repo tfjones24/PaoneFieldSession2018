@@ -164,6 +164,8 @@
     <Compile Include="Helpers\jsonHelpers.cs" />
     <Compile Include="Helpers\ltiLaunchParams.cs" />
     <Compile Include="Helpers\oauthHelper.cs" />
+    <Compile Include="Models\GradeModel.cs" />
+    <Compile Include="Models\NavigationModel.cs" />
     <Compile Include="Models\willNameModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -215,6 +217,8 @@
     <Content Include="Scripts\esm\popper-utils.min.js.map" />
     <Content Include="Scripts\esm\popper-utils.js.map" />
     <Content Include="NLog.config" />
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\CustomProfile1.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
