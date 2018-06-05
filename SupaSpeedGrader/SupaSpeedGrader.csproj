@@ -164,6 +164,8 @@
     <Compile Include="Helpers\jsonHelpers.cs" />
     <Compile Include="Helpers\ltiLaunchParams.cs" />
     <Compile Include="Helpers\oauthHelper.cs" />
+    <Compile Include="Models\GradeModel.cs" />
+    <Compile Include="Models\NavigationModel.cs" />
     <Compile Include="Models\willNameModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
