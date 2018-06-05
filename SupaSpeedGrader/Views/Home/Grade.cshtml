@@ -43,12 +43,7 @@
 
     </script>
     <style>
-        #response {
-            background-color: white;
-        }
-        #potato{
-            background-color: lightgreen;
-        }
+
 
      
         /* Style The Dropdown Button */
@@ -134,25 +129,25 @@
                 <ul style=" list-style-type: none; padding: 0;">
                     @for (int x = 0; x < numStudent; x++)
                     {
-                        <li>
-                            <div style="display:flex" id='response' onMouseOver="highlightResponse(this)">
-                                <div style="float:left; width:15%; background-color:transparent">
+                        <li id='response' onclick="highlightResponse(this)" style="background-color:white">
+                            <div style="display:flex; background-color:transparent" onclick="highlightResponse(this)" >
+                                <div style="float:left; width:15%; background-color:transparent" onclick="highlightResponse(this)">
                                     <p> @names[x]  </p>
                                 </div>
-                                <div style="float:left; width:50%;  border:1px solid black; border-radius:5px; background-color:transparent">
+                                <div style="float:left; width:50%;  border:1px solid black; border-radius:5px; background-color:transparent" onclick="highlightResponse(this)">
                                     <p>@namesAnswer[names[x]]</p>
                                 </div>
-                                <div style="float:left; width:35%; ">
+                                <div style="float:left; width:35%; " onclick="highlightResponse(this)">
                                     @{
                                         string demo = "demo" + x;
                                     }
-                                    <p style="text-align:center"> Grade :<input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='@names[x]' value='@namesGrade[names[x]]' onchange="myFunction('@names[x]','@demo')" /> / @gradeOutOf</p>
+                                    <p onclick="highlightResponse(this)" style="text-align:center"> Grade :<input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='@names[x]' value='@namesGrade[names[x]]' onchange="myFunction('@names[x]','@demo')" /> / @gradeOutOf</p>
 
                                     <p id="@demo"></p>
 
                                 </div>
                             </div>
-                        </li>
+                        </li onMouseOver="highlightResponse(this)">
                         <p></p>
                     }
                 </ul>
@@ -243,7 +238,6 @@
 
             for (var x = 0; x < buttons.length; x++) {
                 buttons[x].style = "width:100%; background-color:white; border:none";
-                document.getElementById("action").innerHTML = source.id;
             }
 
             source.style = "width:100%; background-color:lightgreen; border:none"
@@ -254,8 +248,12 @@
           //  for (var i = 0; i < responses.length; i++) {
         //        responses[i] = 
             //}
-            document.getElementById('potato').id='response';
-            source.id = 'potato';
+            document.getElementById("action").innerHTML = "POTATO";
+            var responses = document.querySelectorAll('#response');
+            for (var x = 0; x < responses.length) {
+                responses[x].style = "background-color:white";
+            }
+            source.style="background-color:lightgreen"
 
         }
     </script>
