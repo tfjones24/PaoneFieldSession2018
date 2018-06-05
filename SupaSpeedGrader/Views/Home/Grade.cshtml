@@ -1,5 +1,5 @@
 ﻿
-@{
+@{ string[] alphabet = { "a", "b", "c", "d", "e", "f", "g", "h", "'i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
     ViewBag.Title = "Grade";
     int numStudent = 5;
     int gradeOutOf = 20;
@@ -20,6 +20,22 @@
     {
         namesGrade.Add(names[x], "0");
     }
+    int rubicRows = 5;
+    int rubicCols = 3;
+    int width = 100 / rubicCols;
+    List<List<string>> rubic = new List<List<string>>();
+    int y = 0;
+    for(int i=0; i<rubicRows; ++i)
+    {
+        List<String> row = new List<string>();
+        for(int j=0; j < rubicCols; ++j)
+        {
+            row.Add(alphabet[y]);
+            y++;
+        }
+        rubic.Add(row);
+    }
+    string rubicTitle = "Rubic";
 }
 <head>
     <link rel="stylesheet" type="text/css" href="StyleSheet1.css" />
@@ -148,20 +164,32 @@
             </div>
             <!--- Rubic--->
             <div>
-                <p> RUBIC WOULD BE HERE </p>
+                <p>@rubicTitle</p>
+                @for (int i = 0; i < rubicRows; ++i)
+                {<div style="display: flex">
+                        @for (int j = 0; j < rubicCols; ++j)
+                        {
+                            <div style=" float:left; width:@width%;border:1px solid black">
+                                <p> @rubic[i][j]</p>
+                            </div>
+                        }
+                    </div>
+                }
+
             </div>
+            <p></p>
             <!--- next row--->
-                <div style="display: flex">
-                    <div style="float:left; width:33%;">
-                        <form><input type="button" style="width:100%; background-color:#D3D3D3" value=" Revert" onclick="revert();" /></form>
-                    </div>
-                    <div style="float:left; width:33%;">
-                        <form><input type="button" style="width:100%; background-color:#D3D3D3" value="Save" onclick="save();"/></form>
-                    </div>
-                    <div style="float:left; width:33%;">
-                        <form ><input type="button" style="width:100%; background-color:#D3D3D3" value="Save&Next"onclick="saveNext();"/></form>
-                    </div>
+            <div style="display: flex">
+                <div style="float:left; width:33%;">
+                    <form><input type="button" style="width:100%; background-color:#D3D3D3" value=" Revert" onclick="revert();" /></form>
                 </div>
+                <div style="float:left; width:33%;">
+                    <form><input type="button" style="width:100%; background-color:#D3D3D3" value="Save" onclick="save();" /></form>
+                </div>
+                <div style="float:left; width:33%;">
+                    <form><input type="button" style="width:100%; background-color:#D3D3D3" value="Save&Next" onclick="saveNext();" /></form>
+                </div>
+            </div>
             <p></p>
             <!--- Comment Box--->
             <div>
