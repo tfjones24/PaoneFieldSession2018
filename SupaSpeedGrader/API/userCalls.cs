@@ -196,5 +196,31 @@ namespace SupaSpeedGrader.API
         }
 
 
+
+        public static async Task<dynamic> getSectionList(string accessToken, string baseUrl, string canvasCourseId)
+        {
+            dynamic rval = null;
+            string urlCommand = "/api/v1/courses/:course_id/sections";
+
+            urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
+
+            using (HttpResponseMessage response = await clsHttpMethods.httpGET(baseUrl, urlCommand, accessToken))
+            {
+                string result = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    rval = JsonConvert.DeserializeObject(result);
+                }
+                else
+                {
+                    throw new Exception(result);
+                }
+            }
+
+            return rval;
+
+        }
+
+
     }
 }
