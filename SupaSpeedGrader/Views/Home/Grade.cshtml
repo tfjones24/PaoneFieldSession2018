@@ -43,6 +43,7 @@
 
     </script>
     <style>
+     
         /* Style The Dropdown Button */
         .dropbtn {
             background-color: #4CAF50;
@@ -167,14 +168,19 @@
             <div>
                 <p>@rubicTitle</p>
                 @for (int i = 0; i < rubicRows; ++i)
-                {<div style="display: flex">
+                {<div style="display: flex" >
+                   
                         @for (int j = 0; j < rubicCols; ++j)
                         {
-                            <div style=" float:left; width:@width%;border:1px solid black">
-                                <input type="button"  style="width:100%; background-color:white; border:none"value="@rubic[i][j]"/>
+                           
+                                string clap = "rubr" + i;
+                           
+                            <div style=" float:left; width:@width%;border:1px solid black" >
+                                <input onclick="highlight(this)" type="button"  style="width:100%; background-color:white; border:none"value="@rubic[i][j]" id='@clap' />
                             </div>
                         }
                     </div>
+                    
                 }
 
             </div>
@@ -218,6 +224,20 @@
         }
         function saveNext() {
             document.getElementById("action").innerHTML = "You pressed save&next";
+        }
+
+        function highlight(source) {
+            document.getElementById("action").innerHTML = source.id;
+            var buttons = document.querySelectorAll('#' + source.id);
+
+
+            for (var x = 0; x < buttons.length; x++) {
+                buttons[x].style = "width:100%; background-color:white; border:none";
+                document.getElementById("action").innerHTML = source.id;
+            }
+
+            source.style = "width:100%; background-color:blue; border:none"
+
         }
     </script>
 </body>
