@@ -133,9 +133,10 @@
                                 <p>@namesAnswer[names[x]]</p>
                             </div>
                             <div style="float:left; width:35%; ">
-                                @{string demo = "demo" + x;
+                                @{
+                                    string demo = "demo" + x;
                                 }
-                                <p style="text-align:center"> Grade :<input type="number" style="height:20px; width:100px; border:1px solid black; " id="@names[x]" value="@namesGrade[names[x]]" oninput="myFunction('@names[x]','@demo')" /> / @gradeOutOf</p>
+                                <p style="text-align:center"> Grade :<input type="number" style="height:20px; width:100px; border:1px solid black; " id='@names[x]' value='@namesGrade[names[x]]' onchange="myFunction('@names[x]','@demo')" /> / @gradeOutOf</p>
 
                                 <p id="@demo"></p>
 
@@ -207,15 +208,16 @@
         function myFunction(x,z) {
             var y = document.getElementById(x).value ;
             document.getElementById(z).innerHTML = "You wrote: " + y;
+
         }
         function revert() {
-            document.getElementById(action).innerHTML = "You pressed revert";
+            document.getElementById("action").innerHTML = "You pressed revert";
         }
         function save() {
-            document.getElementById(action).innerHTML = "You pressed save";
+            document.getElementById("action").innerHTML = "You pressed save";
         }
         function saveNext() {
-            document.getElementById(action).innerHTML = "You pressed save&next";
+            document.getElementById("action").innerHTML = "You pressed save&next";
         }
     </script>
 </body>
