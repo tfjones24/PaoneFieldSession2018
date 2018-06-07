@@ -206,6 +206,13 @@
         }
         function saveNext() {
             document.getElementById("action").innerHTML = "You pressed save&next";
+            @{ 
+                studentAt++;
+                if (studentAt == Model.names.Count())
+                {
+                    studentAt = 0;
+                }
+            }
         }
 
         function highlightRubic(source) {
