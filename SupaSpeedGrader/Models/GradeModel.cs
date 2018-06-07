@@ -68,7 +68,7 @@ namespace SupaSpeedGrader.Models
                 namesGrade.Add(names[x], "0");
             }
             rubicRows = 5;
-            rubicCols = 3;
+            rubicCols = 4;
             width = 100 / rubicCols;
             rubic = new List<List<string>>();
             int y = 0;

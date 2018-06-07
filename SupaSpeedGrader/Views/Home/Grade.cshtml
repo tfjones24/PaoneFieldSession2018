@@ -2,10 +2,10 @@
 
 @{ 
     ViewBag.Title = "Grade";
-    
+
     string defaultColor = "white";
     string highlightColor = "lightgray";
-      
+
 }
 <head>
     <link rel="stylesheet" type="text/css" href="StyleSheet1.css" />
@@ -102,22 +102,24 @@
                         <li id='response' onclick=highlightResponse(this) style="background-color:white">
                             @{string color = defaultColor;
                             }
-                            @if(x == Model.studentAt)
-                             {
-                                color = highlightColor;    
-                             }
-                            <div style="display:flex; background-color:transparent" onclick=highlightResponse(this)>
-                                <div style="float:left; width:15%; background-color:@color">
+                            @if (x == Model.studentAt)
+                            {
+                                color = highlightColor;
+                            }
+                            <div style="display:flex; background-color:transparent"> <!--onclick=highlightResponse(this)-->
+                                <div style="float:left; width:15%; background-color:@color" id="@x">
                                     <p> @Model.names[x]  </p>
                                 </div>
-                                <div style="float:left; width:50%;  border:1px solid black; border-radius:5px" onclick=highlightResponse(this)>
+                                <div style="float:left; width:50%;  border:1px solid black; border-radius:5px"> <!--onclick=highlightResponse(this)-->
                                     <p>@Model.namesAnswer[Model.names[x]]</p>
                                 </div>
-                                <div style="float:left; width:35%; background-color:@color" onclick=highlightResponse(this)>
+                                @{string m = x + "2";
+                                }
+                                <div style="float:left; width:35%; background-color:@color"id="@m"> <!--onclick=highlightResponse(this)-->
                                     @{
                                         string demo = "demo" + x;
                                     }
-                                    <p onclick="highlightResponse(this)" style="text-align:center"> Grade :<input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='@Model.names[x]' value='@Model.namesGrade[Model.names[x]]' onchange="myFunction('@Model.names[x]','@demo')" /> / @Model.gradeOutOf</p>
+                                    <p style="text-align:center"> Grade :<input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='@Model.names[x]' value='@Model.namesGrade[Model.names[x]]' onchange="myFunction('@Model.names[x]','@demo',@x)" /> / @Model.gradeOutOf</p>
 
                                     <p id="@demo"></p>
 
@@ -125,7 +127,7 @@
                             </div>
                         </li>
                         <p></p>
-                    }
+                                        }
                 </ul>
             </div>
 
@@ -150,13 +152,15 @@
                 <p>@Model.rubicTitle</p>
                 @for (int i = 0; i < Model.rubicRows; ++i)
                 {<div style="display: flex">
-
-                        @for (int j = 0; j < Model.rubicCols; ++j)
+                     <div style="float:left; width: @Model.width%;background-color:grey;border:1px solid black " >
+                         @Model.rubic[i][0]
+                     </div>
+                        @for (int j = 1; j < Model.rubicCols; ++j)
                         {
 
                             string clap = "rubr" + i;
 
-                            <div style=" float:left; width:@Model.width%;border:1px solid black">
+                            <div style="float:left; width:@Model.width%;border:1px solid black">
                                 <input onclick=highlightRubic(this) type="button" style="width:100%; background-color:white; border:none" value="@Model.rubic[i][j]" id='@clap' />
                             </div>
                         }
@@ -185,17 +189,28 @@
             </div>
             <!--- Grade Box-->
             <div style="height:10%">
-                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " name="grade" value="@Model.namesGrade[Model.names[Model.studentAt]]" onchange="myFunction('@Model.names[Model.studentAt]','grade')"/> /@Model.gradeOutOf</p>
+                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " id="grade" value="@Model.namesGrade[Model.names[Model.studentAt]]" onchange="myGrade()"/> /@Model.gradeOutOf</p>
             </div>
-            <p id="grade"></p>
+            <p id="graded"></p>
         </div>
     </div>
 
     <p id="action"></p>
+    <p id="action2"></p>
+    <p id="action 3"></p>
     <script>
-        function myFunction(x, z) {
+        function myFunction(x, z, num) {
             var y = document.getElementById(x).value;
             document.getElementById(z).innerHTML = "You wrote: " + y;
+            if (num ==@Model.studentAt) {
+                document.getElementById("grade").value = y;
+            }
+
+        }
+        function myGrade() {
+            var y = document.getElementById("grade").value;
+            document.getElementById("graded").innerHTML = "You wrote: " + y;
+            document.getElementById("@Model.names[Model.studentAt]").value = y;
 
         }
         function revert() {
@@ -205,16 +220,30 @@
             document.getElementById("action").innerHTML = "You pressed save";
         }
         function saveNext() {
-            document.getElementById("action").innerHTML = "You pressed save&next";
+            document.getElementById("action").innerHTML = "You pressed save&next with @Model.studentAt out of @Model.names.Count()";
+            //remove highlight from initial
+           @{ string y = Model.studentAt + "2";
+               }
+            updateResponseHighlight("@Model.studentAt",false);
+            updateResponseHighlight("@y", false);
             @{ 
-                Model.studentAt++;
-                if (Model.studentAt == Model.names.Count())
-                {
-                    Model.studentAt = 0;
-                }
+                Model.studentAt = (Model.studentAt + 1) % Model.names.Count();
+                y = Model.studentAt + "2";
+            }
+            //add highlight to update
+            updateResponseHighlight("@Model.studentAt", true);
+            updateResponseHighlight("@y", true);
+            document.getElementById("grade").value = @Model.namesGrade[Model.names[Model.studentAt]];
+            document.getElementById("action2").innerHTML = "You pressed save&next with @Model.studentAt out of @Model.names.Count()";
+        }
+        function updateResponseHighlight(x, highlight) {
+            if (highlight == true) {
+                document.getElementById(x).style.backgroundColor = "@highlightColor";
+            }
+            else {
+                document.getElementById(x).style.backgroundColor = "@defaultColor";
             }
         }
-
         function highlightRubic(source) {
 
             var buttons = document.querySelectorAll('#' + source.id);
