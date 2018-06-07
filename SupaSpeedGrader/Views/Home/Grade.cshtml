@@ -2,6 +2,10 @@
 
 @{ 
     ViewBag.Title = "Grade";
+    int studentAt = 0;
+    string defaultColor = "white";
+    string highlightColor = "lightgray";
+    
 }
 <head>
     <link rel="stylesheet" type="text/css" href="StyleSheet1.css" />
@@ -96,14 +100,20 @@
                     @for (int x = 0; x < Model.numStudent; x++)
                     {
                         <li id='response' onclick="highlightResponse(this)" style="background-color:white">
+                            @{string color = defaultColor;
+                            }
+                            @if(x == studentAt)
+                             {
+                                color = highlightColor;    
+                             }
                             <div style="display:flex; background-color:transparent" onclick="highlightResponse(this)">
-                                <div style="float:left; width:15%; background-color:transparent" onclick="highlightResponse(this)">
+                                <div style="float:left; width:15%; background-color:@color"highlightResponse(this)">
                                     <p> @Model.names[x]  </p>
                                 </div>
-                                <div style="float:left; width:50%;  border:1px solid black; border-radius:5px; background-color:transparent" onclick="highlightResponse(this)">
+                                <div style="float:left; width:50%;  border:1px solid black; border-radius:5px" onclick="highlightResponse(this)">
                                     <p>@Model.namesAnswer[Model.names[x]]</p>
                                 </div>
-                                <div style="float:left; width:35%; " onclick="highlightResponse(this)">
+                                <div style="float:left; width:35%; background-color:@color" onclick="highlightResponse(this)">
                                     @{
                                         string demo = "demo" + x;
                                     }
@@ -171,12 +181,13 @@
             <p></p>
             <!--- Comment Box--->
             <div>
-                <textarea style="height:100px; width:100%; border:1px solid black; border-radius:5px" name="comment"></textarea>
+                <textarea style="height:100px; width:100%; border:1px solid black; border-radius:5px" name="comment">@Model.namesComment[Model.names[studentAt]]</textarea>
             </div>
             <!--- Grade Box-->
             <div style="height:10%">
-                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " name="grade" /> /@Model.gradeOutOf</p>
+                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " name="grade" value="@Model.namesGrade[Model.names[studentAt]]" onchange="myFunction('@Model.names[studentAt]','grade')"/> /@Model.gradeOutOf</p>
             </div>
+            <p id="grade"></p>
         </div>
     </div>
 

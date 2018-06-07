@@ -15,7 +15,7 @@ namespace SupaSpeedGrader.Models
         public Dictionary<string, string> namesAnswer = new Dictionary<string, string>();
 
         public Dictionary<string, string> namesGrade = new Dictionary<string, string>();
-
+        public Dictionary<string, string> namesComment = new Dictionary<string, string>();
         public int rubicRows;
         public int rubicCols;
         public int width;
@@ -54,6 +54,11 @@ namespace SupaSpeedGrader.Models
             namesAnswer.Add(names[2], "Charlie");
             namesAnswer.Add(names[3], "Delta");
             namesAnswer.Add(names[4], "Epsilon");
+            namesComment.Add(names[0], "Alpha");
+            namesComment.Add(names[1], "Bravo");
+            namesComment.Add(names[2], "Charlie");
+            namesComment.Add(names[3], "Delta");
+            namesComment.Add(names[4], "Epsilon");
             namesGrade = new Dictionary<string, string>();
             for (int x = 0; x < names.Count(); ++x)
             {
