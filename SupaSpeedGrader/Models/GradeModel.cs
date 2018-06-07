@@ -7,22 +7,25 @@ namespace SupaSpeedGrader.Models
 {
     public class GradeModel
     {
-        
+        public int questionNum;   
         public int numStudent;
         public int gradeOutOf;
+        public int questionOn;
+        public string questionName;
+        public string question;
         public List<string> names = new List<string>();
 
         public Dictionary<string, string> namesAnswer = new Dictionary<string, string>();
 
         public Dictionary<string, string> namesGrade = new Dictionary<string, string>();
-
+        public Dictionary<string, string> namesComment = new Dictionary<string, string>();
         public int rubicRows;
         public int rubicCols;
         public int width;
         public List<List<string>> rubic = new List<List<string>>();
 
         public string rubicTitle = "Rubric";
-
+        public int studentAt;
         public GradeModel(int numStudents, int gradeOutof, List<string> names, Dictionary<string, string> namesAnswer, Dictionary<string, string> namesGrade, int rubicRows, int rubicCols, List<List<string>> rubric)
         {
             this.numStudent = numStudents;
@@ -54,6 +57,11 @@ namespace SupaSpeedGrader.Models
             namesAnswer.Add(names[2], "Charlie");
             namesAnswer.Add(names[3], "Delta");
             namesAnswer.Add(names[4], "Epsilon");
+            namesComment.Add(names[0], "Alpha");
+            namesComment.Add(names[1], "Bravo");
+            namesComment.Add(names[2], "Charlie");
+            namesComment.Add(names[3], "Delta");
+            namesComment.Add(names[4], "Epsilon");
             namesGrade = new Dictionary<string, string>();
             for (int x = 0; x < names.Count(); ++x)
             {
@@ -74,6 +82,11 @@ namespace SupaSpeedGrader.Models
                 }
                 rubic.Add(row);
             }
+            questionNum = 20;
+            questionOn = 2;
+            questionName = "Question Name";
+            question = "Question";
+            studentAt = 0;
         }
 
     }
