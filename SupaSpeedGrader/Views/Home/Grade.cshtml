@@ -1,41 +1,7 @@
-﻿
-@{ string[] alphabet = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
+﻿@model SupaSpeedGrader.Models.GradeModel
+
+@{ 
     ViewBag.Title = "Grade";
-    int numStudent = 5;
-    int gradeOutOf = 20;
-    List<string> names = new List<string>();
-    names.Add("A");
-    names.Add("B");
-    names.Add("C");
-    names.Add("D");
-    names.Add("E");
-    Dictionary<string, string> namesAnswer = new Dictionary<string, string>();
-    namesAnswer.Add(names[0], "Alpha");
-    namesAnswer.Add(names[1], "Bravo");
-    namesAnswer.Add(names[2], "Charlie");
-    namesAnswer.Add(names[3], "Delta");
-    namesAnswer.Add(names[4], "Epsilon");
-    Dictionary<string, string> namesGrade = new Dictionary<string, string>();
-    for (int x = 0; x < names.Count(); ++x)
-    {
-        namesGrade.Add(names[x], "0");
-    }
-    int rubicRows = 5;
-    int rubicCols = 3;
-    int width = 100 / rubicCols;
-    List<List<string>> rubic = new List<List<string>>();
-    int y = 0;
-    for(int i=0; i<rubicRows; ++i)
-    {
-        List<String> row = new List<string>();
-        for(int j=0; j < rubicCols; ++j)
-        {
-            row.Add(alphabet[y]);
-            y++;
-        }
-        rubic.Add(row);
-    }
-    string rubicTitle = "Rubic";
 }
 <head>
     <link rel="stylesheet" type="text/css" href="StyleSheet1.css" />
@@ -45,7 +11,7 @@
     <style>
 
 
-     
+
         /* Style The Dropdown Button */
         .dropbtn {
             background-color: #4CAF50;
@@ -124,30 +90,30 @@
                 <p> Question </p>
             </div>
             <!--- answer box --->
-            
-            <div >
+
+            <div>
                 <ul style=" list-style-type: none; padding: 0;">
-                    @for (int x = 0; x < numStudent; x++)
+                    @for (int x = 0; x < Model.numStudent; x++)
                     {
                         <li id='response' onclick="highlightResponse(this)" style="background-color:white">
-                            <div style="display:flex; background-color:transparent" onclick="highlightResponse(this)" >
+                            <div style="display:flex; background-color:transparent" onclick="highlightResponse(this)">
                                 <div style="float:left; width:15%; background-color:transparent" onclick="highlightResponse(this)">
-                                    <p> @names[x]  </p>
+                                    <p> @Model.names[x]  </p>
                                 </div>
                                 <div style="float:left; width:50%;  border:1px solid black; border-radius:5px; background-color:transparent" onclick="highlightResponse(this)">
-                                    <p>@namesAnswer[names[x]]</p>
+                                    <p>@Model.namesAnswer[Model.names[x]]</p>
                                 </div>
                                 <div style="float:left; width:35%; " onclick="highlightResponse(this)">
                                     @{
                                         string demo = "demo" + x;
                                     }
-                                    <p onclick="highlightResponse(this)" style="text-align:center"> Grade :<input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='@names[x]' value='@namesGrade[names[x]]' onchange="myFunction('@names[x]','@demo')" /> / @gradeOutOf</p>
+                                    <p onclick="highlightResponse(this)" style="text-align:center"> Grade :<input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='@Model.names[x]' value='@Model.namesGrade[Model.names[x]]' onchange="myFunction('@Model.names[x]','@demo')" /> / @Model.gradeOutOf</p>
 
                                     <p id="@demo"></p>
 
                                 </div>
                             </div>
-                        </li onMouseOver="highlightResponse(this)">
+                        </li>
                         <p></p>
                     }
                 </ul>
@@ -171,21 +137,21 @@
             </div>
             <!--- Rubic--->
             <div>
-                <p>@rubicTitle</p>
-                @for (int i = 0; i < rubicRows; ++i)
-                {<div style="display: flex" >
-                   
-                        @for (int j = 0; j < rubicCols; ++j)
+                <p>@Model.rubicTitle</p>
+                @for (int i = 0; i < Model.rubicRows; ++i)
+                {<div style="display: flex">
+
+                        @for (int j = 0; j < Model.rubicCols; ++j)
                         {
-                           
-                                string clap = "rubr" + i;
-                           
-                            <div style=" float:left; width:@width%;border:1px solid black" >
-                                <input onclick="highlightRubic(this)" type="button"  style="width:100%; background-color:white; border:none"value="@rubic[i][j]" id='@clap' />
+
+                            string clap = "rubr" + i;
+
+                            <div style=" float:left; width:@Model.width%;border:1px solid black">
+                                <input onclick="highlightRubic(this)" type="button" style="width:100%; background-color:white; border:none" value="@Model.rubic[i][j]" id='@clap' />
                             </div>
                         }
                     </div>
-                    
+
                 }
 
             </div>
@@ -209,15 +175,15 @@
             </div>
             <!--- Grade Box-->
             <div style="height:10%">
-                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " name="grade" /> /@gradeOutOf</p>
+                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " name="grade" /> /@Model.gradeOutOf</p>
             </div>
         </div>
     </div>
 
     <p id="action"></p>
     <script>
-        function myFunction(x,z) {
-            var y = document.getElementById(x).value ;
+        function myFunction(x, z) {
+            var y = document.getElementById(x).value;
             document.getElementById(z).innerHTML = "You wrote: " + y;
 
         }
@@ -245,15 +211,15 @@
         }
         function highlightResponse(source) {
             //var responses = document.querySelectAll('#' + source.id)
-          //  for (var i = 0; i < responses.length; i++) {
-        //        responses[i] = 
+            //  for (var i = 0; i < responses.length; i++) {
+            //        responses[i] =
             //}
             document.getElementById("action").innerHTML = "POTATO";
             var responses = document.querySelectorAll('#response');
             for (var x = 0; x < responses.length) {
                 responses[x].style = "background-color:white";
             }
-            source.style="background-color:lightgreen"
+            source.style = "background-color:lightgreen"
 
         }
     </script>

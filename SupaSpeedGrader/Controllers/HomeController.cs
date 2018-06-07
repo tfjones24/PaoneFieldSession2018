@@ -23,7 +23,7 @@ namespace SupaSpeedGrader.Controllers
 
         public ActionResult Grade()
         {
-            return View();
+            return View(new GradeModel());
         }
         public ActionResult Help()
         {
