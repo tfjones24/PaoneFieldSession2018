@@ -99,21 +99,21 @@
                 <ul style=" list-style-type: none; padding: 0;">
                     @for (int x = 0; x < Model.numStudent; x++)
                     {
-                        <li id='response' onclick="highlightResponse(this)" style="background-color:white">
+                        <li id='response' onclick=highlightResponse(this) style="background-color:white">
                             @{string color = defaultColor;
                             }
                             @if(x == Model.studentAt)
                              {
                                 color = highlightColor;    
                              }
-                            <div style="display:flex; background-color:transparent" onclick="highlightResponse(this)">
-                                <div style="float:left; width:15%; background-color:@color"highlightResponse(this)">
+                            <div style="display:flex; background-color:transparent" onclick=highlightResponse(this)>
+                                <div style="float:left; width:15%; background-color:@color">
                                     <p> @Model.names[x]  </p>
                                 </div>
-                                <div style="float:left; width:50%;  border:1px solid black; border-radius:5px" onclick="highlightResponse(this)">
+                                <div style="float:left; width:50%;  border:1px solid black; border-radius:5px" onclick=highlightResponse(this)>
                                     <p>@Model.namesAnswer[Model.names[x]]</p>
                                 </div>
-                                <div style="float:left; width:35%; background-color:@color" onclick="highlightResponse(this)">
+                                <div style="float:left; width:35%; background-color:@color" onclick=highlightResponse(this)>
                                     @{
                                         string demo = "demo" + x;
                                     }
@@ -157,7 +157,7 @@
                             string clap = "rubr" + i;
 
                             <div style=" float:left; width:@Model.width%;border:1px solid black">
-                                <input onclick="highlightRubic(this)" type="button" style="width:100%; background-color:white; border:none" value="@Model.rubic[i][j]" id='@clap' />
+                                <input onclick=highlightRubic(this) type="button" style="width:100%; background-color:white; border:none" value="@Model.rubic[i][j]" id='@clap' />
                             </div>
                         }
                     </div>
@@ -169,13 +169,13 @@
             <!--- next row--->
             <div style="display: flex">
                 <div style="float:left; width:33%;">
-                    <form><input type="button" style="width:100%; background-color:#D3D3D3" value=" Revert" onclick="revert();" /></form>
+                    <form><input type="button" style="width:100%; background-color:#D3D3D3" value=" Revert" onclick=revert() /></form>
                 </div>
                 <div style="float:left; width:33%;">
-                    <form><input type="button" style="width:100%; background-color:#D3D3D3" value="Save" onclick="save();" /></form>
+                    <form><input type="button" style="width:100%; background-color:#D3D3D3" value="Save" onclick=save() /></form>
                 </div>
                 <div style="float:left; width:33%;">
-                    <form><input type="button" style="width:100%; background-color:#D3D3D3" value="Save&Next" onclick="saveNext();" /></form>
+                    <form><input type="button" style="width:100%; background-color:#D3D3D3" value="Save&Next" onclick=saveNext() /></form>
                 </div>
             </div>
             <p></p>
@@ -227,19 +227,19 @@
             source.style = "width:100%; background-color:lightgreen; border:none"
 
         }
-        function highlightResponse(source) {
+ //       function highlightResponse(source) {
             //var responses = document.querySelectAll('#' + source.id)
             //  for (var i = 0; i < responses.length; i++) {
             //        responses[i] =
             //}
-            document.getElementById("action").innerHTML = "POTATO";
-            var responses = document.querySelectorAll('#response');
-            for (var x = 0; x < responses.length) {
-                responses[x].style = "background-color:white";
-            }
-            source.style = "background-color:lightgreen"
+ //           document.getElementById("action").innerHTML = "POTATO";
+ //           var responses = document.querySelectorAll('#response');
+ //           for (var x = 0; x < responses.length) {
+  //              responses[x].style = "background-color:white";
+ //           }
+  //          source.style = "background-color:lightgreen"
 
-        }
+//        }
     </script>
 </body>
 
