@@ -7,9 +7,12 @@ namespace SupaSpeedGrader.Models
 {
     public class GradeModel
     {
-        
+        public int questionNum;   
         public int numStudent;
         public int gradeOutOf;
+        public int questionOn;
+        public string questionName;
+        public string question;
         public List<string> names = new List<string>();
 
         public Dictionary<string, string> namesAnswer = new Dictionary<string, string>();
@@ -22,7 +25,7 @@ namespace SupaSpeedGrader.Models
         public List<List<string>> rubic = new List<List<string>>();
 
         public string rubicTitle = "Rubric";
-
+        public int studentAt;
         public GradeModel(int numStudents, int gradeOutof, List<string> names, Dictionary<string, string> namesAnswer, Dictionary<string, string> namesGrade, int rubicRows, int rubicCols, List<List<string>> rubric)
         {
             this.numStudent = numStudents;
@@ -79,6 +82,11 @@ namespace SupaSpeedGrader.Models
                 }
                 rubic.Add(row);
             }
+            questionNum = 20;
+            questionOn = 2;
+            questionName = "Question Name";
+            question = "Question";
+            studentAt = 0;
         }
 
     }

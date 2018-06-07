@@ -2,10 +2,10 @@
 
 @{ 
     ViewBag.Title = "Grade";
-    int studentAt = 0;
+    
     string defaultColor = "white";
     string highlightColor = "lightgray";
-    
+      
 }
 <head>
     <link rel="stylesheet" type="text/css" href="StyleSheet1.css" />
@@ -71,7 +71,7 @@
 <body>
     <div style="display: flex; border-bottom:1px solid black">
         <div style="float:left; width:90%">
-            <h3 style="color: #21314d"> Question Name </h3>
+            <h3 style="color: #21314d"> @Model.questionName </h3>
         </div>
         <!--Navigation Bar-->
         <div style="float:left; width:10%">
@@ -91,7 +91,7 @@
         <div style="float:left; width: 75%">
             <!--- question box --->
             <div>
-                <p> Question </p>
+                <p>@Model.question </p>
             </div>
             <!--- answer box --->
 
@@ -102,7 +102,7 @@
                         <li id='response' onclick="highlightResponse(this)" style="background-color:white">
                             @{string color = defaultColor;
                             }
-                            @if(x == studentAt)
+                            @if(x == Model.studentAt)
                              {
                                 color = highlightColor;    
                              }
@@ -181,11 +181,11 @@
             <p></p>
             <!--- Comment Box--->
             <div>
-                <textarea style="height:100px; width:100%; border:1px solid black; border-radius:5px" name="comment">@Model.namesComment[Model.names[studentAt]]</textarea>
+                <textarea style="height:100px; width:100%; border:1px solid black; border-radius:5px" name="comment">@Model.namesComment[Model.names[Model.studentAt]]</textarea>
             </div>
             <!--- Grade Box-->
             <div style="height:10%">
-                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " name="grade" value="@Model.namesGrade[Model.names[studentAt]]" onchange="myFunction('@Model.names[studentAt]','grade')"/> /@Model.gradeOutOf</p>
+                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " name="grade" value="@Model.namesGrade[Model.names[Model.studentAt]]" onchange="myFunction('@Model.names[Model.studentAt]','grade')"/> /@Model.gradeOutOf</p>
             </div>
             <p id="grade"></p>
         </div>
@@ -207,10 +207,10 @@
         function saveNext() {
             document.getElementById("action").innerHTML = "You pressed save&next";
             @{ 
-                studentAt++;
-                if (studentAt == Model.names.Count())
+                Model.studentAt++;
+                if (Model.studentAt == Model.names.Count())
                 {
-                    studentAt = 0;
+                    Model.studentAt = 0;
                 }
             }
         }
