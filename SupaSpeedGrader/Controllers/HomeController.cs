@@ -14,11 +14,84 @@ namespace SupaSpeedGrader.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            NavigationModel nav = new NavigationModel();
-            nav.addHardValue();
-            return View(nav);
+            oauthHelper oauth = new oauthHelper(Request);
+
+            /***********************************************************/
+            //	Make sure the LTI signature is valid
+            /***********************************************************/
+            if (oauth.verifySignature())
+            {
+                //TODO: Get course ID
+                string course_id = Request.Form.Get("custom_canvas_course_id");
+                Uri testUri = Request.Url;
+
+                //TODO: Get user key from storage
+                //TODO: Call all needed API calls
+                JArray sectionsJSON = await userCalls.getSectionList("9802~jT11gMJZiaByfs7vBVI2PFQje0YhKwtunlzpw8h6HAMuELHGXodejJzT2mONVMdS", "https://" + Request.UrlReferrer.Host, course_id);
+                JArray quizListJSON = await userCalls.getListQuizzesInCourse("9802~jT11gMJZiaByfs7vBVI2PFQje0YhKwtunlzpw8h6HAMuELHGXodejJzT2mONVMdS", "https://" + Request.UrlReferrer.Host, course_id);
+
+                //TODO: Get API data ready to go
+                NavigationModel nav = new NavigationModel();
+
+                //Objects for section names and IDs to pass in
+                List<string> sections = new List<string>();
+                Dictionary<string, string> sectionIDs = new Dictionary<string, string>();
+
+                //Objects for quiz names and IDs to pass in
+                List<string> quizzes = new List<string>();
+                Dictionary<string, string> quizIDs = new Dictionary<string, string>();
+
+                //Get section data extracted
+                JToken token = sectionsJSON.First;
+                List<JToken> tokens = new List<JToken>();
+
+                //Get all tokens from section data
+                do
+                {
+                    tokens.Add(token);
+                    token = token.Next;
+                } while (token != null);
+                //Parse out name and ID for use later
+                for (int i = 0; i < tokens.Count; i++)
+                {
+                    sections.Add(tokens[i].Value<string>("name"));
+                    sectionIDs.Add(tokens[i].Value<string>("name"), tokens[i].Value<string>("id"));
+                }
+
+                //Now do quiz data
+                token = quizListJSON.First;
+                tokens = new List<JToken>();
+
+                //Get all tokens from quiz data
+                while (token != null)
+                {
+                    tokens.Add(token);
+                    token = token.Next;
+                }
+                //Parse out name and ID for use later
+                for (int i = 0; i < tokens.Count; i++)
+                {
+                    quizzes.Add(tokens[i].Value<string>("title"));
+                    quizIDs.Add(tokens[i].Value<string>("title"), tokens[i].Value<string>("id"));
+                }
+
+
+                //TODO: Put API data in model
+                //Put section and quiz info into nav model
+                nav.sections = sections;
+                nav.sectionID = sectionIDs;
+
+                nav.quizzes = quizzes;
+                nav.quizID = quizIDs;
+
+                return View(nav);
+            }
+
+            NavigationModel nav2 = new NavigationModel();
+            nav2.addHardValue();
+            return View(nav2);
         }
 
         public ActionResult Grade()
@@ -105,7 +178,7 @@ namespace SupaSpeedGrader.Controllers
 
                 willNameModel model = new willNameModel();
                 model.name = "SUCCESSish";
-                model.id = jsonHelpers.GetJArrayValue(rval, "name");
+                model.id = jsonHelpers.GetJObjectValue(rval, "name");
                 return View(model);
             }
             return View(new willNameModel());

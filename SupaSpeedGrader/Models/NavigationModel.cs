@@ -9,7 +9,10 @@ namespace SupaSpeedGrader.Models
     {
         //Public data to fill from API calls
         public List<string> sections = new List<string>();
+        public Dictionary<string, string> sectionID = new Dictionary<string, string>(); 
+
         public List<string> quizzes = new List<string>();
+        public Dictionary<string, string> quizID = new Dictionary<string, string>();
 
         public Dictionary<string, List<string>> quizdata = new Dictionary<string, List<string>>();
 
