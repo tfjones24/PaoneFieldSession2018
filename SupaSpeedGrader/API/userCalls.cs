@@ -72,6 +72,35 @@ namespace SupaSpeedGrader.API
         }
 
         /**
+         * Gets a list of all the questions in the given quiz, to be used for question selection.  
+         * 
+        */
+        public static async Task<dynamic> getListQuestionsInQuiz(string accessToken, string baseUrl, string canvasCourseId, string quizId)
+        {
+            dynamic rval = null;
+            string urlCommand = "/api/v1/courses/:course_id/quizzes/:quiz_id/questions";
+
+            urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
+            urlCommand = urlCommand.Replace(":quiz_id", quizId);
+
+            using (HttpResponseMessage response = await clsHttpMethods.httpGET(baseUrl, urlCommand, accessToken))
+            {
+                string result = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    rval = JsonConvert.DeserializeObject(result);
+                }
+                else
+                {
+                    throw new Exception(result);
+                }
+            }
+
+            return rval;
+
+        }
+
+        /**
          * Gets a single quiz object, given the courseID and QuizID
          * 
         */

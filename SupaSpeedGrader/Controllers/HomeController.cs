@@ -28,11 +28,11 @@ namespace SupaSpeedGrader.Controllers
                 Uri testUri = Request.Url;
 
                 //TODO: Get user key from storage
-                //TODO: Call all needed API calls
+                //TODO: Get all questions or something
                 JArray sectionsJSON = await userCalls.getSectionList("9802~jT11gMJZiaByfs7vBVI2PFQje0YhKwtunlzpw8h6HAMuELHGXodejJzT2mONVMdS", "https://" + Request.UrlReferrer.Host, course_id);
                 JArray quizListJSON = await userCalls.getListQuizzesInCourse("9802~jT11gMJZiaByfs7vBVI2PFQje0YhKwtunlzpw8h6HAMuELHGXodejJzT2mONVMdS", "https://" + Request.UrlReferrer.Host, course_id);
 
-                //TODO: Get API data ready to go
+                //TODO: Get quesiton data ready to go
                 NavigationModel nav = new NavigationModel();
 
                 //Objects for section names and IDs to pass in
@@ -81,7 +81,7 @@ namespace SupaSpeedGrader.Controllers
                 }
 
 
-                //TODO: Put API data in model
+                //TODO: Put question data in model
                 //Put section and quiz info into nav model
                 nav.sections = sections;
                 nav.sectionID = sectionIDs;
@@ -92,19 +92,24 @@ namespace SupaSpeedGrader.Controllers
                 return View(nav);
             }
 
+            //Oops, not canvas or someone trying to breach our shit. Give em good test data.
             NavigationModel nav2 = new NavigationModel();
             nav2.addHardValue();
             return View(nav2);
         }
 
+        //Returns the grading page with the selected question
         public ActionResult Grade()
         {
             return View(new GradeModel());
         }
+
+        //Let's see some help
         public ActionResult Help()
         {
             return View();
         }
+
         // Following code copied in as a base
 
         /// <summary>
@@ -161,7 +166,7 @@ namespace SupaSpeedGrader.Controllers
         }
 
         // OH GOD WILLS authentication token: 9802~jT11gMJZiaByfs7vBVI2PFQje0YhKwtunlzpw8h6HAMuELHGXodejJzT2mONVMdS
-
+        // Just a good reference for post-token creation work, inclduign sample API call
         public async Task<ActionResult> willName()
         {
             oauthHelper oauth = new oauthHelper(Request);
