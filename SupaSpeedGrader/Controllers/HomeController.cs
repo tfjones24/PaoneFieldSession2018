@@ -73,8 +73,11 @@ namespace SupaSpeedGrader.Controllers
                 //Parse out name and ID for use later
                 for (int i = 0; i < tokens.Count; i++)
                 {
-                    quizzes.Add(tokens[i].Value<string>("title"));
-                    quizIDs.Add(tokens[i].Value<string>("title"), tokens[i].Value<string>("id"));
+                    if (tokens[i].Value<string>("published").ToLower() == "true")
+                    {
+                        quizzes.Add(tokens[i].Value<string>("title"));
+                        quizIDs.Add(tokens[i].Value<string>("title"), tokens[i].Value<string>("id"));
+                    }
                 }
 
 
