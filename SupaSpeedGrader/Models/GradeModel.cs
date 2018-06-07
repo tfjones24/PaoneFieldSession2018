@@ -11,6 +11,7 @@ namespace SupaSpeedGrader.Models
         public int numStudent;
         public int gradeOutOf;
         public int questionOn;
+        public int questionStartShow;
         public string questionName;
         public string question;
         public List<string> names = new List<string>();
@@ -82,8 +83,9 @@ namespace SupaSpeedGrader.Models
                 }
                 rubic.Add(row);
             }
-            questionNum = 20;
-            questionOn = 2;
+            questionNum = 30;
+            questionOn = 12;
+            questionStartShow = (questionOn / 10) * 10;
             questionName = "Question Name";
             question = "Question";
             studentAt = 0;

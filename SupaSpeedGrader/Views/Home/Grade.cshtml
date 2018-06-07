@@ -77,17 +77,20 @@
         <div style="float:left; width:4%">
             <input type="button" style="width:100%; background-color:#D3D3D3" value="<-" onclick=down10() />
         </div>
-        @for(int x = 1; x<11; ++x) {
-            string color =" #D3D3D3";
-            if (x == Model.questionOn)
+        <div style="float:left; width:40%" id="navBar">
+            @for (int x = 1; x < 11; ++x)
             {
-                color ="white";
+                string name = "Question" + x;
+                string color = " #D3D3D3";
+                if (x == Model.questionOn)
+                {
+                    color = "white";
+                }
+                <div style="float:left; width:10%">
+                    <input type="button" style="width:100%; background-color:@color" value="@x" onclick=changeQuestion() id="@name"/>
+                </div>
             }
-            <div style="float:left; width:4%">
-                <input type="button" style="width:100%; background-color:@color" value="@x" onclick=changeQuestion() />
-            </div>
-        }
-            
+        </div>     
         <div style="float:left; width:4%">
             <input type="button" style="width:100%; background-color:#D3D3D3" value="->" onclick=up10() />
         </div>
@@ -103,11 +106,11 @@
             <!--- answer box --->
 
             <div>
-                <ul style=" list-style-type: none; padding: 0;">
+                <ul style=" list-style-type: none; padding: 0; overflow: auto; width:100%; max-height:1000px">
                     @for (int x = 0; x < Model.numStudent; x++)
                     {
                         <li id='response' onclick=highlightResponse(this) style="background-color:white">
-                            @{string color = defaultColor;
+                            @{ string color = defaultColor;
                             }
                             @if (x == Model.studentAt)
                             {
@@ -206,14 +209,56 @@
     <p id="action2"></p>
     <p id="action 3"></p>
     <script>
-        function down10(){
+        function down10() {
+            @{
 
+                if (Model.questionStartShow != 0)
+                {
+                    Model.questionStartShow = Model.questionStartShow - 10;
+                }
+
+             }
+            reloadQuestions();
+            
         }
+        function reloadQuestions() {
+            for (var i = 1; i < 11; ++i)
+            {
+                @{ 
+                    int l = 10;
+                    string name1 = "Question" + l;
+                    string color1 = " #D3D3D3";
+                    if (l == Model.questionOn)
+                    {
+                        color1 = "white";
+                    }
+                }
+                
+                document.getElementById(@name1).style.backgroundColor = @color1;
+                document.getElementById(@name1).value = @l;
+                @{ 
+                    l++;
+                        }
+
+            }
+        }
+            
+               
+
+
+            }
         function changeQuestion() {
 
         }
         function up10() {
-
+            @{
+                Model.questionStartShow=Model.questionStartShow+10;
+                if ((Model.questionNum < Model.questionStartShow))
+                {
+                    Model.questionStartShow = (Model.questionNum / 10) * 10;
+                }
+            }
+            reloadQuestions();
         }
         function myFunction(x, z, num) {
             var y = document.getElementById(x).value;
