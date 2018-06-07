@@ -70,19 +70,26 @@
 
 <body>
     <div style="display: flex; border-bottom:1px solid black">
-        <div style="float:left; width:90%">
+        <div style="float:left; width:52%">
             <h3 style="color: #21314d"> @Model.questionName </h3>
         </div>
         <!--Navigation Bar-->
-        <div style="float:left; width:10%">
-            <div class="dropdown">
-                <button class="dropbtn">Dropdown</button>
-                <div class="dropdown-content">
-                    <a href="#">Link 1</a>
-                    <a href="#">Link 2</a>
-                    <a href="#">Link 3</a>
-                </div>
+        <div style="float:left; width:4%">
+            <input type="button" style="width:100%; background-color:#D3D3D3" value="<-" onclick=down10() />
+        </div>
+        @for(int x = 1; x<11; ++x) {
+            string color =" #D3D3D3";
+            if (x == Model.questionOn)
+            {
+                color ="white";
+            }
+            <div style="float:left; width:4%">
+                <input type="button" style="width:100%; background-color:@color" value="@x" onclick=changeQuestion() />
             </div>
+        }
+            
+        <div style="float:left; width:4%">
+            <input type="button" style="width:100%; background-color:#D3D3D3" value="->" onclick=up10() />
         </div>
     </div>
     <p></p>
@@ -199,6 +206,15 @@
     <p id="action2"></p>
     <p id="action 3"></p>
     <script>
+        function down10(){
+
+        }
+        function changeQuestion() {
+
+        }
+        function up10() {
+
+        }
         function myFunction(x, z, num) {
             var y = document.getElementById(x).value;
             document.getElementById(z).innerHTML = "You wrote: " + y;
