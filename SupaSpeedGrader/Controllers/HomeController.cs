@@ -29,8 +29,8 @@ namespace SupaSpeedGrader.Controllers
 
                 //TODO: Get user key from storage
                 //TODO: Get all questions or something
-                JArray sectionsJSON = await userCalls.getSectionList("9802~jT11gMJZiaByfs7vBVI2PFQje0YhKwtunlzpw8h6HAMuELHGXodejJzT2mONVMdS", "https://" + Request.UrlReferrer.Host, course_id);
-                JArray quizListJSON = await userCalls.getListQuizzesInCourse("9802~jT11gMJZiaByfs7vBVI2PFQje0YhKwtunlzpw8h6HAMuELHGXodejJzT2mONVMdS", "https://" + Request.UrlReferrer.Host, course_id);
+                JArray sectionsJSON = await userCalls.getSectionList("9802~XGk8BJGRorTVCHIH4fY3bSgqLQabhXoVi7DkY1aO36kBCA0pupuuhS1hVWiWboko", "https://" + Request.UrlReferrer.Host, course_id);
+                JArray quizListJSON = await userCalls.getListQuizzesInCourse("9802~XGk8BJGRorTVCHIH4fY3bSgqLQabhXoVi7DkY1aO36kBCA0pupuuhS1hVWiWboko", "https://" + Request.UrlReferrer.Host, course_id);
 
                 //TODO: Get quesiton data ready to go
                 NavigationModel nav = new NavigationModel();

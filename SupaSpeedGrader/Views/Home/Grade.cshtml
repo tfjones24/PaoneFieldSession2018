@@ -6,6 +6,7 @@
     string defaultColor = "white";
     string highlightColor = "lightgray";
     int questionShow = Model.questionStartShow;
+    Model.studentAt = 0;
 
 }
 <head>
@@ -96,11 +97,11 @@
     <div>
         <!--- left column--->
         <div style="float:left; width: 75%">
-            <!--- question box --->
+            <!--- question name (under nav bar) --->
             <div>
                 <p>@Model.question </p>
             </div>
-            <!--- answer box --->
+            <!--- total response container --->
 
             <div>
                 <ul style=" list-style-type: none; padding: 0; overflow: auto; width:100%; max-height:1000px">
@@ -108,21 +109,21 @@
                     {
                         <li id='response' style="background-color:white">
                             @{ string color = defaultColor;
+                                string remp = "response" + x;
                             }
                             @if (x == Model.studentAt)
                             {
                                 color = highlightColor;
                             }
                             <div style="display:flex; background-color:transparent">
-                                <div style="float:left; width:15%; background-color:@color" id="@x">
+                                <div onclick="highlightResponse(this)" style="float:left; width:15%; background-color:@color" id="@remp">
                                     <p> @Model.names[x]  </p>
                                 </div>
-                                <div style="float:left; width:50%;  border:1px solid black; border-radius:5px"> 
+                                <div onclick="highlightResponse(this)" style="float:left; width:50%;  border:1px solid black; border-radius:5px; background-color:white" id="@remp"> 
                                     <p>@Model.namesAnswer[Model.names[x]]</p>
                                 </div>
-                                @{string m = x + "2";
-                                }
-                                <div style="float:left; width:35%; background-color:@color"id="@m"> 
+
+                                <div onclick="highlightResponse(this)" style ="float:left; width:35%; background-color:@color" id="@remp"> 
                                     @{
                                         string demo = "demo" + x;
                                     }
@@ -204,7 +205,7 @@
 
     <p id="action"></p>
     <p id="action2"></p>
-    <p id="action 3"></p>
+    <p id="action3"></p>
     <script>
         @*function reloadQuestions() {
           for (var i = 1; i < 11; ++i){
@@ -227,9 +228,9 @@
         }*@
         function down10() {
             @{
-                if (questionShow!= 0)
+                if (questionShow != 0)
                 {
-                   questionShow = questionShow - 10;
+                    questionShow = questionShow - 10;
                 }
 
              }           
@@ -241,7 +242,7 @@
         }
         function up10() {
             @{
-                questionShow=questionShow+10;
+                questionShow = questionShow + 10;
                 if ((Model.questionNum < questionShow))
                 {
                     questionShow = (Model.questionNum / 10) * 10;
@@ -266,33 +267,79 @@
             document.getElementById("action").innerHTML = "You pressed revert";
         }
         function save() {
-            document.getElementById("action").innerHTML = "You pressed save";
+            document.getElementById("action").innerHTML = "You pressed save-------------@Model.studentAt";
         }
-        function saveNext() {
-            document.getElementById("action").innerHTML = "You pressed save&next with @Model.studentAt out of @Model.names.Count()";
+
+
+
+        @*function saveNext(source) {
+            document.getElementById("action").innerHTML = "You pressed save&next with @Model.studentAt out of @Model.names.Count()";    //only says 0, will update only to 0
             //remove highlight from initial
            @{ string y = Model.studentAt + "2";
                }
-            updateResponseHighlight("@Model.studentAt",false);
-            updateResponseHighlight("@y", false);
+            var responses = document.querySelectorAll('#' + source.id);
+            for (var i = 0; i < responses.length; i++) {
+                updateResponseHighlight(responses[i], false);
+            }
+
+         //   updateResponseHighlight("@Model.studentAt",false);
+         //   updateResponseHighlight("@y", false);
             @{ 
                 Model.studentAt = (Model.studentAt + 1) % Model.names.Count();
-                y = Model.studentAt + "2";
             }
             //add highlight to update
-            updateResponseHighlight("@Model.studentAt", true);
-            updateResponseHighlight("@y", true);
+          //  updateResponseHighlight("@Model.studentAt", true);
+          //  updateResponseHighlight("@y", true);
+
+            for (var i = 0; i < responses.length; i++){
+                updateResponseHighlight(responses[responses.length], true);
+            }
+
             document.getElementById("grade").value = @Model.namesGrade[Model.names[Model.studentAt]];
-            document.getElementById("action2").innerHTML = "You pressed save&next with @Model.studentAt out of @Model.names.Count()";
+            document.getElementById("action2").innerHTML = "You pressed save&next with @Model.studentAt out of @Model.names.Count()";   //only says 1 and updates once
+        }*@  
+
+        function saveNext() {               //used for save and next button for next question highlighting
+            document.getElementById("action").innerHTML = "You pressed save&next with @Model.studentAt out of @Model.names.Count()";    //only says 0, will update only to 0
+
+            @{ 
+
+                string nowBoi = "#response" +Model.studentAt;
+                Model.AddOneToStudentAt(ref Model.studentAt);
+                string nextBoi = "#response" + Model.studentAt;
+            }
+
+            var responseToHighlight = document.querySelectorAll("@nextBoi");
+            var responseToDeselect = document.querySelectorAll("@nowBoi");
+
+           
+
+            for (var i = 0; i < responseToDeselect.length; i++) {
+                responseToDeselect[i].style.backgroundColor = "@defaultColor";
+            }
+
+            for (var j = 0; j < responseToHighlight.length; j++) {
+                responseToHighlight[j].style.backgroundColor = "@highlightColor";
+            }
+       
+          
+            
+              document.getElementById("action2").innerHTML = "You pressed save&next with @Model.studentAt out of @Model.names.Count()";   //only says 1 and updates once
+
         }
-        function updateResponseHighlight(x, highlight) {
+
+        
+
+        @*function updateResponseHighlight(x, highlight) {
             if (highlight == true) {
-                document.getElementById(x).style.backgroundColor = "@highlightColor";
+                x.style.backgroundColor = "@highlightColor";
             }
             else {
-                document.getElementById(x).style.backgroundColor = "@defaultColor";
+                x.style.backgroundColor = "@defaultColor";
             }
-        }
+        }*@
+
+
         function highlightRubic(source) {
 
             var buttons = document.querySelectorAll('#' + source.id);
@@ -305,6 +352,26 @@
             source.style = "width:100%; background-color:lightgreen; border:none"
 
         }
+
+
+
+        @*function highlightResponse(source) {
+            var responseCurrent = document.querySelectorAll('#' + source.id);
+            @{ 
+                string potato ="#response" + Model.studentAt;
+            }
+            var responseLast = document.querySelectorAll(@potato);
+            for (var i = 0; i < responseLast.length; i++) {
+                responseLast[i].style.backgroundColor = @defaultColor;
+            }
+            for (var i = 0; i < responseCurrent.length; i++) {
+                responseCurrent[i].style.backgroundColor = @highlightColor;
+            }
+            Model.studentAt = parseInt(source.id.substr(9));
+        }*@
+
+
+
  //       function highlightResponse(source) {
             //var responses = document.querySelectAll('#' + source.id)
             //  for (var i = 0; i < responses.length; i++) {

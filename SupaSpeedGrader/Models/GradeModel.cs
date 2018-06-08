@@ -27,6 +27,12 @@ namespace SupaSpeedGrader.Models
 
         public string rubicTitle = "Rubric";
         public int studentAt;
+
+        public void AddOneToStudentAt(ref int studentAt){
+            studentAt++;
+        }
+
+
         public GradeModel(int numStudents, int gradeOutof, List<string> names, Dictionary<string, string> namesAnswer, Dictionary<string, string> namesGrade, int rubicRows, int rubicCols, List<List<string>> rubric)
         {
             this.numStudent = numStudents;
@@ -88,7 +94,7 @@ namespace SupaSpeedGrader.Models
             questionStartShow = (questionOn / 10) * 10;
             questionName = "Question Name";
             question = "Question";
-            studentAt = 0;
+            
         }
 
     }
