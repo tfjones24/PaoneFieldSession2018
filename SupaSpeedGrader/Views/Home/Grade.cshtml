@@ -5,17 +5,14 @@
 
     string defaultColor = "white";
     string highlightColor = "lightgray";
+    int questionShow = Model.questionStartShow;
 
 }
 <head>
     <link rel="stylesheet" type="text/css" href="StyleSheet1.css" />
     <script type="text/javascript">
-
     </script>
-    <style>
-
-
-
+    <!--<style>
         /* Style The Dropdown Button */
         .dropbtn {
             background-color: #4CAF50;
@@ -65,9 +62,8 @@
             background-color: #3e8e41;
         }
     </style>
-
+        -->
 </head>
-
 <body>
     <div style="display: flex; border-bottom:1px solid black">
         <div style="float:left; width:52%">
@@ -75,24 +71,25 @@
         </div>
         <!--Navigation Bar-->
         <div style="float:left; width:4%">
-            <input type="button" style="width:100%; background-color:#D3D3D3" value="<-" onclick=down10() />
+            <input type="button" style="width:100%; background-color:#D3D3D3" value="<<" onclick=down10()/>
         </div>
         <div style="float:left; width:40%" id="navBar">
             @for (int x = 1; x < 11; ++x)
             {
                 string name = "Question" + x;
                 string color = " #D3D3D3";
+                int value = x + questionShow;
                 if (x == Model.questionOn)
                 {
                     color = "white";
                 }
                 <div style="float:left; width:10%">
-                    <input type="button" style="width:100%; background-color:@color" value="@x" onclick=changeQuestion() id="@name"/>
+                    <input type="button" style="width:100%; background-color:@color" value="@value"  id="@name" onclick=changeQuestion()/>
                 </div>
             }
         </div>     
         <div style="float:left; width:4%">
-            <input type="button" style="width:100%; background-color:#D3D3D3" value="->" onclick=up10() />
+            <input type="button" style="width:100%; background-color:#D3D3D3" value=">>" onclick=up10()/>
         </div>
     </div>
     <p></p>
@@ -109,27 +106,27 @@
                 <ul style=" list-style-type: none; padding: 0; overflow: auto; width:100%; max-height:1000px">
                     @for (int x = 0; x < Model.numStudent; x++)
                     {
-                        <li id='response' onclick=highlightResponse(this) style="background-color:white">
+                        <li id='response' style="background-color:white">
                             @{ string color = defaultColor;
                             }
                             @if (x == Model.studentAt)
                             {
                                 color = highlightColor;
                             }
-                            <div style="display:flex; background-color:transparent"> <!--onclick=highlightResponse(this)-->
+                            <div style="display:flex; background-color:transparent">
                                 <div style="float:left; width:15%; background-color:@color" id="@x">
                                     <p> @Model.names[x]  </p>
                                 </div>
-                                <div style="float:left; width:50%;  border:1px solid black; border-radius:5px"> <!--onclick=highlightResponse(this)-->
+                                <div style="float:left; width:50%;  border:1px solid black; border-radius:5px"> 
                                     <p>@Model.namesAnswer[Model.names[x]]</p>
                                 </div>
                                 @{string m = x + "2";
                                 }
-                                <div style="float:left; width:35%; background-color:@color"id="@m"> <!--onclick=highlightResponse(this)-->
+                                <div style="float:left; width:35%; background-color:@color"id="@m"> 
                                     @{
                                         string demo = "demo" + x;
                                     }
-                                    <p style="text-align:center"> Grade :<input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='@Model.names[x]' value='@Model.namesGrade[Model.names[x]]' onchange="myFunction('@Model.names[x]','@demo',@x)" /> / @Model.gradeOutOf</p>
+                                    <p style="text-align:center"> Grade :<input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='@Model.names[x]' value='@Model.namesGrade[Model.names[x]]' onchange=myFunction('@Model.names[x]','@demo',@x) /> / @Model.gradeOutOf</p>
 
                                     <p id="@demo"></p>
 
@@ -162,7 +159,7 @@
                 <p>@Model.rubicTitle</p>
                 @for (int i = 0; i < Model.rubicRows; ++i)
                 {<div style="display: flex">
-                     <div style="float:left; width: @Model.width%;background-color:grey;border:1px solid black " >
+                     <div style="float:left;width: @Model.width%; background-color:grey; border:1px solid black" >
                          @Model.rubic[i][0]
                      </div>
                         @for (int j = 1; j < Model.rubicCols; ++j)
@@ -199,7 +196,7 @@
             </div>
             <!--- Grade Box-->
             <div style="height:10%">
-                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " id="grade" value="@Model.namesGrade[Model.names[Model.studentAt]]" onchange="myGrade()"/> /@Model.gradeOutOf</p>
+                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " id="grade" value="@Model.namesGrade[Model.names[Model.studentAt]]" onchange=myGrade()/> /@Model.gradeOutOf</p>
             </div>
             <p id="graded"></p>
         </div>
@@ -209,56 +206,47 @@
     <p id="action2"></p>
     <p id="action 3"></p>
     <script>
-        function down10() {
-            @{
-
-                if (Model.questionStartShow != 0)
-                {
-                    Model.questionStartShow = Model.questionStartShow - 10;
-                }
-
-             }
-            reloadQuestions();
-            
-        }
-        function reloadQuestions() {
-            for (var i = 1; i < 11; ++i)
-            {
-                @{ 
-                    int l = 10;
-                    string name1 = "Question" + l;
-                    string color1 = " #D3D3D3";
-                    if (l == Model.questionOn)
-                    {
-                        color1 = "white";
-                    }
+        @*function reloadQuestions() {
+          for (var i = 1; i < 11; ++i){
+               @{ 
+                   int l = 1;
+                   int value1 = l + questionShow;
+                   string name1 = "Question" + l;
+                   string color1 = " #D3D3D3";
+                   if (l == Model.questionOn)
+                   {
+                       color1 = "white";
+                   }
                 }
                 
                 document.getElementById(@name1).style.backgroundColor = @color1;
-                document.getElementById(@name1).value = @l;
-                @{ 
-                    l++;
-                        }
-
+                document.getElementById(@name1).value = @value1;
+                @{l++;}
+        
             }
+        }*@
+        function down10() {
+            @{
+                if (questionShow!= 0)
+                {
+                   questionShow = questionShow - 10;
+                }
+
+             }           
         }
-            
-               
-
-
-            }
+        
+        
         function changeQuestion() {
 
         }
         function up10() {
             @{
-                Model.questionStartShow=Model.questionStartShow+10;
-                if ((Model.questionNum < Model.questionStartShow))
+                questionShow=questionShow+10;
+                if ((Model.questionNum < questionShow))
                 {
-                    Model.questionStartShow = (Model.questionNum / 10) * 10;
+                    questionShow = (Model.questionNum / 10) * 10;
                 }
             }
-            reloadQuestions();
         }
         function myFunction(x, z, num) {
             var y = document.getElementById(x).value;
