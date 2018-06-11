@@ -15,7 +15,7 @@ namespace SupaSpeedGrader.Models
         public string questionName;
         public string question;
         public List<string> names = new List<string>();
-
+        /* element 0 = answer, element 1 = grade, element 2 = comment*/
         public Dictionary<string, string[]> namesGrades = new Dictionary<string, string[]>();
         
         public int rubicRows;
@@ -36,7 +36,7 @@ namespace SupaSpeedGrader.Models
             this.numStudent = numStudents;
             this.gradeOutOf = gradeOutof;
             this.names = names;
-
+            this.namesGrades = namesGrades;
             this.rubicRows = rubicRows;
             this.rubicCols = rubicCols;
             this.rubic = rubric;
