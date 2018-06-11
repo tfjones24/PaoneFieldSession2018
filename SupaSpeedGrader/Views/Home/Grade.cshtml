@@ -165,7 +165,7 @@
         </div>
         <!--Navigation Bar-->
         <div style="float:left; width:4%">
-            <input type="button" style="width:100%; background-color:#D3D3D3" value="<<" onclick=down10()/>
+            <input type="button" style="width:100%; background-color:#D3D3D3" value="<<" onclick="down10()"/>
         </div>
         <div style="float:left; width:40%" id="navBar">
             @for (int x = 0; x < 10; ++x)
@@ -177,12 +177,12 @@
                     color = "white";
                 }
                 <div style="float:left; width:10%">
-                    <input type="button" style="width:100%; background-color:@color" value="@shownSet[x]"  id="@name" onclick=changeQuestion()/>
+                    <input type="button" style="width:100%; background-color:@color" value="@shownSet[x]"  id="@name" onclick="changeQuestion()"/>
                 </div>
             }
         </div>     
         <div style="float:left; width:4%">
-            <input type="button" style="width:100%; background-color:#D3D3D3" value=">>" onclick=up10()/>
+            <input type="button" style="width:100%; background-color:#D3D3D3" value=">>" onclick="up10()"/>
         </div>
     </div>
     <p></p>
@@ -380,6 +380,7 @@
 
         }
         function up10() {
+            document.getElementById("action").innerHTML = "You pressed up button";
             @{
                 if (shownSet[0] == s0[0]) {
                     for (int x = 0; x < 10; ++x)
@@ -444,7 +445,7 @@
                     document.getElementById(@question1).value = @shownSet[y];
                 @{y++;}
             }
-            document.getElementById("action").innerHTML = "You pressed up button";
+
         }
         
         function myFunction(x, z, num) {
