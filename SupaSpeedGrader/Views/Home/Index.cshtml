@@ -19,13 +19,27 @@
 <body>
     <p></p>
     <div>
-        <div style="float:left; width: 50%">
+        <div style="float:left">
             <div>
-                <h2>Section</h2>
-
-
-
+                <h2>Quiz</h2>
                 <form>
+                    <select id="quiz" onchange="quizFunction()">
+                        <option value="" selected="selected"></option>
+                        @{
+                            for (int i = 0; i < Model.quizzes.Count; i++)
+                            {
+                                <option value=@Model.quizzes[i]>@Model.quizzes[i]</option>
+                            }
+                        }
+                    </select>
+                    <p id="demo"></p>
+                </form>
+            </div>
+            <div>
+
+                <h2>Section</h2>
+                <form class="hidden" id="sectionForm" >
+
                     <script language="JavaScript">
                         function toggle(source) {
                             checkboxes = document.getElementsByName('foo');
@@ -40,58 +54,35 @@
                             document.getElementById("allsections").checked = false;
                         }
                     </script>
-                    <input checked="checked" onClick="toggle(this)" type="checkbox" id="allsections" name="section" value="all">
+                    <input checked="checked" onClick="toggle(this)" type="checkbox" id="allsections" name="section" value="all" >
                     <label for="allsections">Select All</label>
 
                     @{ for (int i = 0; i < Model.sections.Count; i++)
                         {
-                         <br />
-                            <input type="checkbox" onClick="uncheck()" checked="checked" id="section" name="foo" value=@Model.sections[i]>
+                            <br />
+                            <input type="checkbox" onClick="uncheck()" checked="checked" id="section" name="foo" value=@Model.sections[i] >
                             <label for="section">@Model.sections[i]</label>
                         }
                     }
                 </form>
             </div>
-            <div>
-                <h2>Quiz</h2>
-                <form>
-                    <select id="quiz" onchange="quizFunction()">
-                                <option value="" selected="selected"></option>
-                        @{
-                            for (int i = 0; i < Model.quizzes.Count; i++)
-                            {
-                                <option value=@Model.quizzes[i]>@Model.quizzes[i]</option>
-                            }
-                        }
-                    </select>
-                    <p id="demo"></p>
-                </form>
-            </div>
+
             <div>
                 <h2>Question</h2>
-                <form >
+                <form>
                     <select id="questionDrop" class="hidden">
-                        
+
                         @{
                             for (int i = 0; i < Model.quizdata.Count; i++)
                             {
                                 <option value=@Model.questions[i]>@Model.questions[i]</option>
                             }
                         }
-                    </select id="questionDrop">
+                    </select>
                 </form>
             </div>
             <p></p>
             <form action="../Home/Grade"> <input type="image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHfNSX7YyLf4h1XAMiFADq4jJt8c9orN9zvvbb-IQp_aF3maXV-A" alt="launch" height="40" width="40" /> </form>
-        </div>
-        <div style="float:left; width: 50%">
-            <h2>Sort By</h2>
-            <form>
-                <input checked="checked" name="filter" type="radio" value="Section" /> Section <br />
-                <input name="filter" type="radio" value="Groups" /> Groups <br />
-                <input name="filter" type="radio" value="Students" /> Students <br />
-            </form>
-            <p></p>
         </div>
     </div>
 
@@ -102,10 +93,12 @@
             if (x != "") {
                 document.getElementById("demo").innerHTML = "You selected: " + x;
                 document.getElementById("questionDrop").className = "visible";
+                document.getElementById("sectionForm").className = "visible";
                 document.getElementById("demo").innerHTML = "You chose: " + x;
             }
             else {
                 document.getElementById("questionDrop").className = "hidden";
+                document.getElementById("sectionForm").className = "hidden";
                 document.getElementById("questionDrop").value = "";
                 document.getElementById("demo").innerHTML = "";
             }
