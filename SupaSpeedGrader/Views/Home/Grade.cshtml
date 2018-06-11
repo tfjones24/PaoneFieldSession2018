@@ -286,7 +286,7 @@
             <!--- Comment Box--->
             <div>
                 <textarea style="height:100px; width:100%; border:1px solid black; border-radius:5px" name="comment">@Model.namesGrades[Model.names[Model.studentAt]][2]</textarea>
-                <input type="button" style="width:30%; background-color:#D3D3D3" value="Clear" onclick=clear() />
+                <input type="button" style="width:30%; background-color:#D3D3D3" value="Clear" onclick="clear()" />
             </div>
             <!--- Grade Box-->
             <div style="height:10%">
@@ -367,14 +367,23 @@
                         shownSet[x] = s80[x];
                     }
                 }
+                else
+                {
+                    for (int x = 0; x < 10; ++x)
+                    {
+                        shownSet[x] = "Error";
+                    }
                 }
+                }
+            document.getElementById("action2").innerHTML = "You pressed the down button 1";
             @{ int y = 0;}
             for (var x = 0; x < 11; ++x)
             {
                 @{string question = "Question" + y; }
                     document.getElementById(@question).value = @shownSet[y];
                 @{y++;}
-            }    
+            }
+            document.getElementById("action3").innerHTML = "You pressed the down button 2";
         }
         function changeQuestion() {
 
@@ -434,6 +443,13 @@
                     for (int x = 0; x < 10; ++x)
                     {
                         shownSet[x] = s90[x];
+                    }
+                }
+                else
+                {
+                    for (int x = 0; x < 10; ++x)
+                    {
+                        shownSet[x] = "Error";
                     }
                 }
             }
