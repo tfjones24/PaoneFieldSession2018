@@ -212,14 +212,14 @@
                                     <p> @Model.names[x]  </p>
                                 </div>
                                 <div onclick="highlightResponse(this)" style="float:left; width:50%;  border:1px solid black; border-radius:5px; background-color:white" id="@remp"> 
-                                    <p>@Model.namesAnswer[Model.names[x]]</p>
+                                    <p>@Model.namesGrades[Model.names[x]][0]</p>
                                 </div>
 
                                 <div onclick="highlightResponse(this)" style ="float:left; width:35%; background-color:@color" id="@remp"> 
                                     @{
                                         string demo = "demo" + x;
                                     }
-                                    <p style="text-align:center"> Grade :<input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='@Model.names[x]' value='@Model.namesGrade[Model.names[x]]' onchange=myFunction('@Model.names[x]','@demo',@x) /> / @Model.gradeOutOf</p>
+                                    <p style="text-align:center"> Grade :<input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='@Model.names[x]' value='@Model.namesGrades[Model.names[x]][1]' onchange=myFunction('@Model.names[x]','@demo',@x) /> / @Model.gradeOutOf</p>
 
                                     <p id="@demo"></p>
 
@@ -285,11 +285,11 @@
             <p></p>
             <!--- Comment Box--->
             <div>
-                <textarea style="height:100px; width:100%; border:1px solid black; border-radius:5px" name="comment">@Model.namesComment[Model.names[Model.studentAt]]</textarea>
+                <textarea style="height:100px; width:100%; border:1px solid black; border-radius:5px" name="comment">@Model.namesGrades[Model.names[Model.studentAt]][0]</textarea>
             </div>
             <!--- Grade Box-->
             <div style="height:10%">
-                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " id="grade" value="@Model.namesGrade[Model.names[Model.studentAt]]" onchange=myGrade()/> /@Model.gradeOutOf</p>
+                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " id="grade" value="@Model.namesGrades[Model.names[Model.studentAt]][0]" onchange=myGrade()/> /@Model.gradeOutOf</p>
             </div>
             <p id="graded"></p>
         </div>

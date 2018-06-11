@@ -16,10 +16,8 @@ namespace SupaSpeedGrader.Models
         public string question;
         public List<string> names = new List<string>();
 
-        public Dictionary<string, string> namesAnswer = new Dictionary<string, string>();
-
-        public Dictionary<string, string> namesGrade = new Dictionary<string, string>();
-        public Dictionary<string, string> namesComment = new Dictionary<string, string>();
+        public Dictionary<string, string[]> namesGrades = new Dictionary<string, string[]>();
+        
         public int rubicRows;
         public int rubicCols;
         public int width;
@@ -33,13 +31,12 @@ namespace SupaSpeedGrader.Models
         }
 
 
-        public GradeModel(int numStudents, int gradeOutof, List<string> names, Dictionary<string, string> namesAnswer, Dictionary<string, string> namesGrade, int rubicRows, int rubicCols, List<List<string>> rubric)
+        public GradeModel(int numStudents, int gradeOutof, List<string> names, Dictionary<string, string[]> namesGrades, int rubicRows, int rubicCols, List<List<string>> rubric)
         {
             this.numStudent = numStudents;
             this.gradeOutOf = gradeOutof;
             this.names = names;
-            this.namesAnswer = namesAnswer;
-            this.namesGrade = namesGrade;
+
             this.rubicRows = rubicRows;
             this.rubicCols = rubicCols;
             this.rubic = rubric;
@@ -58,22 +55,16 @@ namespace SupaSpeedGrader.Models
             names.Add("C");
             names.Add("D");
             names.Add("E");
-            namesAnswer = new Dictionary<string, string>();
-            namesAnswer.Add(names[0], "Alpha");
-            namesAnswer.Add(names[1], "Bravo");
-            namesAnswer.Add(names[2], "Charlie");
-            namesAnswer.Add(names[3], "Delta");
-            namesAnswer.Add(names[4], "Epsilon");
-            namesComment.Add(names[0], "Alpha");
-            namesComment.Add(names[1], "Bravo");
-            namesComment.Add(names[2], "Charlie");
-            namesComment.Add(names[3], "Delta");
-            namesComment.Add(names[4], "Epsilon");
-            namesGrade = new Dictionary<string, string>();
-            for (int x = 0; x < names.Count(); ++x)
-            {
-                namesGrade.Add(names[x], "0");
-            }
+            string[] A = { "Alpha", "0", "Alpha" };
+            string[] B = { "Beta", "0", "Beta" };
+            string[] C = { "Charlie", "0", "Charlie" };
+            string[] D = { "Delta", "0", "Delta" };
+            string[] E = { "Echo", "0", "Echo" };
+            namesGrades.Add(names[0], A);
+            namesGrades.Add(names[1], B);
+            namesGrades.Add(names[2], C);
+            namesGrades.Add(names[3], D);
+            namesGrades.Add(names[4], E);
             rubicRows = 5;
             rubicCols = 4;
             width = 100 / rubicCols;
