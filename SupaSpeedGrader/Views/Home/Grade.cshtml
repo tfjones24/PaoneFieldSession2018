@@ -285,12 +285,12 @@
             <p></p>
             <!--- Comment Box--->
             <div>
-                <textarea style="height:100px; width:100%; border:1px solid black; border-radius:5px" name="comment">@Model.namesGrades[Model.names[Model.studentAt]][0]</textarea>
-                <input type="button" style="width:30%; background-color:#D3D3D3" value="Clear" onlick=clear() />
+                <textarea style="height:100px; width:100%; border:1px solid black; border-radius:5px" name="comment">@Model.namesGrades[Model.names[Model.studentAt]][2]</textarea>
+                <input type="button" style="width:30%; background-color:#D3D3D3" value="Clear" onclick=clear() />
             </div>
             <!--- Grade Box-->
             <div style="height:10%">
-                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " id="grade" value="@Model.namesGrades[Model.names[Model.studentAt]][0]" onchange=myGrade()/> /@Model.gradeOutOf</p>
+                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " id="grade" value="@Model.namesGrades[Model.names[Model.studentAt]][1]" onchange=myGrade()/> /@Model.gradeOutOf</p>
             </div>
             <p id="graded"></p>
         </div>
@@ -474,6 +474,7 @@
         }
         function clear() {
             document.getElementByName("comment").value = "";
+            document.getElementById("action").innerHTML = "You pressed the click button";
         }
 
 
