@@ -104,8 +104,16 @@
 }
 <head>
     <link rel="stylesheet" type="text/css" href="StyleSheet1.css" />
-    <script type="text/javascript">
-    </script>
+
+
+    <!--DECLARING VARIABLES IN THIS SCRIPT BELOW-->
+
+
+
+
+
+
+
     <!--<style>
         /* Style The Dropdown Button */
         .dropbtn {
@@ -300,7 +308,10 @@
     <p id="action2"></p>
     <p id="action3"></p>
     <script>
-   
+    var studentAt = 0;
+
+
+
         function down10() {
             document.getElementById("action").innerHTML = "You pressed the down button";
             @{
@@ -463,7 +474,7 @@
             }
 
         }
-        
+
         function myFunction(x, z, num) {
             var y = document.getElementById(x).value;
             document.getElementById(z).innerHTML = "You wrote: " + y;
@@ -518,31 +529,31 @@
         }*@
 
         function saveNext() {               //used for save and next button for next question highlighting
-            document.getElementById("action").innerHTML = "You pressed save&next with @Model.studentAt out of @Model.names.Count()";    //only says 0, will update only to 0
+            document.getElementById("action").innerHTML = "You pressed save&next with " + (studentAt+1) + " out of @Model.names.Count()";    //only says 0, will update only to 0
+            if (studentAt != (@Model.names.Count()-1)) {
 
-            @{
 
-                string nowBoi = "#response" +Model.studentAt;
-                Model.AddOneToStudentAt(ref Model.studentAt);
-                string nextBoi = "#response" + Model.studentAt;
+                var responseToHighlight = document.querySelectorAll("#response" + (studentAt + 1));
+
+                var responseToDeselect = document.querySelectorAll("#response" + studentAt);
+                studentAt++;
+
+
+
+                for (var i = 0; i < responseToDeselect.length; i++) {
+                    responseToDeselect[i].style.backgroundColor = "@defaultColor";
+                }
+
+                for (var j = 0; j < responseToHighlight.length; j++) {
+                    responseToHighlight[j].style.backgroundColor = "@highlightColor";
+                }
+            }
+            else {
+                document.getElementById("action2").innerHTML = "You are at the end of the file";   //only says 1 and updates once
             }
 
-            var responseToHighlight = document.querySelectorAll("@nextBoi");
-            var responseToDeselect = document.querySelectorAll("@nowBoi");
 
-
-
-            for (var i = 0; i < responseToDeselect.length; i++) {
-                responseToDeselect[i].style.backgroundColor = "@defaultColor";
-            }
-
-            for (var j = 0; j < responseToHighlight.length; j++) {
-                responseToHighlight[j].style.backgroundColor = "@highlightColor";
-            }
-
-
-
-              document.getElementById("action2").innerHTML = "You pressed save&next with @Model.studentAt out of @Model.names.Count()";   //only says 1 and updates once
+              document.getElementById("action2").innerHTML = "You pressed save&next with " + (studentAt+1) + " out of @Model.names.Count()";   //only says 1 and updates once
 
         }
 
@@ -590,7 +601,7 @@
 
 
 
- //       function highlightResponse(source) {
+ @*//       function highlightResponse(source) {
             //var responses = document.querySelectAll('#' + source.id)
             //  for (var i = 0; i < responses.length; i++) {
             //        responses[i] =
@@ -602,7 +613,7 @@
  //           }
   //          source.style = "background-color:lightgreen"
 
-//        }
+//        }*@
     </script>
 </body>
 
