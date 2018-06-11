@@ -225,7 +225,9 @@ namespace SupaSpeedGrader.API
         }
 
 
-
+        /**
+         * Gets list of all sections in the current class
+         */ 
         public static async Task<dynamic> getSectionList(string accessToken, string baseUrl, string canvasCourseId)
         {
             dynamic rval = null;
