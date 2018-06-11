@@ -286,6 +286,7 @@
             <!--- Comment Box--->
             <div>
                 <textarea style="height:100px; width:100%; border:1px solid black; border-radius:5px" name="comment">@Model.namesGrades[Model.names[Model.studentAt]][0]</textarea>
+                <input type="button" style="width:30%; background-color:#D3D3D3" value="Clear" onlick=clear() />
             </div>
             <!--- Grade Box-->
             <div style="height:10%">
@@ -471,7 +472,9 @@
         function save() {
             document.getElementById("action").innerHTML = "You pressed save-------------@Model.studentAt";
         }
-
+        function clear() {
+            document.getElementByName("comment").value = "";
+        }
 
 
         @*function saveNext(source) {
