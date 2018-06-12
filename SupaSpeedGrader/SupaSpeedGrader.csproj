@@ -168,6 +168,7 @@
     <Compile Include="Helpers\userAccessToken.cs" />
     <Compile Include="Models\GradeModel.cs" />
     <Compile Include="Models\NavigationModel.cs" />
+    <Compile Include="Models\resultModel.cs" />
     <Compile Include="Models\willNameModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -255,6 +256,7 @@
     <Content Include="Views\Home\Grade.cshtml" />
     <Content Include="Views\Home\Help.cshtml" />
     <Content Include="Views\Home\willName.cshtml" />
+    <Content Include="Views\Home\result.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -138,6 +138,7 @@ namespace SupaSpeedGrader.Controllers
             bool requireOathRedirect = false;
             string jsonState = string.Empty;
 
+            resultModel model = new resultModel();
 
             /***********************************************************/
             //	Make sure the LTI signature is valid
@@ -165,17 +166,17 @@ namespace SupaSpeedGrader.Controllers
                         }
                         else
                         {
-                            /*model.title = "Token Refresh Success!!";
+                            model.title = "Token Refresh Success!!";
                             model.message = "We have successfully refreshed our existing user access token.";
                             model.linkTitle = "Using a Refresh Token to get a new Access Token";
-                            model.link = "https://canvas.instructure.com/doc/api/file.oauth.html#using-refresh-tokens";*/
+                            model.link = "https://canvas.instructure.com/doc/api/file.oauth.html#using-refresh-tokens";
                         }
 
                     }
                     else
                     {
-                        //model.title = "Success!!";
-                        //model.message = "Our token is still valid, no need to refresh.";
+                        model.title = "Success!!";
+                        model.message = "Our token is still valid, no need to refresh.";
                     }
 
                     if (!requireOathRedirect)
@@ -187,15 +188,15 @@ namespace SupaSpeedGrader.Controllers
                         sqlHelper.storeState(stateId, jsonState);
 
                         //for demo purposes only, we will display the LTI variables on the client, don't do this in production environment, this is only for testing
-                        //model.stateJson = jsonState;
+                        model.stateJson = jsonState;
 
                         //store the unique stateId in a hidden field so it can be passed back from the client to the server
-                        //model.oauth2State = stateId.ToString();
+                        model.oauth2State = stateId.ToString();
 
                         //display our token information
-                        //model.accessToken = oauth.accessToken.accessToken;
-                        //model.refreshToken = oauth.accessToken.refreshToken;
-                        //model.tokenLife = oauth.accessToken.tokenLife.ToString();
+                        model.accessToken = oauth.accessToken.accessToken;
+                        model.refreshToken = oauth.accessToken.refreshToken;
+                        model.tokenLife = oauth.accessToken.tokenLife.ToString();
 
                         //TODO: redirect since token is GOOD!
                         return View("result", model);
@@ -219,9 +220,9 @@ namespace SupaSpeedGrader.Controllers
             /***********************************************************/
             //	If we're here LTI validation failed, return a dead view
             /***********************************************************/
-            /*resultModel model = new resultModel();
+            resultModel model = new resultModel();
             model.title = "What happened...";
-            model.message = "Uh-oh looks like LTI validation failed, the user should never see this view.";*/
+            model.message = "Uh-oh looks like LTI validation failed, the user should never see this view.";
             return View();
         }
 
@@ -237,31 +238,31 @@ namespace SupaSpeedGrader.Controllers
             //FOR ILLUSTRATION: notice that when oauth is created, all of the LTI variables are empty
             oauthHelper oauth = new oauthHelper(Request);
 
-            //resultModel model = new resultModel();
+            resultModel model = new resultModel();
 
             if (error == null)
             {
-                //model.title = "Success!!";
-               // model.message = "Step 2 of the OAuth2 workflow was executed, as described here:";
-                //model.linkTitle = "Step 2: Redirect back to the request_uri, or out-of-band redirect";
-               // model.link = "https://canvas.instructure.com/doc/api/file.oauth.html#oauth2-flow-2";
+                model.title = "Success!!";
+                model.message = "Step 2 of the OAuth2 workflow was executed, as described here:";
+                model.linkTitle = "Step 2: Redirect back to the request_uri, or out-of-band redirect";
+                model.link = "https://canvas.instructure.com/doc/api/file.oauth.html#oauth2-flow-2";
 
                 // the [code] will be used in the API call to request the user token
                 // https://canvas.instructure.com/doc/api/file.oauth.html#oauth2-flow-3
                 // this is the [code] parameter called for in Step 3 of the document 
-               // model.oauth2Code = code;
+                model.oauth2Code = code;
 //
                 // this is the [state] identifier that we created in the launch request and sent to Canvas in the redirect to get use authorization
                 // we will use this value below to retrieve those launch parameters
-                //model.oauth2State = state;
+                model.oauth2State = state;
 
                 // hopefully this value is always null or empty
-                //model.oauth2Error = (string.IsNullOrEmpty(error)) ? string.Empty : error;
+                model.oauth2Error = (string.IsNullOrEmpty(error)) ? string.Empty : error;
 
                 //ok, let's get the [state] that we stored in the launch request
                 //    -- here i'm storing the state string in the model so it can be displayed in the browser
                 //		 NOTE: this is for demo purposes only, you never want to return this data to the client in production
-                //model.stateJson = sqlHelper.getStateJson(Guid.Parse(state));
+                model.stateJson = sqlHelper.getStateJson(Guid.Parse(state));
 
                 //let's deserialize that [state] json into an object so we can reference the variables
                 oauth = Newtonsoft.Json.JsonConvert.DeserializeObject<oauthHelper>(sqlHelper.getStateJson(Guid.Parse(state)));
@@ -273,8 +274,8 @@ namespace SupaSpeedGrader.Controllers
                     //	If we're here Canvas must have responded with an error, 
                     //  tell the user something went wrong
                     /***********************************************************/
-                    //model.title = "What happened...";
-                    //model.message = "Uh-oh looks like Canvas failed to return a user access token.";
+                    model.title = "What happened...";
+                    model.message = "Uh-oh looks like Canvas failed to return a user access token.";
                 }
                 else
                 {
@@ -283,9 +284,9 @@ namespace SupaSpeedGrader.Controllers
                     //  let's display in the browser for testing purposes
                     //  again you never want to return this data to the client in production
                     /***********************************************************/
-                    //model.accessToken = oauth.accessToken.accessToken;
-                    //model.refreshToken = oauth.accessToken.refreshToken;
-                    //model.tokenLife = oauth.accessToken.tokenLife.ToString();
+                    model.accessToken = oauth.accessToken.accessToken;
+                    model.refreshToken = oauth.accessToken.refreshToken;
+                    model.tokenLife = oauth.accessToken.tokenLife.ToString();
                 }
             }
             else
@@ -293,8 +294,8 @@ namespace SupaSpeedGrader.Controllers
                 /***********************************************************/
                 //	If we're here Canvas must have responded with an error
                 /***********************************************************/
-                //model.title = "What happened...";
-                //model.message = "Uh-oh looks like Canvas responded with an error.";
+                model.title = "What happened...";
+                model.message = "Uh-oh looks like Canvas responded with an error.";
             }
 
             //TODO: store new token, pass off to rest of app

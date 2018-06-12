@@ -1,0 +1,49 @@
+﻿@model SupaSpeedGrader.Models.resultModel
+@{
+    ViewBag.Title = "Response";
+}
+<h2>@Model.title</h2>
+<div>
+    <hr />
+    <p>
+        @Model.message<br />
+        <a href=@Model.link target="_blank">@Model.linkTitle</a>
+    </p>
+    <p>
+        <strong>OAuth2 Code:</strong> @Model.oauth2Code<br />
+        <strong>OAuth2 State:</strong> @Model.oauth2State<br />
+        <strong>OAuth2 Error:</strong> @Model.oauth2Error<br />
+    </p>
+</div>
+<div class="row">
+    <p class="@(@Model.title.ToUpper().Contains("SUCCESS") ? "alert-success" : "alert-danger")">
+        <strong>User Access Token:</strong> @Model.accessToken<br />
+        <strong>Refresh Token:</strong> @Model.refreshToken<br />
+        <strong>Token Life:</strong> @Model.tokenLife<br />
+    </p>
+    <p>
+        <div class="row">
+            @using (Html.BeginForm("logout", "Home", FormMethod.Post))
+            {
+                <div class="form-group">
+                    <div class="col-md-offset-1 col-md-12">
+                        @Html.Hidden("stateToken", Model.oauth2State)
+                        <input type="submit" value="Logout" class="btn btn-primary btn-lg" style="width:500px;" />
+                    </div>
+                </div>
+            }
+        </div>
+    </p>
+</div>
+<div class="row">
+    <p>
+        <strong>State Json:</strong> <pre id="stateJson"></pre>
+    </p>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var str = JSON.stringify(@(new MvcHtmlString(Model.stateJson)), undefined, 2); // indentation level = 2
+        $('#stateJson').html(str);
+        console.log(str);
+    });
+</script>
