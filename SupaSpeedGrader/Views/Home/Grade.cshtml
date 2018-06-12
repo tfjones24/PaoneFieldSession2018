@@ -18,7 +18,7 @@
     string[] s70 = { "71", "72", "73", "74", "75", "76", "77", "78", "79", "80" };
     string[] s80 = { "81", "82", "83", "84", "85", "86", "87", "88", "89", "90" };
     string[] s90 = { "91", "92", "93", "94", "95", "96", "97", "98", "99", "100" };
-    int a = (Model.questionOn/ 10);
+    int a = (Model.questionOn / 10);
     if (Model.questionNum % 10 == 0)
     {
         a--;
@@ -107,7 +107,6 @@
 
 
     <!--DECLARING VARIABLES IN THIS SCRIPT BELOW-->
-
 
 
 
@@ -226,8 +225,9 @@
                                 <div onclick="highlightResponse(this)" style ="float:left; width:35%; background-color:@color" id="@remp"> 
                                     @{
                                         string demo = "demo" + x;
+                                        string grades = "grade" + x;
                                     }
-                                    <p style="text-align:center"> Grade :<input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='@Model.names[x]' value='@Model.namesGrades[Model.names[x]][1]' onchange=myFunction('@Model.names[x]','@demo',@x) /> / @Model.gradeOutOf</p>
+                                    <p style="text-align:center"> Grade :<input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='@grades' value='@Model.namesGrades[Model.names[x]][1]' onchange=myFunction('@Model.names[x]','@demo',@x) /> / @Model.gradeOutOf</p>
 
                                     <p id="@demo"></p>
 
@@ -269,7 +269,7 @@
                             string clap = "rubr" + i;
 
                             <div style="float:left; width:@Model.width%;border:1px solid black">
-                                <input onclick=highlightRubic(this) type="button" style="width:100%; background-color:white; border:none" value="@Model.rubic[i][j]" id='@clap' />
+                                <input onclick=highlightRubic(this) onmouseover="hoverRubric(this)" onmouseout="exitRubric(this)" type="button" style="width:100%; background-color:white; border:none" value="@Model.rubic[i][j]" id='@clap' />
                             </div>
                         }
                     </div>
@@ -293,12 +293,12 @@
             <p></p>
             <!--- Comment Box--->
             <div>
-                <textarea style="height:100px; width:100%; border:1px solid black; border-radius:5px" name="comment">@Model.namesGrades[Model.names[Model.studentAt]][2]</textarea>
+                <textarea style="height:100px; width:100%; border:1px solid black; border-radius:5px" id="comment">@Model.namesGrades[Model.names[Model.studentAt]][2]</textarea>
                 <input type="button" style="width:30%; background-color:#D3D3D3" value="Clear" onclick="clear()" />
             </div>
             <!--- Grade Box-->
             <div style="height:10%">
-                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " id="grade" value="@Model.namesGrades[Model.names[Model.studentAt]][1]" onchange="myGrade()"/> /@Model.gradeOutOf</p>
+                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " id="grade" value="@Model.namesGrades[Model.names[Model.studentAt]][1]" onchange="myGrade()"/> /@Model.gradeOutOf </p>
             </div>
             <p id="graded"></p>
         </div>
@@ -307,15 +307,19 @@
     <p id="action"></p>
     <p id="action2"></p>
     <p id="action3"></p>
+    
+    
+    
     <script>
-    var studentAt = 0;
-
-
-
+        var studentAt = 0;
+        var comments = [];
+        @{int c = 0;}
+        for (var x = 0; x < @Model.names.Count(); ++x) {
+            comments.push(@Model.namesGrades[Model.names[c]][2]);
+            @{c++;}
+        }
         function down10() {
-            document.getElementById("action").innerHTML = "You pressed the down button";
-            @{
-                if (shownSet[0] == s10[0])
+               @{ if (shownSet[0] == s10[0])
                 {
                     for (int x = 0; x < 10; ++x)
                     {
@@ -396,9 +400,7 @@
             }
             document.getElementById("action3").innerHTML = "You pressed the down button 2";
         }
-        function changeQuestion() {
-
-        }
+       
         function up10() {
             document.getElementById("action").innerHTML = "You pressed up button";
             @{
@@ -475,10 +477,21 @@
 
         }
 
+        function exitRubric(source) {
+            if (source.style.backgroundColor == "lightblue") {
+                source.style.backgroundColor = "white";
+           }
+        }
+        function hoverRubric(source) {
+            if (source.style.backgroundColor=="white") {
+                source.style.backgroundColor = "lightblue";
+            }
+        }
+
         function myFunction(x, z, num) {
             var y = document.getElementById(x).value;
             document.getElementById(z).innerHTML = "You wrote: " + y;
-            if (num ==@Model.studentAt) {
+            if (num ==studentAt) {
                 document.getElementById("grade").value = y;
             }
 
@@ -486,7 +499,8 @@
         function myGrade() {
             var y = document.getElementById("grade").value;
             document.getElementById("graded").innerHTML = "You wrote: " + y;
-            document.getElementById("@Model.names[Model.studentAt]").value = y;
+            var grade = "grade" + studentAt; 
+            document.getElementById(grade).value = y;
 
         }
         function revert() {
@@ -500,6 +514,7 @@
             document.getElementById("action").innerHTML = "You pressed the click button";
         }
 
+       
 
         @*function saveNext(source) {
             document.getElementById("action").innerHTML = "You pressed save&next with @Model.studentAt out of @Model.names.Count()";    //only says 0, will update only to 0
@@ -551,10 +566,12 @@
             else {
                 document.getElementById("action2").innerHTML = "You are at the end of the file";   //only says 1 and updates once
             }
+            var grade ="grade" + studentAt; 
 
-
-              document.getElementById("action2").innerHTML = "You pressed save&next with " + (studentAt+1) + " out of @Model.names.Count()";   //only says 1 and updates once
-
+            document.getElementById("action2").innerHTML = "You pressed save&next with " + (studentAt + 1) + " out of @Model.names.Count()";   //only says 1 and updates once
+            // it is not updating
+            document.getElementById("grade").value = document.getElementById(grade).value;
+            document.getElementById("comment").value = comments[studentAt];
         }
 
 
@@ -596,7 +613,7 @@
             for (var i = 0; i < responseCurrent.length; i++) {
                 responseCurrent[i].style.backgroundColor = @highlightColor;
             }
-            Model.studentAt = parseInt(source.id.substr(9));
+            studentAt = parseInt(source.id.substr(9));
         }*@
 
 
