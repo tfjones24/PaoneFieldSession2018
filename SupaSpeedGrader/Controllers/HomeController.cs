@@ -211,7 +211,7 @@ namespace SupaSpeedGrader.Controllers
                     jsonState = Newtonsoft.Json.JsonConvert.SerializeObject(oauth);
                     sqlHelper.storeState(stateId, jsonState);
                     string oauth2ClientId = (ConfigurationManager.AppSettings["oauth2ClientId"] != null) ? ConfigurationManager.AppSettings["oauth2ClientId"] : Guid.NewGuid().ToString();
-                    string redirectUrl = string.Format("{0}://{1}/login/oauth2/auth?client_id={2}&&response_type=code&redirect_uri={3}&state={4}", Request.UrlReferrer.Scheme, Request.UrlReferrer.DnsSafeHost, oauth2ClientId, Request.Url.ToString().Replace("oauth2Request", "oauth2Response"), stateId.ToString());
+                    string redirectUrl = string.Format("{0}://{1}/login/oauth2/auth?client_id={2}&&response_type=code&redirect_uri={3}&state={4}", Request.UrlReferrer.Scheme, Request.UrlReferrer.DnsSafeHost, oauth2ClientId, Request.Url.ToString().Replace("oauth2Request", "oauthreturn"), stateId.ToString());
                     Response.Redirect(redirectUrl, true);
                 }
 
@@ -233,7 +233,7 @@ namespace SupaSpeedGrader.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult> oauth2Response(string code = null, string state = null, string error = null)
+        public async Task<ActionResult> oauthreturn(string code = null, string state = null, string error = null)
         {
             //FOR ILLUSTRATION: notice that when oauth is created, all of the LTI variables are empty
             oauthHelper oauth = new oauthHelper(Request);
