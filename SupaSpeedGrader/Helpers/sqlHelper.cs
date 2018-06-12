@@ -8,8 +8,9 @@ using System.Linq;
 using System.Web;
 using Newtonsoft.Json;
 
-namespace oauth2Test.Helpers
+namespace SupaSpeedGrader.Helpers
 {
+    // This helper was coiped in for the purpose of simplifying the SQL database management.
 	public class sqlHelper
 	{
 		private static string _camsConnectionString = (System.Configuration.ConfigurationManager.ConnectionStrings["oauth2"] != null) ? System.Configuration.ConfigurationManager.ConnectionStrings["oauth2"].ToString() : string.Empty;

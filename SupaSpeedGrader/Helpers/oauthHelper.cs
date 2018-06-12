@@ -16,7 +16,9 @@ namespace SupaSpeedGrader.Helpers
 		public string _consumerSecret = string.Empty;
 		private bool _signatureVerified = false;
 
-		public string uniqueSessionKey
+        public userAccessToken accessToken = null;
+
+        public string uniqueSessionKey
 		{
 			get
 			{

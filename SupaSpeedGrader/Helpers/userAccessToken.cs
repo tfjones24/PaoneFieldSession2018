@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Data;
 
-namespace oauth2Test.Helpers
+namespace SupaSpeedGrader.Helpers
 {
 	/// <summary>
 	/// Use thie helper class to simplify serialization/deserialization of the token data
