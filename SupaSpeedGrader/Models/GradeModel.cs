@@ -49,7 +49,6 @@ namespace SupaSpeedGrader.Models
             string[] alphabet = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
             numStudent = 11;
             gradeOutOf = 20;
-            names = new List<string>();
             names.Add("A");
             names.Add("B");
             names.Add("C");
