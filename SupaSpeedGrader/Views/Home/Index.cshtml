@@ -19,7 +19,7 @@
 <body>
     <p></p>
     <div>
-        <div style="float:left">
+        <div style="float:left; width:50%">
             <div>
                 <h2>Quiz</h2>
                 <form>
@@ -60,7 +60,7 @@
                     @{ for (int i = 0; i < Model.sections.Count; i++)
                         {
                             <br />
-                            <input type="checkbox" onClick="uncheck()" checked="checked" id="section" name="foo" value=@Model.sections[i] >
+                            <input type="checkbox" onClick="uncheck()" checked="checked" id="@Model.sections[i]" name="foo" value=@Model.sections[i] >
                             <label for="section">@Model.sections[i]</label>
                         }
                     }
@@ -82,7 +82,22 @@
                 </form>
             </div>
             <p></p>
-            <form action="../Home/Grade"> <input type="image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHfNSX7YyLf4h1XAMiFADq4jJt8c9orN9zvvbb-IQp_aF3maXV-A" alt="launch" height="40" width="40"  /> </form>
+            <form action="../Home/Grade"> <input type="image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHfNSX7YyLf4h1XAMiFADq4jJt8c9orN9zvvbb-IQp_aF3maXV-A" alt="launch" height="40" width="40" onclick="datapull()"  /> </form>
+        </div>
+        <div style="float:left; width:50%">
+            <h2>Rubic</h2>
+            <form>
+                <select id="rubic">
+                    <option value="" selected="selected"></option>
+                    @{
+                        for (int i = 0; i < Model.rubic.Count; i++)
+                        {
+                            <option value=@Model.rubic[i]>@Model.rubic[i]</option>
+                        }
+                    }
+                </select>
+                <p id="demo1"></p>
+            </form>
         </div>
     </div>
 
@@ -101,6 +116,21 @@
                 document.getElementById("sectionForm").className = "hidden";
                 document.getElementById("questionDrop").value = "";
                 document.getElementById("demo").innerHTML = "";
+            }
+        }
+        function datapull() {
+            var question = document.getElementById("questionDrop").value;
+            var  quiz = document.getElementById("quiz").value;
+            var rubic = document.getElementById("rubic").value;
+            var secChecked = [];
+            @{int y = 0; }
+            for (var x = 0; x < 10; x++) {
+                if (document.getElementById("@Model.sections[y]").checked){
+                    secChecked.push(@Model.sections[y]);
+                }
+
+                @{y++;}
+
             }
         }
     </script>

@@ -15,7 +15,7 @@ namespace SupaSpeedGrader.Models
         public Dictionary<string, string> quizID = new Dictionary<string, string>();
 
         public Dictionary<string, List<string>> quizdata = new Dictionary<string, List<string>>();
-
+        public List<string> rubic = new List<string>();
         //Garbage to ignore, only for hardcoded bullshit
         public List<string> questions = new List<string>();
 
@@ -47,7 +47,9 @@ namespace SupaSpeedGrader.Models
             quizzes.Add("Apple");
             quizzes.Add("Banana");
             quizzes.Add("Cucumber");
-
+            rubic.Add("A");
+            rubic.Add("B");
+            rubic.Add("C");
             updateQuizData();
         }
 
