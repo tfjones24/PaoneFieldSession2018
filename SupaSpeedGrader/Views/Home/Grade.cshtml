@@ -491,7 +491,7 @@
         function myFunction(x, z, num) {
             var y = document.getElementById(x).value;
             document.getElementById(z).innerHTML = "You wrote: " + y;
-            if (num ==@Model.studentAt) {
+            if (num ==studentAt) {
                 document.getElementById("grade").value = y;
             }
 
@@ -499,7 +499,8 @@
         function myGrade() {
             var y = document.getElementById("grade").value;
             document.getElementById("graded").innerHTML = "You wrote: " + y;
-            document.getElementById("@Model.names[Model.studentAt]").value = y;
+            var grade = "grade" + studentAt; 
+            document.getElementById(grade).value = y;
 
         }
         function revert() {
