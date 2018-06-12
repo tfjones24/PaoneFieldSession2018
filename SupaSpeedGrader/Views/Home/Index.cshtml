@@ -14,6 +14,18 @@
         visibility: visible;
         overflow: visible;
     }
+    .unstarted{
+        background-color:red;
+        color: white;
+    }
+    .done {
+        background-color:green;
+        color: white;
+    }
+    .started{
+        background-color:yellow;
+        color: black;
+    }
 </style>
 
 <body>
@@ -28,7 +40,7 @@
                         @{
                             for (int i = 0; i < Model.quizzes.Count; i++)
                             {
-                                <option value=@Model.quizzes[i]>@Model.quizzes[i]</option>
+                                <option value=@Model.quizzes[i] class ="@Model.quizColor[Model.quizzes[i]]">@Model.quizzes[i]</option>
                             }
                         }
                     </select>
@@ -75,9 +87,9 @@
                         @{
                             for (int i = 0; i < Model.quizdata.Count; i++)
                             {
-                                <option value=@Model.questions[i]>@Model.questions[i]</option>
+                                <option value=@Model.questions[i] class="@Model.questionColor[Model.questions[i]] ">@Model.questions[i]</option>
                             }
-                        }
+                                }
                     </select>
                 </form>
             </div>
