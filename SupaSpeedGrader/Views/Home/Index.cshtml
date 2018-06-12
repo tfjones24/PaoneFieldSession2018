@@ -14,87 +14,78 @@
         visibility: visible;
         overflow: visible;
     }
-    .unstarted{
-        background-color:red;
-        color: white;
-    }
-    .done {
-        background-color:green;
-        color: white;
-    }
-    .started{
-        background-color:yellow;
-        color: black;
-    }
 </style>
 
 <body>
     <p></p>
     <div>
         <div style="float:left; width:50%">
-            <div>
-                <h2>Quiz</h2>
-                <form>
-                    <select id="quiz" onchange="quizFunction()">
-                        <option value="" selected="selected"></option>
-                        @{
-                            for (int i = 0; i < Model.quizzes.Count; i++)
-                            {
-                                <option value=@Model.quizzes[i] class ="@Model.quizColor[Model.quizzes[i]]">@Model.quizzes[i]</option>
-                            }
-                        }
-                    </select>
-                    <p id="demo"></p>
-                </form>
-            </div>
-            <div>
-
-                <h2>Section</h2>
-                <form class="hidden" id="sectionForm" >
-
-                    <script language="JavaScript">
-                        function toggle(source) {
-                            checkboxes = document.getElementsByName('foo');
-
-                            for (var i = 0, n = checkboxes.length; i < n; i++) {
-                                checkboxes[i].checked = source.checked;
-                            }
-
-
-                        }
-                        function uncheck() {
-                            document.getElementById("allsections").checked = false;
-                        }
-                    </script>
-                    <input checked="checked" onClick="toggle(this)" type="checkbox" id="allsections" name="section" value="all" >
-                    <label for="allsections">Select All</label>
-
-                    @{ for (int i = 0; i < Model.sections.Count; i++)
-                        {
-                            <br />
-                            <input type="checkbox" onClick="uncheck()" checked="checked" id="@Model.sections[i]" name="foo" value=@Model.sections[i] >
-                            <label for="section">@Model.sections[i]</label>
-                        }
-                    }
-                </form>
-            </div>
-
-            <div>
-                <h2>Question</h2>
-                <form>
-                    <select id="questionDrop" class="hidden">
-
-                        @{
-                            for (int i = 0; i < Model.quizdata.Count; i++)
-                            {
-                                <option value=@Model.questions[i] class="@Model.questionColor[Model.questions[i]] ">@Model.questions[i]</option>
-                            }
+            <form action="../Home/Grade">
+                <div>
+                    <h2>Quiz</h2>
+                    <div>
+                        <select name="quiz" id="quiz" onchange="quizFunction()">
+                            <option value="" selected="selected"></option>
+                            @{
+                                for (int i = 0; i < Model.quizzes.Count; i++)
+                                {
+                                    <option value=@Model.quizzes[i]>@Model.quizzes[i]</option>
                                 }
-                    </select>
-                </form>
-            </div>
-            <p></p>
-            <form action="../Home/Grade"> <input type="image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHfNSX7YyLf4h1XAMiFADq4jJt8c9orN9zvvbb-IQp_aF3maXV-A" alt="launch" height="40" width="40" onclick="datapull()"  /> </form>
+                            }
+                        </select>
+                        <p id="demo"></p>
+                    </div>
+                </div>
+                <div>
+
+                    <h2>Section</h2>
+                    <div class="hidden" id="sectionForm">
+
+                        <script language="JavaScript">
+                            function toggle(source) {
+                                checkboxes = document.getElementsByName('foo');
+
+                                for (var i = 0, n = checkboxes.length; i < n; i++) {
+                                    checkboxes[i].checked = source.checked;
+                                }
+
+
+                            }
+                            function uncheck() {
+                                document.getElementById("allsections").checked = false;
+                            }
+                        </script>
+
+                        <input checked="checked" onClick="toggle(this)" type="checkbox" id="allsections" name="section" value="all">
+                        <label for="allsections">Select All</label>
+
+                        @{ for (int i = 0; i < Model.sections.Count; i++)
+                            {
+                                <br />
+                                <input type="checkbox" onClick="uncheck()" checked="checked" id="@Model.sections[i]" name="section" value=@Model.sections[i]>
+                                <label for="section">@Model.sections[i]</label>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <div>
+                    <h2>Question</h2>
+                    <div>
+                        <select name="question" id="questionDrop" class="hidden">
+
+                            @{
+                                for (int i = 0; i < Model.quizdata.Count; i++)
+                                {
+                                    <option value=@Model.questions[i]>@Model.questions[i]</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <p></p>
+                <input type="image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHfNSX7YyLf4h1XAMiFADq4jJt8c9orN9zvvbb-IQp_aF3maXV-A" alt="launch" height="40" width="40" />
+            </form>
         </div>
         <div style="float:left; width:50%">
             <h2>Rubic</h2>
@@ -130,21 +121,7 @@
                 document.getElementById("demo").innerHTML = "";
             }
         }
-        function datapull() {
-            var question = document.getElementById("questionDrop").value;
-            var  quiz = document.getElementById("quiz").value;
-            var rubic = document.getElementById("rubic").value;
-            var secChecked = [];
-            @{int y = 0; }
-            for (var x = 0; x < 10; x++) {
-                if (document.getElementById("@Model.sections[y]").checked){
-                    secChecked.push(@Model.sections[y]);
-                }
-
-                @{y++;}
-
-            }
-        }
+        
     </script>
 
 </body>
