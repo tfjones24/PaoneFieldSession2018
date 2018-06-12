@@ -164,6 +164,8 @@
     <Compile Include="Helpers\jsonHelpers.cs" />
     <Compile Include="Helpers\ltiLaunchParams.cs" />
     <Compile Include="Helpers\oauthHelper.cs" />
+    <Compile Include="Helpers\sqlHelper.cs" />
+    <Compile Include="Helpers\userAccessToken.cs" />
     <Compile Include="Models\GradeModel.cs" />
     <Compile Include="Models\NavigationModel.cs" />
     <Compile Include="Models\willNameModel.cs" />
@@ -200,6 +202,8 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
+    <Content Include="SqlServer\accessTokenCache.sql" />
+    <Content Include="SqlServer\stateCache.sql" />
     <Content Include="Views\Home\codeForNavbar.html" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\bootstrap.min.js.map" />
