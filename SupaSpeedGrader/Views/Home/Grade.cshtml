@@ -110,7 +110,7 @@
 
     <style>
         .potato:hover{
-            background-color:lightblue;
+            background:lightblue;
         }
     </style>
 
@@ -273,8 +273,8 @@
 
                             string clap = "rubr" + i;
 
-                            <div class="potato" style="float:left; width:@Model.width%;border:1px solid black">
-                                <input onclick=highlightRubic(this) onmouseover="hoverRubric(this)" onmouseout="exitRubric(this)" type="button" style="width:100%; background-color:white; border:none" value="@Model.rubic[i][j]" id='@clap' />
+                            <div  style="float:left; width:@Model.width%;border:1px solid black">
+                                <input class="potato" onclick=highlightRubic(this) @*onmouseover="hoverRubric(this)" onmouseout="exitRubric(this)"*@ type="button" style="width:100%; background-color:white; border:none" value="@Model.rubic[i][j]" id='@clap' />
                             </div>
                         }
                     </div>
@@ -312,6 +312,9 @@
     <p id="action"></p>
     <p id="action2"></p>
     <p id="action3"></p>
+    
+    
+    
     <script>
     var studentAt = 0;
 
@@ -479,13 +482,13 @@
         }
 
         function exitRubric(source) {
-            if (source.style.background == 'lightblue') {
-                source.style.background = white;
+            if (source.style.backgroundColor == "lightblue") {
+                source.style.backgroundColor = "white";
             }
         }
         function hoverRubric(source) {
-            if (source.style.background != 'lightgreen') {
-                source.style.background = 'lightblue';
+            if (source.stlye.backgroundColor!="white") {
+                source.style.backgroundColor = "lightblue";
             }
         }
 
