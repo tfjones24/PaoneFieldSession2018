@@ -108,7 +108,11 @@
 
     <!--DECLARING VARIABLES IN THIS SCRIPT BELOW-->
 
-
+    <style>
+        .potato:hover{
+            background-color:lightblue;
+        }
+    </style>
 
 
 
@@ -268,8 +272,8 @@
 
                             string clap = "rubr" + i;
 
-                            <div style="float:left; width:@Model.width%;border:1px solid black">
-                                <input onclick=highlightRubic(this) type="button" style="width:100%; background-color:white; border:none" value="@Model.rubic[i][j]" id='@clap' />
+                            <div class="potato" style="float:left; width:@Model.width%;border:1px solid black">
+                                <input onclick=highlightRubic(this) onmouseover="hoverRubric(this)" onmouseout="exitRubric(this)" type="button" style="width:100%; background-color:white; border:none" value="@Model.rubic[i][j]" id='@clap' />
                             </div>
                         }
                     </div>
@@ -396,9 +400,7 @@
             }
             document.getElementById("action3").innerHTML = "You pressed the down button 2";
         }
-        function changeQuestion() {
-
-        }
+       
         function up10() {
             document.getElementById("action").innerHTML = "You pressed up button";
             @{
@@ -475,6 +477,17 @@
 
         }
 
+        function exitRubric(source) {
+            if (source.style.background == 'lightblue') {
+                source.style.background = white;
+            }
+        }
+        function hoverRubric(source) {
+            if (source.style.background != 'lightgreen') {
+                source.style.background = 'lightblue';
+            }
+        }
+
         function myFunction(x, z, num) {
             var y = document.getElementById(x).value;
             document.getElementById(z).innerHTML = "You wrote: " + y;
@@ -500,6 +513,7 @@
             document.getElementById("action").innerHTML = "You pressed the click button";
         }
 
+       
 
         @*function saveNext(source) {
             document.getElementById("action").innerHTML = "You pressed save&next with @Model.studentAt out of @Model.names.Count()";    //only says 0, will update only to 0
