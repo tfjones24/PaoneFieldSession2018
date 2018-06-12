@@ -261,9 +261,9 @@
                 <p>@Model.rubicTitle</p>
                 @for (int i = 0; i < Model.rubicRows; ++i)
                 {<div style="display: flex">
-                     <div style="float:left;width: @Model.width%; background-color:grey; border:1px solid black" >
-                         @Model.rubic[i][0]
-                     </div>
+                        <div style="float:left;width: @Model.width%; background-color:grey; border:1px solid black">
+                            @Model.rubic[i][0]
+                        </div>
                         @for (int j = 1; j < Model.rubicCols; ++j)
                         {
 
@@ -295,11 +295,14 @@
             <!--- Comment Box--->
             <div>
                 <textarea style="height:100px; width:100%; border:1px solid black; border-radius:5px" id="comment">@Model.namesGrades[Model.names[Model.studentAt]][2]</textarea>
-                <input type="button" style="width:30%; background-color:#D3D3D3" value="Clear" onclick="clear()" />
+                <input type="button" style="width:30%; background-color:#D3D3D3" value="Clear" onclick="clear()" />     <!--clear comment-->
+
             </div>
+            <br />
+            <br />
             <!--- Grade Box-->
             <div style="height:10%">
-                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " id="grade" value="@Model.namesGrades[Model.names[Model.studentAt]][1]" onchange="myGrade()"/> /@Model.gradeOutOf </p>
+                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " id="grade" value="@Model.namesGrades[Model.names[Model.studentAt]][1]" onchange="myGrade()" /> /@Model.gradeOutOf </p>
             </div>
             <p id="graded"></p>
         </div>
@@ -618,11 +621,15 @@
 
 
                 for (var i = 0; i < responseToDeselect.length; i++) {
-                    responseToDeselect[i].style.backgroundColor = "@defaultColor";
+                    if (responseToDeselect[i].style.backgroundColor != "aliceblue") {
+                        responseToDeselect[i].style.backgroundColor = "@defaultColor";
+                    }
                 }
 
                 for (var j = 0; j < responseToHighlight.length; j++) {
-                    responseToHighlight[j].style.backgroundColor = "@highlightColor";
+                    if (responseToHighlight[j].style.backgroundColor != "aliceblue") {
+                        responseToHighlight[j].style.backgroundColor = "@highlightColor";
+                    }
                 }
             }
             else {
