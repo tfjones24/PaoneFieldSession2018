@@ -230,8 +230,9 @@
                                 <div onclick="highlightResponse(this)" style ="float:left; width:35%; background-color:@color" id="@remp"> 
                                     @{
                                         string demo = "demo" + x;
+                                        string grades = "grade" + x;
                                     }
-                                    <p style="text-align:center"> Grade :<input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='@Model.names[x]' value='@Model.namesGrades[Model.names[x]][1]' onchange=myFunction('@Model.names[x]','@demo',@x) /> / @Model.gradeOutOf</p>
+                                    <p style="text-align:center"> Grade :<input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='@grades' value='@Model.namesGrades[Model.names[x]][1]' onchange=myFunction('@Model.names[x]','@demo',@x) /> / @Model.gradeOutOf</p>
 
                                     <p id="@demo"></p>
 
@@ -565,10 +566,11 @@
             else {
                 document.getElementById("action2").innerHTML = "You are at the end of the file";   //only says 1 and updates once
             }
+            var grade = "\"" +grade + studentAt+"\"";
 
-
-              document.getElementById("action2").innerHTML = "You pressed save&next with " + (studentAt+1) + " out of @Model.names.Count()";   //only says 1 and updates once
-
+            document.getElementById("action2").innerHTML = "You pressed save&next with " + (studentAt + 1) + " out of @Model.names.Count()";   //only says 1 and updates once
+            // it is not updating
+            document.getElementById("grade").value = document.getElementById(grade).value;
         }
 
 
