@@ -220,10 +220,10 @@ namespace SupaSpeedGrader.Controllers
             /***********************************************************/
             //	If we're here LTI validation failed, return a dead view
             /***********************************************************/
-            resultModel model = new resultModel();
+            model = new resultModel();
             model.title = "What happened...";
             model.message = "Uh-oh looks like LTI validation failed, the user should never see this view.";
-            return View();
+            return View("result", model);
         }
 
         /// <summary>
