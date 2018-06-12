@@ -209,20 +209,21 @@
                         <li id='response' style="background-color:white">
                             @{ string color = defaultColor;
                                 string remp = "response" + x;
+                                //string remp2 = "response" + x;
                             }
                             @if (x == Model.studentAt)
                             {
                                 color = highlightColor;
                             }
                             <div style="display:flex; background-color:transparent">
-                                <div onclick="highlightResponse(this)" style="float:left; width:15%; background-color:@color" id="@remp">
+                                <div onclick="highlightResponse(this)" style="float:left; width:15%; background-color:@color" id="@remp">   <!--Student name on the left-->
                                     <p> @Model.names[x]  </p>
                                 </div>
-                                <div  style="float:left; width:50%;  border:1px solid black; border-radius:5px; background-color:white" > 
+                                <div onclick="highlightResponse(this)" style="float:left; width:50%;  border:1px solid black; border-radius:5px; background-color:aliceblue" id="@remp">   <!--Response box-->
                                     <p>@Model.namesGrades[Model.names[x]][0]</p>
                                 </div>
 
-                                <div onclick="highlightResponse(this)" style ="float:left; width:35%; background-color:@color" id="@remp"> 
+                                <div onclick="highlightResponse(this)" style ="float:left; width:35%; background-color:@color" id="@remp">  <!--Holds the grade box on the right-->
                                     @{
                                         string demo = "demo" + x;
                                         string grades = "grade" + x;
@@ -260,9 +261,9 @@
                 <p>@Model.rubicTitle</p>
                 @for (int i = 0; i < Model.rubicRows; ++i)
                 {<div style="display: flex">
-                     <div style="float:left;width: @Model.width%; background-color:grey; border:1px solid black" >
-                         @Model.rubic[i][0]
-                     </div>
+                        <div style="float:left;width: @Model.width%; background-color:grey; border:1px solid black">
+                            @Model.rubic[i][0]
+                        </div>
                         @for (int j = 1; j < Model.rubicCols; ++j)
                         {
 
@@ -294,11 +295,14 @@
             <!--- Comment Box--->
             <div>
                 <textarea style="height:100px; width:100%; border:1px solid black; border-radius:5px" id="comment">@Model.namesGrades[Model.names[Model.studentAt]][2]</textarea>
-                <input type="button" style="width:30%; background-color:#D3D3D3" value="Clear" onclick="clear()" />
+                <input type="button" style="width:30%; background-color:#D3D3D3" value="Clear" onclick="clear()" />     <!--clear comment-->
+
             </div>
+            <br />
+            <br />
             <!--- Grade Box-->
             <div style="height:10%">
-                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " id="grade" value="@Model.namesGrades[Model.names[Model.studentAt]][1]" onchange="myGrade()"/> /@Model.gradeOutOf </p>
+                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " id="grade" value="@Model.namesGrades[Model.names[Model.studentAt]][1]" onchange="myGrade()" /> /@Model.gradeOutOf </p>
             </div>
             <p id="graded"></p>
         </div>
@@ -527,7 +531,68 @@
             document.getElementById("action").innerHTML = "You pressed the click button";
         }
 
-       
+
+
+        function highlightResponse(source) {
+            var newResponse = document.querySelectorAll('#' + source.id);   //populate with new response selection elements
+            var lastID = "#response" + studentAt;                           //Id of last selection pulled using studentAt variable
+            var oldResponse = document.querySelectorAll(lastID);            //populate with old response selection elements
+
+            for (var i = 0; i < newResponse.length; i++) {
+                if (newResponse[i].style.backgroundColor == "aliceblue") {              //Highlight new one
+                    //don't color response gray
+                }
+                else {
+                    newResponse[i].style.backgroundColor = "@highlightColor";
+                }
+
+            }
+            for (var i = 0; i < oldResponse.length; i++) {                          //Deselect the old one
+                if (oldResponse[i].style.backgroundColor == "aliceblue") {
+                    //don't color response gray
+                }
+                else {
+                    oldResponse[i].style.backgroundColor = "@defaultColor";
+                }
+
+            }
+
+
+            studentAt = parseInt(source.id.substr(8));  //update studentAt
+            document.getElementById("action").innerHTML = "studentAt is set to " + studentAt;       //doublecheck we right
+        }
+
+
+        @* function highlightResponse(source) {
+            var responseCurrent = document.querySelectorAll('#' + source.id);
+            @{
+                string potato = "#response" + Model.studentAt;
+            }
+            var responseLast = document.querySelectorAll(@potato);
+            for (var i = 0; i < responseLast.length; i++) {
+                responseLast[i].style.backgroundColor = @defaultColor;
+            }
+            for (var i = 0; i < responseCurrent.length; i++) {
+                responseCurrent[i].style.backgroundColor = @highlightColor;
+            }
+            studentAt = parseInt(source.id.substr(9));
+        } *@
+
+
+
+ @*//       function highlightResponse(source) {
+            //var responses = document.querySelectAll('#' + source.id)
+            //  for (var i = 0; i < responses.length; i++) {
+            //        responses[i] =
+            //}
+ //           document.getElementById("action").innerHTML = "POTATO";
+ //           var responses = document.querySelectorAll('#response');
+ //           for (var x = 0; x < responses.length) {
+  //              responses[x].style = "background-color:white";
+ //           }
+  //          source.style = "background-color:lightgreen"
+
+//        }*@
 
         @*function saveNext(source) {
             document.getElementById("action").innerHTML = "You pressed save&next with @Model.studentAt out of @Model.names.Count()";    //only says 0, will update only to 0
@@ -569,11 +634,15 @@
 
 
                 for (var i = 0; i < responseToDeselect.length; i++) {
-                    responseToDeselect[i].style.backgroundColor = "@defaultColor";
+                    if (responseToDeselect[i].style.backgroundColor != "aliceblue") {
+                        responseToDeselect[i].style.backgroundColor = "@defaultColor";
+                    }
                 }
 
                 for (var j = 0; j < responseToHighlight.length; j++) {
-                    responseToHighlight[j].style.backgroundColor = "@highlightColor";
+                    if (responseToHighlight[j].style.backgroundColor != "aliceblue") {
+                        responseToHighlight[j].style.backgroundColor = "@highlightColor";
+                    }
                 }
             }
             else {
@@ -582,9 +651,9 @@
             var grade ="grade" + studentAt; 
 
             document.getElementById("action2").innerHTML = "You pressed save&next with " + (studentAt + 1) + " out of @Model.names.Count()";   //only says 1 and updates once
-            // it is not updating
+           
             document.getElementById("grade").value = document.getElementById(grade).value;
-            document.getElementById("comment").value = comments[studentAt];
+            document.getElementById("comment").value = comments[studentAt]; //TODO comment is returning as undefined still
         }
 
 
@@ -614,36 +683,7 @@
 
 
 
-        @*function highlightResponse(source) {
-            var responseCurrent = document.querySelectorAll('#' + source.id);
-            @{
-                string potato ="#response" + Model.studentAt;
-            }
-            var responseLast = document.querySelectorAll(@potato);
-            for (var i = 0; i < responseLast.length; i++) {
-                responseLast[i].style.backgroundColor = @defaultColor;
-            }
-            for (var i = 0; i < responseCurrent.length; i++) {
-                responseCurrent[i].style.backgroundColor = @highlightColor;
-            }
-            studentAt = parseInt(source.id.substr(9));
-        }*@
-
-
-
- @*//       function highlightResponse(source) {
-            //var responses = document.querySelectAll('#' + source.id)
-            //  for (var i = 0; i < responses.length; i++) {
-            //        responses[i] =
-            //}
- //           document.getElementById("action").innerHTML = "POTATO";
- //           var responses = document.querySelectorAll('#response');
- //           for (var x = 0; x < responses.length) {
-  //              responses[x].style = "background-color:white";
- //           }
-  //          source.style = "background-color:lightgreen"
-
-//        }*@
+ 
     </script>
 </body>
 
