@@ -307,9 +307,7 @@
     <p id="action"></p>
     <p id="action2"></p>
     <p id="action3"></p>
-    
-    
-    
+   
     <script>
         var studentAt = 0;
         var comments = [];
@@ -319,7 +317,8 @@
             @{c++;}
         }
         function down10() {
-               @{ if (shownSet[0] == s10[0])
+            var set = [];
+               @{if (shownSet[0] == s10[0])
                 {
                     for (int x = 0; x < 10; ++x)
                     {
@@ -390,19 +389,26 @@
                     }
                 }
                 }
-            document.getElementById("action2").innerHTML = "You pressed the down button 1";
             @{ int y = 0;}
+            for (var x = 0; x < 10; ++x) {
+                set[x] = @shownSet[y];
+                @{y++;}
+            }
+            document.getElementById("action2").innerHTML = "You pressed the down button 1";
+            @{ y = 0;}
             for (var x = 0; x < 11; ++x)
             {
                 @{string question = "Question" + y; }
-                    document.getElementById(@question).value = @shownSet[y];
+                document.getElementById("@question").value = set[x];
                 @{y++;}
+                
             }
-            document.getElementById("action3").innerHTML = "You pressed the down button 2";
+            document.getElementById("action1").innerHTML = "You pressed the down button 2";
         }
        
         function up10() {
             document.getElementById("action").innerHTML = "You pressed up button";
+            var set = [];
             @{
                 if (shownSet[0] == s0[0]) {
                     for (int x = 0; x < 10; ++x)
@@ -467,13 +473,20 @@
                 }
             }
             @{ y = 0;}
-            for (var x = 0; x < 11; ++x)
-            {
-                @{string question1 = "Question" + y; }
-
-                    document.getElementById(@question1).value = @shownSet[y];
+            for(var x = 0; x < 10; ++x) {
+                set[x] = @shownSet[y];
                 @{y++;}
             }
+            document.getElementById("action2").innerHTML = "You pressed the up button 1";
+           
+            @{ y = 0;}
+            for (var x = 0; x < 10; ++x)
+            {
+                @{string question1 = "Question" + y; }
+                document.getElementById("@question1").value = set[x];
+                @{y++;}
+            }
+            document.getElementById("action1").innerHTML = "You pressed the up button 3";
 
         }
 
