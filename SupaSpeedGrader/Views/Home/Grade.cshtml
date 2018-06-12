@@ -8,98 +8,7 @@
     string[] shownSet = new string[10];
     Model.studentAt = 0;
 
-    string[] s0 = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
-    string[] s10 = { "11", "12", "13", "14", "15", "16", "17", "18", "19", "20" };
-    string[] s20 = { "21", "22", "23", "24", "25", "26", "27", "28", "29", "30" };
-    string[] s30 = { "31", "32", "33", "34", "35", "36", "37", "38", "39", "40" };
-    string[] s40 = { "41", "42", "43", "44", "45", "46", "47", "48", "49", "50" };
-    string[] s50 = { "51", "52", "53", "54", "55", "56", "57", "58", "59", "60" };
-    string[] s60 = { "61", "62", "63", "64", "65", "66", "67", "68", "69", "70" };
-    string[] s70 = { "71", "72", "73", "74", "75", "76", "77", "78", "79", "80" };
-    string[] s80 = { "81", "82", "83", "84", "85", "86", "87", "88", "89", "90" };
-    string[] s90 = { "91", "92", "93", "94", "95", "96", "97", "98", "99", "100" };
-    int a = (Model.questionOn / 10);
-    if (Model.questionNum % 10 == 0)
-    {
-        a--;
-    }
-    if (a == 0)
-    {
-        for (int x = 0; x < 10; ++x)
-        {
-            shownSet[x] = s0[x];
-        }
-    }
-    else if (a == 1)
-    {
-        for (int x = 0; x < 10; ++x)
-        {
-            shownSet[x] = s10[x];
-        }
-    }
-    else if (a == 2)
-    {
-        for (int x = 0; x < 10; ++x)
-        {
-            shownSet[x] = s20[x];
-        }
-    }
-    else if (a == 3)
-    {
-        for (int x = 0; x < 10; ++x)
-        {
-            shownSet[x] = s30[x];
-        }
-    }
-    else if (a == 4)
-    {
-        for (int x = 0; x < 10; ++x)
-        {
-            shownSet[x] = s40[x];
-        }
-    }
-    else if (a == 5)
-    {
-        for (int x = 0; x < 10; ++x)
-        {
-            shownSet[x] = s50[x];
-        }
-    }
-    else if (a == 6)
-    {
-        for (int x = 0; x < 10; ++x)
-        {
-            shownSet[x] = s60[x];
-        }
-    }
-    else if (a == 7)
-    {
-        for (int x = 0; x < 10; ++x)
-        {
-            shownSet[x] = s70[x];
-        }
-    }
-    else if (a == 8)
-    {
-        for (int x = 0; x < 10; ++x)
-        {
-            shownSet[x] = s80[x];
-        }
-    }
-    else if (a == 9)
-    {
-        for (int x = 0; x < 10; ++x)
-        {
-            shownSet[x] = s90[x];
-        }
-    }
-    else
-    {
-        for (int x = 0; x < 10; ++x)
-        {
-            shownSet[x] = "Error";
-        }
-    }
+
 
 }
 <head>
@@ -170,24 +79,43 @@
         <div style="float:left; width:52%">
             <h3 style="color: #21314d"> @Model.questionName </h3>
         </div>
-        <!--Navigation Bar-->
+
+
+
+<!--Navigation Bar-->
         <div style="float:left; width:4%">
             <input type="button" style="width:100%; background-color:#D3D3D3" value="<<" onclick="down10()"/>
         </div>
-        <div style="float:left; width:40%" id="navBar">
-            @for (int x = 0; x < 10; ++x)
+        <!--first set of question numbers-->
+        @{ 
+            string newID = "questionSet0";
+        }
+        <div style="float:left; width:40%" id="@newID">
+            @for (int x = 0; x < 10; x++)
             {
-                string color = "lightGrey";
-                string name = "Question" + x;
-                if (x == Model.questionOn)
-                {
-                    color = "white";
-                }
+                
                 <div style="float:left; width:10%">
-                    <input type="button" style="width:100%; background-color:@color" value="@shownSet[x]"  id="@name" onclick="changeQuestion()"/>
+                    <input type="button" style="width:100%; background-color:lightgray" value="@x" id="questionNumber" onclick="changeQuestion(this)" />
                 </div>
             }
-        </div>     
+        </div>
+        <!--other hidden numbers-->
+        @for (var i = 1; i < (1+(Model.navBarQuestions.Count/10)); i++)
+        {
+            newID = "questionSet" + i;   //Makes ID for set the same, but different for each set
+        <div style="float:left; width:40%; display:none" id="@newID" >
+            @for (int x = (i*10); x < ((i+1)*10); x++)
+            {
+                     
+                   
+                    
+                <div style="float:left; width:10%">
+                    <input type="button" style="width:100%; background-color:lightgray" value="@x"  id="questionNumber" onclick="changeQuestion(this)"/>
+                </div>
+            }
+        </div>
+       
+        }
         <div style="float:left; width:4%">
             <input type="button" style="width:100%; background-color:#D3D3D3" value=">>" onclick="up10()"/>
         </div>
@@ -309,10 +237,19 @@
     </div>
 
     <p id="action"></p>
+    <p id="action1"></p>
     <p id="action2"></p>
     <p id="action3"></p>
-   
+    
+    
+
+
+
+
+
+    
     <script>
+        var questionSetCurrent = 0;
         var studentAt = 0;
         var comments = [];
         @{int c = 0;}
@@ -320,179 +257,49 @@
             comments.push(@Model.namesGrades[Model.names[c]][2]);
             @{c++;}
         }
+
+
+        //NAV BAR FUNCTIONS FOR MOVING
         function down10() {
-            var set = [];
-               @{if (shownSet[0] == s10[0])
-                {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s0[x];
-                    }
+            if (questionSetCurrent > 0) {
+                questionSetCurrent--;
+                var oldQuestions = document.querySelectorAll("#questionSet" + (questionSetCurrent + 1));
+                var newQuestions = document.querySelectorAll("#questionSet" + questionSetCurrent);
+
+                for (var i = 0; i < oldQuestions.length; i++) {
+                    oldQuestions[i].style = "float:left; width:40%; display:none";
                 }
-                else if (shownSet[0] == s20[0])
-                {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s10[x];
-                    }
+                for (var i = 0; i < newQuestions.length; i++) {
+                    newQuestions[i].style = "float:left; width:40%"
                 }
-                else if (shownSet[0] == s30[0])
-                {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s20[x];
-                    }
-                }
-                else if (shownSet[0] == s40[0])
-                {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s30[x];
-                    }
-                }
-                else if (shownSet[0] == s50[0])
-                {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s40[x];
-                    }
-                }
-                else if (shownSet[0] == s60[0])
-                {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s50[x];
-                    }
-                }
-                else if (shownSet[0] == s70[0])
-                {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s60[x];
-                    }
-                }
-                else if (shownSet[0] == s80[0])
-                {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s70[x];
-                    }
-                }
-                else if (shownSet[0] == s90[0])
-                {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s80[x];
-                    }
-                }
-                else
-                {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = "Error";
-                    }
-                }
-                }
-            @{ int y = 0;}
-            for (var x = 0; x < 10; ++x) {
-                set[x] = @shownSet[y];
-                @{y++;}
+
+                document.getElementById("action2").innerHTML = "You pressed the down button";
             }
-            document.getElementById("action2").innerHTML = "You pressed the down button 1";
-            @{ y = 0;}
-            for (var x = 0; x < 11; ++x)
-            {
-                @{string question = "Question" + y; }
-                document.getElementById("@question").value = set[x];
-                @{y++;}
-                
-            }
-            document.getElementById("action1").innerHTML = "You pressed the down button 2";
         }
        
         function up10() {
-            document.getElementById("action").innerHTML = "You pressed up button";
-            var set = [];
-            @{
-                if (shownSet[0] == s0[0]) {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s10[x];
-                    }
-                }
-                else if (shownSet[0] == s10[0]) {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s20[x];
-                    }
-                }
-                else if (shownSet[0] == s20[0]) {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s30[x];
-                    }
-                }
-                else if (shownSet[0] == s30[0]) {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s40[x];
-                    }
-                }
-                else if (shownSet[0] == s40[0]) {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s50[x];
-                    }
-                }
-                else if (shownSet[0] == s50[0]) {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s60[x];
-                    }
-                }
-                else if (shownSet[0] == s60[0]) {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s70[x];
-                    }
-                }
-                else if (shownSet[0] == s70[0]) {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s80[x];
-                    }
-                }
-                else if (shownSet[0] == s80[0]) {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s90[x];
-                    }
-                }
-                else
-                {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = "Error";
-                    }
-                }
-            }
-            @{ y = 0;}
-            for(var x = 0; x < 10; ++x) {
-                set[x] = @shownSet[y];
-                @{y++;}
-            }
-            document.getElementById("action2").innerHTML = "You pressed the up button 1";
-           
-            @{ y = 0;}
-            for (var x = 0; x < 10; ++x)
-            {
-                @{string question1 = "Question" + y; }
-                document.getElementById("@question1").value = set[x];
-                @{y++;}
-            }
-            document.getElementById("action1").innerHTML = "You pressed the up button 3";
 
+            if (questionSetCurrent < (@Model.navBarQuestions.Count/10)-1) {
+                questionSetCurrent++;
+                var oldQuestions = document.querySelectorAll("#questionSet" + (questionSetCurrent - 1));
+                var newQuestions = document.querySelectorAll("#questionSet" + questionSetCurrent);
+
+                for (var i = 0; i < oldQuestions.length; i++) {
+                    oldQuestions[i].style = "float:left; width:40%; display:none";
+                }
+                for (var i = 0; i < newQuestions.length; i++) {
+                    newQuestions[i].style = "float:left; width:40%"
+                }
+
+                document.getElementById("action2").innerHTML = "You pressed the up button";
+            }
+                        
         }
+
+
+
+
+
 
         function exitRubric(source) {
             if (source.style.backgroundColor == "lightblue") {
@@ -538,15 +345,7 @@
             var lastID = "#response" + studentAt;                           //Id of last selection pulled using studentAt variable
             var oldResponse = document.querySelectorAll(lastID);            //populate with old response selection elements
 
-            for (var i = 0; i < newResponse.length; i++) {
-                if (newResponse[i].style.backgroundColor == "aliceblue") {              //Highlight new one
-                    //don't color response gray
-                }
-                else {
-                    newResponse[i].style.backgroundColor = "@highlightColor";
-                }
 
-            }
             for (var i = 0; i < oldResponse.length; i++) {                          //Deselect the old one
                 if (oldResponse[i].style.backgroundColor == "aliceblue") {
                     //don't color response gray
@@ -556,6 +355,16 @@
                 }
 
             }
+            for (var i = 0; i < newResponse.length; i++) {
+                if (newResponse[i].style.backgroundColor == "aliceblue") {              //Highlight new one
+                    //don't color response gray
+                }
+                else {
+                    newResponse[i].style.backgroundColor = "@highlightColor";
+                }
+
+            }
+
 
 
             studentAt = parseInt(source.id.substr(8));  //update studentAt
@@ -682,7 +491,10 @@
         }
 
 
-
+            function changeQuestion(source) {
+                //make api call to change page to question of this number(reference value of button)
+                document.getElementById("action").innerHTML = "Button pressed to move to question " + source.value;
+            }
  
     </script>
 </body>
