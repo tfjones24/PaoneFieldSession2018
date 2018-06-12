@@ -126,6 +126,10 @@ namespace SupaSpeedGrader.Controllers
         {
             oauthHelper oauth = new oauthHelper(Request);
 
+            bool requireOathRedirect = false;
+            string jsonState = string.Empty;
+
+
             /***********************************************************/
             //	Make sure the LTI signature is valid
             /***********************************************************/
