@@ -74,7 +74,7 @@
     </style>
         -->
 </head>
-<body onload="rubricParseCheck()">
+<body onload="navBarCheck()">       <!--need rubricParseChecker here as well-->
     <div style="display: flex; border-bottom:1px solid black">
         <div style="float:left; width:52%">
             <h3 style="color: #21314d"> @Model.questionName </h3>
@@ -95,7 +95,7 @@
             {
                 
                 <div style="float:left; width:10%">
-                    <input type="button" style="width:100%; background-color:lightgray" value="@x" id="questionNumber" onclick="changeQuestion(this)" />
+                    <input type="button" style="width:100%; background-color:lightgray" value="@x" id="questionNumber" name ="questionNumber" onclick="changeQuestion(this)" />
                 </div>
             }
         </div>
@@ -110,7 +110,7 @@
                    
                     
                 <div style="float:left; width:10%">
-                    <input type="button" style="width:100%; background-color:lightgray" value="@x"  id="questionNumber" onclick="changeQuestion(this)"/>
+                    <input type="button" style="width:100%; background-color:lightgray" value="@x"  id="questionNumber" name="questionNumber" onclick="changeQuestion(this)"/>
                 </div>
             }
         </div>
@@ -224,7 +224,7 @@
             <!--- button row--->
             <div style="display: flex">
                 <div style="float:left; width:33%;">
-                    <form><input type="button" style="width:100%; background-color:#D3D3D3" value=" Revert" onclick=revert() /></form>
+                    <form><input type="button" style="width:100%; background-color:#D3D3D3" value=" Revert" onclick="revert()" /></form>
                 </div>
                 <div style="float:left; width:33%;">
                     <form><input type="button" style="width:100%; background-color:#D3D3D3" value="Save" onclick=save() /></form>
@@ -240,10 +240,13 @@
 
             <!--- Comment Box--->
             <div>
-                <textarea style="height:100px; width:100%; border:1px solid black; border-radius:5px" onchange="updateComments(this)" id="comment" value=""> </textarea>
-                <input type="button" style="width:30%; background-color:#D3D3D3" value="Clear" onclick="clear()" />     <!--clear comment-->
-
+                <form>
+                    <textarea style="height:100px; width:100%; border:1px solid black; border-radius:5px" onchange="updateComments(this)" id="comment" value=""> </textarea>
+                    <input type="reset" value="Clear">
+                </form>
             </div>
+            <!--clear box-->
+            
             <br />
             <br />
             
@@ -298,7 +301,7 @@
                     newQuestions[i].style = "float:left; width:40%"
                 }
 
-                document.getElementById("action2").innerHTML = "You pressed the down button";
+              //  document.getElementById("action2").innerHTML = "You pressed the down button";
             }
         }
        
@@ -316,7 +319,7 @@
                     newQuestions[i].style = "float:left; width:40%"
                 }
 
-                document.getElementById("action2").innerHTML = "You pressed the up button";
+             //   document.getElementById("action2").innerHTML = "You pressed the up button";
             }
                         
         }
@@ -355,22 +358,47 @@
 
         function myGrade() {        //counterpart to leftSideGrade, does the same thing but from the right.
             var y = document.getElementById("grade").value;
-            document.getElementById("graded").innerHTML = "You wrote: " + y;
+           // document.getElementById("graded").innerHTML = "You wrote: " + y;
             var grade = "grade" + studentAt; 
             document.getElementById(grade).value = y;
 
         }
 
 
-        function revert() {
-            document.getElementById("action").innerHTML = "You pressed revert";
+        function revert() {                 //a function to nuke the response back to ground zero and rebuild. (shoutout to fallout 76 being released soon)
+            
+            document.getElementById("comment").value = "";
+            //document.getElementById("action").innerHTML = "You pressed revert";
+            updateComments(document.getElementById("comment"));
+            document.getElementById("grade").value = 0;
+            document.getElementById("grade" + studentAt).value = 0;
+            var rubricPieces = document.querySelectorAll(".rubricButton");
+            for (var i = 0; i < rubricPieces.length; i++) {
+                rubricPieces[i].style.backgroundColor="@defaultColor"
+            }
         }
+
+
+
         function save() {
-            document.getElementById("action").innerHTML = "You pressed save-------------@Model.studentAt";
+            //document.getElementById("action").innerHTML = "You pressed save-------------@Model.studentAt";
+
+            updateComments(document.getElementById("comment"));
+
         }
-        function clear() {
-            document.getElementByName("comment").value = "";
-            document.getElementById("action").innerHTML = "You pressed the click button";
+
+
+
+
+        function navBarCheck() {
+
+            var questionNums = document.getElementsByName("questionNumber");
+            alert("Page is loaded");
+            for (var i = 0; i < questionNums.length; i++) {
+                if (questionNums[i].value > @Model.navBarQuestions.Count()) {
+                    questionNums[i].style.visibility="hidden";
+                }
+            }
         }
 
 
@@ -403,10 +431,10 @@
 
 
             studentAt = parseInt(source.id.substr(8));  //update studentAt
-            document.getElementById("action").innerHTML = "studentAt is set to " + studentAt;       //doublecheck we right
+            //document.getElementById("action").innerHTML = "studentAt is set to " + studentAt;       //doublecheck we right
 
             //CLEAR RIGHT HAND SIDE
-            document.getElementById("grade").value = 0;
+            
             var rubricPieces = document.querySelectorAll(".rubricButton");
             for (var i = 0; i < rubricPieces.length; i++) {
                 rubricPieces[i].style.backgroundColor="@defaultColor"
@@ -425,7 +453,7 @@
 
 
         function saveNext() {               //used for save and next button for next question highlighting
-            document.getElementById("action").innerHTML = "You pressed save&next with " + (studentAt+1) + " out of @Model.names.Count()";    //only says 0, will update only to 0
+           // document.getElementById("action").innerHTML = "You pressed save&next with " + (studentAt+1) + " out of @Model.names.Count()";    //only says 0, will update only to 0
             if (studentAt != (@Model.names.Count()-1)) {
 
 
@@ -448,13 +476,18 @@
                     }
                 }
             }
-            else {
-                document.getElementById("action2").innerHTML = "You are at the end of the file";   //only says 1 and updates once
-            }
+           
             var grade ="grade" + studentAt; 
 
-            document.getElementById("action2").innerHTML = "You pressed save&next with " + (studentAt + 1) + " out of @Model.names.Count()";   //only says 1 and updates once
-           
+           // document.getElementById("action2").innerHTML = "You pressed save&next with " + (studentAt + 1) + " out of @Model.names.Count()";   //only says 1 and updates once
+
+
+
+            var rubricPieces = document.querySelectorAll(".rubricButton");
+            for (var i = 0; i < rubricPieces.length; i++) {
+                rubricPieces[i].style.backgroundColor="@defaultColor"
+            }
+
             document.getElementById("grade").value = document.getElementById(grade).value;
             document.getElementById("comment").value = comments[studentAt]; //TODO comment is returning as undefined still
         }
@@ -487,7 +520,9 @@
 
             function changeQuestion(source) {
                 //make api call to change page to question of this number(reference value of button)
-                document.getElementById("action").innerHTML = "Button pressed to move to question " + source.value;
+
+                    document.getElementById("action").innerHTML = "Button pressed to move to question " + source.value;
+                
             }
 
 
