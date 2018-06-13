@@ -53,7 +53,7 @@ namespace SupaSpeedGrader.Controllers
                 {
                     Guid stateId = Guid.NewGuid();
                     string jsonState = Newtonsoft.Json.JsonConvert.SerializeObject(oauth);
-                    sqlHelper.storeState(stateId, jsonState);
+                    //sqlHelper.storeState(stateId, jsonState);
                     state = stateId.ToString();
                 }
 
