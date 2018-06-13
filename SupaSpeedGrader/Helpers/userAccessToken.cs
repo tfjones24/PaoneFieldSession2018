@@ -18,6 +18,8 @@ namespace SupaSpeedGrader.Helpers
 		public DateTime tstamp = DateTime.Now;
 		public string responseUrl = string.Empty;
 
+        public bool staticKey = false;
+
 		/// <summary>
 		/// Default constructor
 		/// </summary>
@@ -55,15 +57,28 @@ namespace SupaSpeedGrader.Helpers
 			sqlHelper.storeUserAccessToken(this);
 		}
 
-		/// <summary>
-		/// Our Canvas token is only good for [tokenLive] seconds
-		/// Calculate the time since we last refreshed.
+        /// <summary>
+		/// Create a hardcoded access token
 		/// </summary>
-		public bool tokenRefreshRequired
+		/// <param name="token">Access key generated in Canvas</param>
+		public userAccessToken(string token)
+        {
+            accessToken = token;
+            staticKey = true;
+        }
+
+        /// <summary>
+        /// Our Canvas token is only good for [tokenLive] seconds
+        /// Calculate the time since we last refreshed.
+        /// </summary>
+        public bool tokenRefreshRequired
 		{
 			get
 			{
 				bool rval = false;
+
+                if (staticKey == true)
+                    return false;
 
 				if (refreshToken == null)
 					return true;
