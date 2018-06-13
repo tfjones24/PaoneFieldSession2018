@@ -18,7 +18,10 @@ namespace SupaSpeedGrader.Helpers
 
         public userAccessToken accessToken = null;
 
-        public HttpRequestBase Request = null;
+        //public HttpRequestBase Request = null;
+
+        public Uri Url = null;
+        public string host = null;
 
         public string uniqueSessionKey
 		{
@@ -51,8 +54,14 @@ namespace SupaSpeedGrader.Helpers
 		public oauthHelper(HttpRequestBase request)
 			: base(request.Form)
 		{
-            Request = request;
+            //Request = request;
+            Url = request.Url;
+            if (request.UrlReferrer != null)
+            {
+                host = request.UrlReferrer.Host;
+            }
 
+       
 			_clientUrl = request.UserHostAddress;
 
 			// if the config doesn't contain our consumer secret, make sure the signature fails
