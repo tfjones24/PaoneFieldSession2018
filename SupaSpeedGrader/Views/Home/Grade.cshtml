@@ -74,7 +74,7 @@
     </style>
         -->
 </head>
-<body>
+<body onload="rubricParseCheck()">
     <div style="display: flex; border-bottom:1px solid black">
         <div style="float:left; width:52%">
             <h3 style="color: #21314d"> @Model.questionName </h3>
@@ -184,8 +184,18 @@
                     <form><p style="color: blue; font-size:70%"> Autograde and Filter</p></form>
                 </div>
             </div>
-            <!--- Rubic--->
-            <div>
+
+
+
+
+            <!--- Rubric--->
+
+
+            @*<div  id="rubricParseWarning">
+                <p style="color:red; font-size:100%" >RUBRIC PARSING FAILED, PLEASE REFER TO HELP SECTION FOR ADDITIONAL ASSISTANCE</p>
+
+            </div>*@
+            <div  id="rubricWhole" style="">
                 <p>@Model.rubicTitle</p>
                 @for (int i = 0; i < Model.rubicRows; ++i)
                 {<div style="display: flex">
@@ -198,7 +208,7 @@
                             string clap = "rubr" + i;
 
                             <div style="float:left; width:@Model.width%;border:1px solid black">
-                                <input onclick=highlightRubic(this) onmouseover="hoverRubric(this)" onmouseout="exitRubric(this)" type="button" style="width:100%; background-color:white; border:none" value="@Model.rubic[i][j]" id='@clap' />
+                                <input class="rubricButton" onclick=highlightRubic(this) onmouseover="hoverRubric(this)" onmouseout="exitRubric(this)" type="button" style="width:100%; background-color:white; border:none" value="@Model.rubic[i][j]" id='@clap' />
                             </div>
                         }
                     </div>
@@ -207,7 +217,11 @@
 
             </div>
             <p></p>
-            <!--- next row--->
+
+
+
+
+            <!--- button row--->
             <div style="display: flex">
                 <div style="float:left; width:33%;">
                     <form><input type="button" style="width:100%; background-color:#D3D3D3" value=" Revert" onclick=revert() /></form>
@@ -220,6 +234,10 @@
                 </div>
             </div>
             <p></p>
+
+
+
+
             <!--- Comment Box--->
             <div>
                 <textarea style="height:100px; width:100%; border:1px solid black; border-radius:5px" id="comment">@Model.namesGrades[Model.names[Model.studentAt]][2]</textarea>
@@ -228,6 +246,10 @@
             </div>
             <br />
             <br />
+            
+            
+            
+            
             <!--- Grade Box-->
             <div style="height:10%">
                 <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " id="grade" value="@Model.namesGrades[Model.names[Model.studentAt]][1]" onchange="myGrade()" /> /@Model.gradeOutOf </p>
@@ -277,7 +299,7 @@
             }
         }
        
-        function up10() {
+        function up10() {       //moves the nav bar to the next 10 entries with the right arrow button
 
             if (questionSetCurrent < (@Model.navBarQuestions.Count/10)-1) {
                 questionSetCurrent++;
@@ -326,7 +348,7 @@
         }
 
 
-        function myGrade() {
+        function myGrade() {        //counterpart to leftSideGrade, does the same thing but from the right.
             var y = document.getElementById("grade").value;
             document.getElementById("graded").innerHTML = "You wrote: " + y;
             var grade = "grade" + studentAt; 
@@ -377,66 +399,20 @@
 
             studentAt = parseInt(source.id.substr(8));  //update studentAt
             document.getElementById("action").innerHTML = "studentAt is set to " + studentAt;       //doublecheck we right
+
+            //CLEAR RIGHT HAND SIDE
+            document.getElementById("grade").value = 0;
+            var rubricPieces = document.querySelectorAll(".rubricButton");
+            for (var i = 0; i < rubricPieces.length; i++) {
+                rubricPieces[i].style.backgroundColor="@defaultColor"
+            }
+
+
         }
 
 
-        @* function highlightResponse(source) {
-            var responseCurrent = document.querySelectorAll('#' + source.id);
-            @{
-                string potato = "#response" + Model.studentAt;
-            }
-            var responseLast = document.querySelectorAll(@potato);
-            for (var i = 0; i < responseLast.length; i++) {
-                responseLast[i].style.backgroundColor = @defaultColor;
-            }
-            for (var i = 0; i < responseCurrent.length; i++) {
-                responseCurrent[i].style.backgroundColor = @highlightColor;
-            }
-            studentAt = parseInt(source.id.substr(9));
-        } *@
 
 
-
- @*//       function highlightResponse(source) {
-            //var responses = document.querySelectAll('#' + source.id)
-            //  for (var i = 0; i < responses.length; i++) {
-            //        responses[i] =
-            //}
- //           document.getElementById("action").innerHTML = "POTATO";
- //           var responses = document.querySelectorAll('#response');
- //           for (var x = 0; x < responses.length) {
-  //              responses[x].style = "background-color:white";
- //           }
-  //          source.style = "background-color:lightgreen"
-
-//        }*@
-
-        @*function saveNext(source) {
-            document.getElementById("action").innerHTML = "You pressed save&next with @Model.studentAt out of @Model.names.Count()";    //only says 0, will update only to 0
-            //remove highlight from initial
-           @{ string y = Model.studentAt + "2";
-               }
-            var responses = document.querySelectorAll('#' + source.id);
-            for (var i = 0; i < responses.length; i++) {
-                updateResponseHighlight(responses[i], false);
-            }
-
-         //   updateResponseHighlight("@Model.studentAt",false);
-         //   updateResponseHighlight("@y", false);
-            @{
-                Model.studentAt = (Model.studentAt + 1) % Model.names.Count();
-            }
-            //add highlight to update
-          //  updateResponseHighlight("@Model.studentAt", true);
-          //  updateResponseHighlight("@y", true);
-
-            for (var i = 0; i < responses.length; i++){
-                updateResponseHighlight(responses[responses.length], true);
-            }
-
-            document.getElementById("grade").value = @Model.namesGrade[Model.names[Model.studentAt]];
-            document.getElementById("action2").innerHTML = "You pressed save&next with @Model.studentAt out of @Model.names.Count()";   //only says 1 and updates once
-        }*@
 
         function saveNext() {               //used for save and next button for next question highlighting
             document.getElementById("action").innerHTML = "You pressed save&next with " + (studentAt+1) + " out of @Model.names.Count()";    //only says 0, will update only to 0
@@ -503,7 +479,27 @@
                 //make api call to change page to question of this number(reference value of button)
                 document.getElementById("action").innerHTML = "Button pressed to move to question " + source.value;
             }
- 
+
+
+
+        //not needed right now until implementing the parsing rubric check. currently not working. going to comment error message
+        function rubricParseCheck() {
+
+
+            var source = document.getElementById("rubricWhole");
+           
+
+            if (@Model.rubricParsed) {
+                document.getElementById("action").innerHTML = "RUBRIC CHECK RUN";
+                source.style = "display:none";
+
+            }
+            else {
+
+                document.getElementById("rubricParseWarning").style = "display:none";
+            }
+
+        }
     </script>
 </body>
 
