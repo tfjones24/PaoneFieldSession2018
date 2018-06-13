@@ -14,5 +14,9 @@ namespace SupaSpeedGrader.Controllers
 {
     public class apiController : Controller
     {
+        public JsonResult getQuestions(string quiz)
+        {
+            return Json(new { Result = String.Format("Fist item in list: '{0}'", quiz) });
+        }
     }
 }
