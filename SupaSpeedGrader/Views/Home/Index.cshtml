@@ -42,7 +42,7 @@
                             @{
                                 for (int i = 0; i < Model.quizzes.Count; i++)
                                 {
-                                    <option value=@Model.quizzes[i] class="@Model.quizColor[Model.quizzes[i]]">@Model.quizzes[i]</option>
+                                    <option value=@Model.quizID[Model.quizzes[i]] class="@Model.quizColor[Model.quizzes[i]]">@Model.quizzes[i]</option>
                                 }
                             }
                         </select>
@@ -97,7 +97,7 @@
                     </div>
                 </div>
                 <p></p>
-                <input class="hidden" type="text" name="state" value="@Model.state"><br />
+                <input class="hidden" type="text" name="state" id="state" value="@Model.state"><br />
                 <input type="image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHfNSX7YyLf4h1XAMiFADq4jJt8c9orN9zvvbb-IQp_aF3maXV-A" alt="launch" height="40" width="40" />
             </form>
         </div>
@@ -124,7 +124,9 @@
     <script>
         function quizFunction() {
             var x = document.getElementById("quiz").value;
-            var postData = { "quiz": x };
+            var state = document.getElementById("state").value;
+
+            var postData = { "quiz": x , "state" : state};
 
             if (x != "") {
                 $.ajax({
@@ -145,7 +147,7 @@
                             sel.options[i] = new Option(new_options[i], "aval", false, false);
                         }
 
-
+                    },
                     dataType: "json",
                     traditional: true
                 });
