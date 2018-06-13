@@ -74,7 +74,7 @@
     </style>
         -->
 </head>
-<body onload="navBarCheck()">       <!--need rubricParseChecker here as well-->
+<body onload="navBarCheck(); rubricParseCheck();">       <!--need rubricParseChecker here as well-->
     <div style="display: flex; border-bottom:1px solid black">
         <div style="float:left; width:52%">
             <h3 style="color: #21314d"> @Model.questionName </h3>
@@ -191,10 +191,13 @@
             <!--- Rubric--->
 
 
-            @*<div  id="rubricParseWarning">
-                <p style="color:red; font-size:100%" >RUBRIC PARSING FAILED, PLEASE REFER TO HELP SECTION FOR ADDITIONAL ASSISTANCE</p>
+            <div  id="rubricParseWarning">
+                <p style="color:red; font-size:200%" >Rubric not found</p>
 
-            </div>*@
+            </div>
+
+
+
             <div  id="rubricWhole" style="">
                 <p>@Model.rubicTitle</p>
                 @for (int i = 0; i < Model.rubicRows; ++i)
@@ -393,7 +396,7 @@
         function navBarCheck() {
 
             var questionNums = document.getElementsByName("questionNumber");
-            alert("Page is loaded");
+            //alert("Page is loaded");
             for (var i = 0; i < questionNums.length; i++) {
                 if (questionNums[i].value > @Model.navBarQuestions.Count()) {
                     questionNums[i].style.visibility="hidden";
@@ -530,13 +533,13 @@
         //not needed right now until implementing the parsing rubric check. currently not working. going to comment error message
         function rubricParseCheck() {
 
-
+           //alert("RUBRIC CHECK RUN with rubricParsed as " + @Model.rubricParsed);
             var source = document.getElementById("rubricWhole");
-           
+           // document.getElementById("rubricParseWarning").style = "display:none";
 
-            if (@Model.rubricParsed) {
-                document.getElementById("action").innerHTML = "RUBRIC CHECK RUN";
-                source.style = "display:none";
+            if (@Model.rubricParsed == 1) {
+         
+                source.style ="display:none";
 
             }
             else {
