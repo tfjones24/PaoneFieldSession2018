@@ -124,33 +124,34 @@
 
         }
         function submitData() {
-            document.getElementById("action2").innerHTML = "start";
-            for (var i = 0; i < rubricNums.length(); ++i) {
-                var spec = "spec" + i;
-                var specNum = document.getElementById(spec).value;
-                var crit = "spec" + i;
-                var critNum = document.getElementById(spec).value;
+            document.getElementById("action").innerHTML = "start";
+            
+            for (var i = 0; i < rubricNums.length; ++i) {
+                var spec = "spec" + rubricNums[i];
+                var specNum = document.getElementById(spec).value; 
+                var crit = "crit" + rubricNums[i];
+                var critNum = document.getElementById(crit).value;
                 var ques = [[[]]];
                 for (var j = 0; j < critNum; ++j) {
                     var specPos = [[]];
-                    var quest = "box" + j + "," + 0 + "of" + i + "n";
-                    var pointsComments = [];
-                    pointsComments.push(document.getElementById(quest).value);
-                    specPos.push(pointComments);
-                    for (var k = 1; k < specNum; ++k) {
-                        pointsComments = [];
-                        quest = "box" + j + "," + k + "of" + i + "q";
-                        pointsComments.push(document.getElementById(quest).value);
-                        quest = "box" + j + "," + k + "of" + i + "c";
-                        pointsComments.push(document.getElementById(quest).value);
+                    var quest = "box" + j + "," + 0 + "of" + rubricNums[i] + "n";
+                    var pointComments = [];
+                    pointComments.push(document.getElementById(quest).value);
+                    specPos.push(pointComments); 
+                    for (var k = 1; k <= specNum; ++k) {
+                        pointComments = [];
+                        quest = "box" + j + "," + k + "of" + rubricNums[i] + "p";
+                        pointComments.push(document.getElementById(quest).value);
+                        quest = "box" + j + "," + k + "of" + rubricNums[i] + "c";
+                        pointComments.push(document.getElementById(quest).value);
                         specPos.push(pointComments);
-                    }
+                        
+                    }                 
                     ques.push(specPos);
-
                 }
                 rubricData.push(ques);
             }
-            document.getElementById("action2").innerHTML = rubricData[0[0[0]]];
+            document.getElementById("action2").innerHTML = rubricData;        
         }
     </script>
 </body>
