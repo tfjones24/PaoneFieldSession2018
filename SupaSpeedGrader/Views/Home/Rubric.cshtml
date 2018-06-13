@@ -44,10 +44,11 @@
                 {
                     <div style="display:flex">
                         @{string box = "box" + i + "," + 0 + "of" + x;
+                            string al = box + "n";
                         }
                         <div id="@box" style="float:left; width :10%:; " class="noDisplay">
                             <p style="font-size:80%"> Criteria Name </p>
-                            <input type="text" style="height:20px; width:50px; border:1px solid black; background-color:transparent " id='comments' />
+                            <input type="text" style="height:20px; width:50px; border:1px solid black; background-color:transparent " id='@al' />
                         </div>
                         @for (int j = 1; j < 9; j++)
                         {
@@ -57,7 +58,7 @@
 
 
                             <div id="@box" style="float:left; width :11.25%" class="noDisplay">
-                                <p style="font-size:80%"> Points Number <input type="number" style="height:20px; width:20px; border:1px solid black; background-color:transparent " id='@points' /></p>
+                                <p style="font-size:80%"> Points <input type="number" style="height:20px; width:50px; border:1px solid black; background-color:transparent " id='@points' /></p>
                                 <p style="font-size:80%">Comment <input type="text" style="height:20px; width:50px; border:1px solid black; background-color:transparent " id='@comment' /></p>
                             </div>
                         }
@@ -71,7 +72,7 @@
     <input type="button" value="Submit" onclick="submitData()" />
     <script>
         var rubricNums = [];
-
+        var rubricData = [[[[]]]];
         function questionNum(source) {
             for (var b = 1; b <= source.value; b++) {
                 var quest = "questionNum" + b;
@@ -122,10 +123,34 @@
             }
 
         }
-        function submitData{
+        function submitData() {
+            document.getElementById("action2").innerHTML = "start";
             for (var i = 0; i < rubricNums.length(); ++i) {
+                var spec = "spec" + i;
+                var specNum = document.getElementById(spec).value;
+                var crit = "spec" + i;
+                var critNum = document.getElementById(spec).value;
+                var ques = [[[]]];
+                for (var j = 0; j < critNum; ++j) {
+                    var specPos = [[]];
+                    var quest = "box" + j + "," + 0 + "of" + i + "n";
+                    var pointsComments = [];
+                    pointsComments.push(document.getElementById(quest).value);
+                    specPos.push(pointComments);
+                    for (var k = 1; k < specNum; ++k) {
+                        pointsComments = [];
+                        quest = "box" + j + "," + k + "of" + i + "q";
+                        pointsComments.push(document.getElementById(quest).value);
+                        quest = "box" + j + "," + k + "of" + i + "c";
+                        pointsComments.push(document.getElementById(quest).value);
+                        specPos.push(pointComments);
+                    }
+                    ques.push(specPos);
 
+                }
+                rubricData.push(ques);
             }
+            document.getElementById("action2").innerHTML = rubricData[0[0[0]]];
         }
     </script>
 </body>
