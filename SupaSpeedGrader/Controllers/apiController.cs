@@ -17,15 +17,17 @@ namespace SupaSpeedGrader.Controllers
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public async Task<JsonResult> getQuestionsAsync(string quiz, string state)
+        public async Task<JsonResult> getQuestions(string quiz, string state)
         {
+            _logger.Error("Pulling in a saved state: " + state);
             oauthHelper oauth = Newtonsoft.Json.JsonConvert.DeserializeObject<oauthHelper>(sqlHelper.getStateJson(Guid.Parse(state)));
 
             oauth.accessToken = sqlHelper.getUserAccessToken(long.Parse(oauth.custom_canvas_user_id));
+            _logger.Error("State loaded: " + state);
 
             if (oauth.accessToken != null)
             {
-
+                _logger.Error("Checking token validity for state: " + state);
                 //now validate the token to make sure it's still good
                 //if the token is no good try to refresh it
                 if (oauth.accessToken.tokenRefreshRequired)
@@ -37,13 +39,13 @@ namespace SupaSpeedGrader.Controllers
                         //  In this case we will request a brand new token, forcing the user to "Authorize" again.
                         //  To test this, delete the token in your Canvas user profile.
                         /***********************************************************/
-
+                        _logger.Error("Token bad, renewal failed! state: " + state);
                         return Json(new { Result = "AUTHFAIL" });
 
                     }
+                    _logger.Error("token renewed! state: " + state);
 
                 }
-
 
             }
             _logger.Error("Calling for questions");

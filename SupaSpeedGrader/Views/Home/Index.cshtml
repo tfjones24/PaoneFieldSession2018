@@ -135,8 +135,11 @@
                    data: postData,
                     success: function (data) {
                         alert(data.Result);
-
+                        alert(data.Extra);
                         var new_options = ['Option 1', 'Option 2', 'Option 3'];
+
+                        obj = JSON.parse(data.Extra);
+                        alert(obj.count);
 
                         /* Remove all options from the select list */
                         var sel = document.getElementById("questionDrop");
