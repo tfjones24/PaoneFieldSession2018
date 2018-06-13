@@ -71,7 +71,90 @@ namespace SupaSpeedGrader.Helpers
 			return rval;
 		}
 
-		public static userAccessToken getUserAccessToken(long userId)
+        public static string getStateJson(string stateId)
+        {
+            string rval = string.Empty;
+
+            string sql = "select statejson from statecache where stateId = '" + stateId + "'";
+            using (SqlConnection dbcon = new SqlConnection(_camsConnectionString))
+            {
+                dbcon.Open();
+                using (SqlCommand cmd = new SqlCommand("dbo.getStateJson", dbcon))
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = sql;
+
+                    DataSet ds = new DataSet();
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    adapter.Fill(ds);
+
+                    if (ds != null && ds.Tables[0].Rows.Count == 1)
+                    {
+                        rval = ds.Tables[0].Rows[0][0].ToString();
+                    }
+                    
+                }
+            }
+
+            return rval;
+        }
+
+        public static string getStateJsonQuery(string stateId)
+        {
+            string rval = string.Empty;
+
+            string sql = "select statejson from statecache where stateId = '" + stateId + "'";
+            using (SqlConnection dbcon = new SqlConnection(_camsConnectionString))
+            {
+                dbcon.Open();
+                using (SqlCommand cmd = new SqlCommand("dbo.getStateJson", dbcon))
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = sql;
+
+                    DataSet ds = new DataSet();
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    adapter.Fill(ds);
+
+                    rval = ds.ToString();
+
+
+                }
+            }
+
+            return rval;
+        }
+
+        public static bool storeState(string stateId, string json)
+        {
+            bool rval = true;
+
+            string sql = string.Empty;
+            string stateJson = getStateJson(stateId);
+            using (SqlConnection dbcon = new SqlConnection(_camsConnectionString))
+            {
+                dbcon.Open();
+                using (SqlCommand cmd = new SqlCommand("dbo.storeStateJson", dbcon))
+                {
+                    cmd.CommandType = CommandType.Text;
+
+                    if (string.IsNullOrEmpty(stateJson))
+                    {
+                        sql = string.Format("insert into statecache (stateid, statejson) values ('{0}', '{1}')", stateId, json);
+                    }
+                    else
+                    {
+                        sql = string.Format("update statecache set statejson = '{0}' where stateid = '{1}'", json, stateId);
+                    }
+                    cmd.CommandText = sql;
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            return rval;
+        }
+
+        public static userAccessToken getUserAccessToken(long userId)
 		{
 			userAccessToken rval = null;
 

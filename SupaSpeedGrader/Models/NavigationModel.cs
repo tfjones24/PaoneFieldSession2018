@@ -21,6 +21,8 @@ namespace SupaSpeedGrader.Models
         public List<string> questions = new List<string>();
         public Dictionary<string, string> questionColor = new Dictionary<string, string>();
 
+        public string state = null;
+
         public NavigationModel()
         {
         }
