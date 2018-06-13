@@ -240,7 +240,7 @@
 
             <!--- Comment Box--->
             <div>
-                <textarea style="height:100px; width:100%; border:1px solid black; border-radius:5px" id="comment">@Model.namesGrades[Model.names[Model.studentAt]][2]</textarea>
+                <textarea style="height:100px; width:100%; border:1px solid black; border-radius:5px" onchange="updateComments(this)" id="comment" value=""> </textarea>
                 <input type="button" style="width:30%; background-color:#D3D3D3" value="Clear" onclick="clear()" />     <!--clear comment-->
 
             </div>
@@ -274,10 +274,13 @@
         var questionSetCurrent = 0;
         var studentAt = 0;
         var comments = [];
-        @{int c = 0;}
-        for (var x = 0; x < @Model.names.Count(); ++x) {
-            comments.push(@Model.namesGrades[Model.names[c]][2]);
-            @{c++;}
+       // @{int c = 0;}
+        for (var x = 0; x < @Model.names.Count(); x++) {
+            //if (@Model.namesGrades[Model.names[c]][2]== undefined) {
+                comments[x]="";
+            //}
+        
+         //   @{c++;}
         }
 
 
@@ -319,7 +322,9 @@
         }
 
 
-
+        function updateComments(source) {
+            comments[studentAt] = source.value;
+        }
 
 
 
@@ -406,6 +411,11 @@
             for (var i = 0; i < rubricPieces.length; i++) {
                 rubricPieces[i].style.backgroundColor="@defaultColor"
             }
+
+
+            //Correctly add in things on right side
+            document.getElementById("grade").value = document.getElementById("grade"+studentAt).value;
+            document.getElementById("comment").value = comments[studentAt]; //TODO comment is returning as undefined still
 
 
         }

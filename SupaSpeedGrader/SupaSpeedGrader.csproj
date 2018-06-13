@@ -20,7 +20,8 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
-    <IISExpressSSLPort>44360</IISExpressSSLPort>
+    <IISExpressSSLPort>
+    </IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -180,6 +181,7 @@
     <Compile Include="Models\GradeModel.cs" />
     <Compile Include="Models\NavigationModel.cs" />
     <Compile Include="Models\resultModel.cs" />
+    <Compile Include="Models\RubricModel.cs" />
     <Compile Include="Models\willNameModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -268,9 +270,11 @@
     <Content Include="Views\Home\Help.cshtml" />
     <Content Include="Views\Home\willName.cshtml" />
     <Content Include="Views\Home\result.cshtml" />
+    <Content Include="Views\Home\Rubric.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\RubicModel\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

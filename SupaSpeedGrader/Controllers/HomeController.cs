@@ -169,6 +169,10 @@ namespace SupaSpeedGrader.Controllers
         {
             return View();
         }
+        public ActionResult Rubric()
+        {
+            return View();
+        }
 
         // Following code copied in as a base, then modified for our own use
 
