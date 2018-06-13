@@ -156,7 +156,7 @@
                                         string demo = "demo" + x;
                                         string grades = "grade" + x;
                                     }
-                                    <p style="text-align:center"> Grade :<input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='@grades' value='@Model.namesGrades[Model.names[x]][1]' onchange=myFunction('@Model.names[x]','@demo',@x) /> / @Model.gradeOutOf</p>
+                                    <p style="text-align:center"> Grade :<input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='@grades' value='@Model.namesGrades[Model.names[x]][1]' onchange="leftSideGrade(this)" /> / @Model.gradeOutOf</p>
 
                                     <p id="@demo"></p>
 
@@ -312,14 +312,20 @@
             }
         }
 
-        function myFunction(x, z, num) {
-            var y = document.getElementById(x).value;
-            document.getElementById(z).innerHTML = "You wrote: " + y;
-            if (num ==studentAt) {
-                document.getElementById("grade").value = y;
-            }
+        function leftSideGrade(source) {
+            //ar y = document.getElementById(x).value;
+            //document.getElementById(z).innerHTML = "You wrote: " + y;
+            //if (num ==studentAt) {
+            //    document.getElementById("grade").value = y;
+            //}
+
+            
+            document.getElementById("grade").value = source.value;
+            
 
         }
+
+
         function myGrade() {
             var y = document.getElementById("grade").value;
             document.getElementById("graded").innerHTML = "You wrote: " + y;
@@ -327,6 +333,8 @@
             document.getElementById(grade).value = y;
 
         }
+
+
         function revert() {
             document.getElementById("action").innerHTML = "You pressed revert";
         }
