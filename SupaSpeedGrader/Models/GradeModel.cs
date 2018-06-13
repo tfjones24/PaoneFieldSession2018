@@ -8,7 +8,7 @@ namespace SupaSpeedGrader.Models
     public class GradeModel
     {
         public List<int> navBarQuestions = new List<int>();
-        public bool rubricParsed = new bool();
+        public int rubricParsed;
         public int questionNum;   
         public int numStudent;
         public int gradeOutOf;
@@ -103,7 +103,7 @@ namespace SupaSpeedGrader.Models
             {
                 navBarQuestions.Add(i);
             }
-            rubricParsed = true;
+            rubricParsed = 0;
 
         }
 

@@ -75,7 +75,7 @@
                         @{ for (int i = 0; i < Model.sections.Count; i++)
                             {
                                 <br />
-                                <input type="checkbox" onClick="uncheck()" checked="checked" id="@Model.sections[i]" name="@Model.sections[i]" value=@Model.sections[i]>
+                                <input type="checkbox" onClick="uncheck()" checked="checked" id="@Model.sections[i]" name="section" value=@Model.sections[i]>
                                 <label for="section">@Model.sections[i]</label>
                             }
                         }
@@ -124,7 +124,32 @@
     <script>
         function quizFunction() {
             var x = document.getElementById("quiz").value;
+            var postData = { "quiz": x };
+
             if (x != "") {
+                $.ajax({
+                   type: "POST",
+                   url: "/api/getQuestions",
+                   data: postData,
+                    success: function (data) {
+                        alert(data.Result);
+
+                        var new_options = ['Option 1', 'Option 2', 'Option 3'];
+
+                        /* Remove all options from the select list */
+                        var sel = document.getElementById("questionDrop");
+
+                        sel.options.length = 0;
+
+                        for (var i = 0; i < new_options.length; i++) {
+                            sel.options[i] = new Option(new_options[i], "aval", false, false);
+                        }
+
+
+                    dataType: "json",
+                    traditional: true
+                });
+
                 document.getElementById("demo").innerHTML = "You selected: " + x;
                 document.getElementById("questionDrop").className = "visible";
                 document.getElementById("sectionForm").className = "visible";
