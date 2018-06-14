@@ -150,6 +150,10 @@
         </div>
     </div>
     <p></p>
+
+
+
+
     <div>
         <!--- left column--->
         <div style="float:left; width: 75%">
@@ -157,6 +161,12 @@
             <div>
                 <p>@Model.question </p>
             </div>
+
+
+
+
+
+
             <!--- total response container --->
 
             <div>
@@ -198,23 +208,23 @@
             </div>
 
         </div>
+
+
+
+
         <!--- right column--->
         <div style="float:left; width: 25%;">
             <!--- top row--->
-            <div class="btn-group">
-                @*<div style="float:left; width:33%">
-                    <form><input type="button" style="color: blue; font-size:70%" value="Highlight Keyword"></form>
+            <div id="buttonInputBar" style="display:none">
+                <input id="searchBar" type="text" name="search" onchange="tripleTrigger(this)">
+            </div>
 
-                </div>
-                <div style="width:33%; float: right">
-                    <form><input type="button" style="color: blue;font-size:70%" value="Jump to..."></form>
-                </div>
-                <div style="float:right; width:33%">
-                    <form><input type="button" style="color: blue; font-size:70%"value="Autograde and Filter"></form>
-                </div>*@
-                <button>Highlight Keyword</button>
-                <button>Jump to...</button>
-                <button>Autograde and Filter</button>
+            <div class="btn-group">
+
+
+                <button onclick="hkReveal()">Highlight Keyword</button>
+                <button onclick="jtReveal()">Jump to...</button>
+                <button onclick="afReveal()">Autograde and Filter</button>
 
 
             </div>
@@ -224,15 +234,14 @@
 
             <!--- Rubric--->
 
-
-            <div  id="rubricParseWarning">
-                <p style="color:red; font-size:200%" >Rubric not found</p>
+            <div id="rubricParseWarning">
+                <p style="color:red; font-size:200%">Rubric not found</p>
 
             </div>
 
 
 
-            <div  id="rubricWhole" style="">
+            <div id="rubricWhole" style="">
                 <p>@Model.rubicTitle</p>
                 @for (int i = 0; i < Model.rubicRows; ++i)
                 {<div style="display: flex">
@@ -283,13 +292,13 @@
                 </form>
             </div>
             <!--clear box-->
-            
+
             <br />
             <br />
-            
-            
-            
-            
+
+
+
+
             <!--- Grade Box-->
             <div style="height:10%">
                 <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " id="grade" value="@Model.namesGrades[Model.names[Model.studentAt]][1]" onchange="myGrade()" /> /@Model.gradeOutOf </p>
@@ -322,6 +331,63 @@
         
          //   @{c++;}
         }
+
+
+
+
+        var highlight = 0;
+        var jumpto = 0;
+        var autograde = 0;
+        function hkReveal() {
+            var searchBar = document.getElementById("buttonInputBar");
+            searchBar.style = "";
+            highlight = 1;
+            jumpto = 0;
+            autograde = 0;
+            document.getElementById("searchBar").placeholder = "Word to highlight...";
+            document.getElementById("searchBar").value = "";
+        }
+        
+        function jtReveal() {
+            var searchBar = document.getElementById("buttonInputBar");
+            searchBar.style = "";
+            highlight = 0;
+            jumpto = 1;
+            autograde = 0;
+            document.getElementById("searchBar").placeholder = "Jump to Response...";
+            document.getElementById("searchBar").value = "";
+            document.getElementById("searchBar").type = "number";
+        }
+
+        function afReveal() {
+            var searchBar = document.getElementById("buttonInputBar");
+            searchBar.style = "";
+            highlight = 0;
+            jumpto = 0;
+            autograde = 1;
+            document.getElementById("searchBar").placeholder = 'Autograde value...';
+            document.getElementById("searchBar").value = "";
+        }
+
+
+        function tripleTrigger(source) {
+            if (highlight == 1) {
+
+            }
+            else if (jumpto == 1) {
+                
+                highlightResponse(document.getElementById("response" + source.value));
+                studentAt = source.value;
+            }
+            else if (autograde == 1) {
+
+            }
+        }
+
+
+
+
+
 
 
         //NAV BAR FUNCTIONS FOR MOVING
