@@ -73,8 +73,45 @@
         }
     </style>
         -->
+
+
+
+    <style>
+        .btn-group button {
+            background-color: lightgray; /* gray background */
+            border: 1px solid black; /* black border */
+            color: black; /* black text */
+            padding: 10px 24px; /* Some padding */
+            cursor: pointer; /* Pointer/hand icon */
+            float: left; /* Float the buttons side by side */
+        }
+
+        /* Clear floats (clearfix hack) */
+        .btn-group:after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        .btn-group button:not(:last-child) {
+            border-right: none; /* Prevent double borders */
+        }
+
+        /* Add a background color on hover */
+        .btn-group button:hover {
+            background-color: darkgray;
+        }
+
+        #searchtext span {
+            background-color: #FF9;
+            color: #555;
+        }
+
+
+    </style>
 </head>
-<body onload="navBarCheck(); rubricParseCheck();">       <!--need rubricParseChecker here as well-->
+<body onload="navBarCheck(); rubricParseCheck();">
+   
     <div style="display: flex; border-bottom:1px solid black">
         <div style="float:left; width:52%">
             <h3 style="color: #21314d"> @Model.questionName </h3>
@@ -121,13 +158,23 @@
         </div>
     </div>
     <p></p>
-    <div>
+
+
+
+
+    <div id="searchtext">
         <!--- left column--->
         <div style="float:left; width: 75%">
             <!--- question name (under nav bar) --->
             <div>
                 <p>@Model.question </p>
             </div>
+
+
+
+
+
+
             <!--- total response container --->
 
             <div>
@@ -144,14 +191,17 @@
                                 color = highlightColor;
                             }
                             <div style="display:flex; background-color:transparent">
-                                <div onclick="highlightResponse(this)" style="float:left; width:15%; background-color:@color" id="@remp">   <!--Student name on the left-->
+                                <div onclick="highlightResponse(this)" style="float:left; width:15%; background-color:@color" id="@remp">
+                                    <!--Student name on the left-->
                                     <p> @Model.names[x]  </p>
                                 </div>
-                                <div onclick="highlightResponse(this)" style="float:left; width:50%;  border:1px solid black; border-radius:5px; background-color:aliceblue" id="@remp">   <!--Response box-->
+                                <div class="trueResponse" onclick="highlightResponse(this)" style="float:left; width:50%;  border:1px solid black; border-radius:5px; background-color:aliceblue" id="@remp">
+                                    <!--Response box-->
                                     <p>@Model.namesGrades[Model.names[x]][0]</p>
                                 </div>
 
-                                <div onclick="highlightResponse(this)" style ="float:left; width:35%; background-color:@color" id="@remp">  <!--Holds the grade box on the right-->
+                                <div class="numberGrade" onclick="highlightResponse(this)" style="float:left; width:35%; background-color:@color" id="@remp">
+                                    <!--Holds the grade box on the right-->
                                     @{
                                         string demo = "demo" + x;
                                         string grades = "grade" + x;
@@ -164,25 +214,30 @@
                             </div>
                         </li>
                         <p></p>
-                                        }
+                    }
                 </ul>
             </div>
 
         </div>
+
+
+    
+
         <!--- right column--->
         <div style="float:left; width: 25%;">
             <!--- top row--->
-            <div style="display: flex">
-                <div style="float:left; width:33%; border-right:2px solid black;">
-                    <form><p style="color: blue; font-size:70%">Highlight Keyword</p></form>
+            <div id="buttonInputBar" style="display:none">
+                <input id="searchBar" type="text" name="search" onchange="tripleTrigger(this)">
+            </div>
 
-                </div>
-                <div style="float:left; width:33%; border-right:2px solid black;">
-                    <form><p style="color: blue;font-size:70%"> Jump to...</p></form>
-                </div>
-                <div style="float:left; width:33%; ">
-                    <form><p style="color: blue; font-size:70%"> Autograde and Filter</p></form>
-                </div>
+            <div class="btn-group">
+
+
+                <button onclick="hkReveal()">Highlight Keyword</button>
+                <button onclick="jtReveal()">Jump to...</button>
+                <button onclick="afReveal()">Autograde and Filter</button>
+
+
             </div>
 
 
@@ -190,15 +245,14 @@
 
             <!--- Rubric--->
 
-
-            <div  id="rubricParseWarning">
-                <p style="color:red; font-size:200%" >Rubric not found</p>
+            <div id="rubricParseWarning">
+                <p style="color:red; font-size:200%">Rubric not found</p>
 
             </div>
 
 
 
-            <div  id="rubricWhole" style="">
+            <div id="rubricWhole" style="">
                 <p>@Model.rubicTitle</p>
                 @for (int i = 0; i < Model.rubicRows; ++i)
                 {<div style="display: flex">
@@ -249,13 +303,13 @@
                 </form>
             </div>
             <!--clear box-->
-            
+
             <br />
             <br />
-            
-            
-            
-            
+
+
+
+
             <!--- Grade Box-->
             <div style="height:10%">
                 <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " id="grade" value="@Model.namesGrades[Model.names[Model.studentAt]][1]" onchange="myGrade()" /> /@Model.gradeOutOf </p>
@@ -288,6 +342,85 @@
         
          //   @{c++;}
         }
+
+
+
+
+        var highlight = 0;
+        var jumpto = 0;
+        var autograde = 0;
+        function hkReveal() {
+            var searchBar = document.getElementById("buttonInputBar");
+            searchBar.style = "";
+            highlight = 1;
+            jumpto = 0;
+            autograde = 0;                                                                      //working
+            document.getElementById("searchBar").placeholder = "Word to highlight...";
+            document.getElementById("searchBar").value = "";
+        }
+        
+        function jtReveal() {
+            var searchBar = document.getElementById("buttonInputBar");
+            searchBar.style = "";
+            highlight = 0;
+            jumpto = 1;
+            autograde = 0;
+            document.getElementById("searchBar").placeholder = "Jump to Response...";           //working
+            document.getElementById("searchBar").value = "";
+            document.getElementById("searchBar").type = "number";
+        }
+
+        function afReveal() {
+            var searchBar = document.getElementById("buttonInputBar");
+            searchBar.style = "";
+            highlight = 0;
+            jumpto = 0;
+            autograde = 1;
+            document.getElementById("searchBar").placeholder = 'Autograde value...';            //not working
+            document.getElementById("searchBar").value = "";
+        }
+
+
+
+
+
+        //Functionality for the 3 buttons over rubric
+        function tripleTrigger(source) {
+            if (highlight == 1) {
+                var text = document.getElementById("searchBar").value;
+                var query = new RegExp("(\\b" + text + "\\b)", "gim");
+                var e = document.getElementById("searchtext").innerHTML;
+                var enew = e.replace(/(<span>|<\/span>)/igm, "");
+                document.getElementById("searchtext").innerHTML = enew;
+                var newe = enew.replace(query, "<span>$1</span>");
+                document.getElementById("searchtext").innerHTML = newe;
+            }
+            else if (jumpto == 1) {
+                
+                highlightResponse(document.getElementById("response" + source.value));
+                studentAt = source.value;
+            }
+            else if (autograde == 1) {
+                //need to implement, reference response values and adjust grade to full 
+                var responses = document.getElementsByName("trueResponse");
+                for (var i = 0; i < response.length; i++) {
+                    if (responses[i].value == document.getElementById("searchBar").value) {
+
+                        var responseWeWant = document.getElementsByName("numberGrade");
+                        for (var j = 0; j < responseWeWant.length; j++) {
+                            if (responseWeWant[j].id = responses[i].id) {
+                                responseWeWant[j] = @Model.gradeOutOf;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+
+
 
 
         //NAV BAR FUNCTIONS FOR MOVING
