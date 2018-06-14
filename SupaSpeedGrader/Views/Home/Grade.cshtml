@@ -101,9 +101,17 @@
         .btn-group button:hover {
             background-color: darkgray;
         }
+
+        #searchtext span {
+            background-color: #FF9;
+            color: #555;
+        }
+
+
     </style>
 </head>
-<body onload="navBarCheck(); rubricParseCheck();">       <!--need rubricParseChecker here as well-->
+<body onload="navBarCheck(); rubricParseCheck();">
+   
     <div style="display: flex; border-bottom:1px solid black">
         <div style="float:left; width:52%">
             <h3 style="color: #21314d"> @Model.questionName </h3>
@@ -154,7 +162,7 @@
 
 
 
-    <div>
+    <div id="searchtext">
         <!--- left column--->
         <div style="float:left; width: 75%">
             <!--- question name (under nav bar) --->
@@ -183,14 +191,17 @@
                                 color = highlightColor;
                             }
                             <div style="display:flex; background-color:transparent">
-                                <div onclick="highlightResponse(this)" style="float:left; width:15%; background-color:@color" id="@remp">   <!--Student name on the left-->
+                                <div onclick="highlightResponse(this)" style="float:left; width:15%; background-color:@color" id="@remp">
+                                    <!--Student name on the left-->
                                     <p> @Model.names[x]  </p>
                                 </div>
-                                <div onclick="highlightResponse(this)" style="float:left; width:50%;  border:1px solid black; border-radius:5px; background-color:aliceblue" id="@remp">   <!--Response box-->
+                                <div onclick="highlightResponse(this)" style="float:left; width:50%;  border:1px solid black; border-radius:5px; background-color:aliceblue" id="@remp">
+                                    <!--Response box-->
                                     <p>@Model.namesGrades[Model.names[x]][0]</p>
                                 </div>
 
-                                <div onclick="highlightResponse(this)" style ="float:left; width:35%; background-color:@color" id="@remp">  <!--Holds the grade box on the right-->
+                                <div onclick="highlightResponse(this)" style="float:left; width:35%; background-color:@color" id="@remp">
+                                    <!--Holds the grade box on the right-->
                                     @{
                                         string demo = "demo" + x;
                                         string grades = "grade" + x;
@@ -203,14 +214,14 @@
                             </div>
                         </li>
                         <p></p>
-                                        }
+                    }
                 </ul>
             </div>
 
         </div>
 
 
-
+    
 
         <!--- right column--->
         <div style="float:left; width: 25%;">
@@ -370,9 +381,19 @@
         }
 
 
+
+
+
+        //Functionality for the 3 buttons over rubric
         function tripleTrigger(source) {
             if (highlight == 1) {
-
+                var text = document.getElementById("searchBar").value;
+                var query = new RegExp("(\\b" + text + "\\b)", "gim");
+                var e = document.getElementById("searchtext").innerHTML;
+                var enew = e.replace(/(<span>|<\/span>)/igm, "");
+                document.getElementById("searchtext").innerHTML = enew;
+                var newe = enew.replace(query, "<span>$1</span>");
+                document.getElementById("searchtext").innerHTML = newe;
             }
             else if (jumpto == 1) {
                 
