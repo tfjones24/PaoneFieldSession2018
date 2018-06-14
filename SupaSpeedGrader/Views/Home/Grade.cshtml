@@ -195,12 +195,12 @@
                                     <!--Student name on the left-->
                                     <p> @Model.names[x]  </p>
                                 </div>
-                                <div onclick="highlightResponse(this)" style="float:left; width:50%;  border:1px solid black; border-radius:5px; background-color:aliceblue" id="@remp">
+                                <div class="trueResponse" onclick="highlightResponse(this)" style="float:left; width:50%;  border:1px solid black; border-radius:5px; background-color:aliceblue" id="@remp">
                                     <!--Response box-->
                                     <p>@Model.namesGrades[Model.names[x]][0]</p>
                                 </div>
 
-                                <div onclick="highlightResponse(this)" style="float:left; width:35%; background-color:@color" id="@remp">
+                                <div class="numberGrade" onclick="highlightResponse(this)" style="float:left; width:35%; background-color:@color" id="@remp">
                                     <!--Holds the grade box on the right-->
                                     @{
                                         string demo = "demo" + x;
@@ -401,7 +401,19 @@
                 studentAt = source.value;
             }
             else if (autograde == 1) {
+                //need to implement, reference response values and adjust grade to full 
+                var responses = document.getElementsByName("trueResponse");
+                for (var i = 0; i < response.length; i++) {
+                    if (responses[i].value == document.getElementById("searchBar").value) {
 
+                        var responseWeWant = document.getElementsByName("numberGrade");
+                        for (var j = 0; j < responseWeWant.length; j++) {
+                            if (responseWeWant[j].id = responses[i].id) {
+                                responseWeWant[j] = @Model.gradeOutOf;
+                            }
+                        }
+                    }
+                }
             }
         }
 
