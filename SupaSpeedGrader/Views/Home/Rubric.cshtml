@@ -21,7 +21,7 @@
         <h2>Rubric</h2>
         </div>
     <div>
-        <p>Rubric Name: <input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='rubrName' /> </p>
+        <p>Rubric Name: <input type="text" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='rubrName' /> </p>
     </div>
     <div style="width:100%">
         <p>Number of Questions: <input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='numQuestions' onchange="questionNum(this)" /> </p>
@@ -61,7 +61,7 @@
 
 
                             <div id="@box" style="float:left; width :11.25%" class="noDisplay">
-                                <p style="font-size:80%"> Points <input type="number" style="height:20px; width:50px; border:1px solid black; background-color:transparent " id='@points' /></p>
+                                <p style="font-size:80%"> Points <input type="number" style="height:20px; width:50px; border:1px solid black; background-color:transparent " id='@points'  /></p>
                                 <p style="font-size:80%">Comment <input type="text" style="height:20px; width:50px; border:1px solid black; background-color:transparent " id='@comment' /></p>
                             </div>
                         }
@@ -74,10 +74,11 @@
     }
     <input type="button" value="Submit" onclick="submitData()" />
     <script>
-        var rubricNums = [];
-        var rubricData = [[[[]]]];
+        var rubricNums = new Array();
+        var rubricData = new Map();
         var rubricName;
         var questNum;
+        var first = 0;
         function questionNum(source) {
             for (var b = 1; b <= source.value; b++) {
                 var quest = "questionNum" + b;
@@ -95,17 +96,22 @@
         function crit(source, a) {
             var crit = "spec" + a;
             var critNum = document.getElementById(crit).value
-            for (var c = 0; c < source.value; c++) {
+            var e = source.value;
+            for (var c = 0; c < e; c++) {
                 var quest = "box" + c + "," + "0" + "of" + a;
                 document.getElementById(quest).className = "yesDisplay";
                 document.getElementById(quest).style.backgroundColor = "lightgrey";
                 document.getElementById(quest).style.border = "1px solid black";
-                if (critNum == 0) {
-                    critNum++;
-                }
+                critNum++;
                 for (var b = critNum; b < 9; ++b) {
                     quest = "box" + c + "," + b + "of" + a;
                     document.getElementById(quest).className = "noShow";
+                }
+            }
+            for (var c = e; c < 11; c++) {
+                for (var b = 0; b < 9; ++b) {
+                    quest = "box" + c + "," + b + "of" + a;
+                    document.getElementById(quest).className = "noDisplay";
                 }
             }
 
@@ -137,15 +143,15 @@
                 var specNum = document.getElementById(spec).value; 
                 var crit = "crit" + rubricNums[i];
                 var critNum = document.getElementById(crit).value;
-                var ques = [[[]]];
+                var ques = new Array();
                 for (var j = 0; j < critNum; ++j) {
-                    var specPos = [[]];
+                    var specPos = new Array();
                     var quest = "box" + j + "," + 0 + "of" + rubricNums[i] + "n";
-                    var pointComments = [];
+                    var pointComments = new Array();
                     pointComments.push(document.getElementById(quest).value);
                     specPos.push(pointComments); 
                     for (var k = 1; k <= specNum; ++k) {
-                        pointComments = [];
+                        pointComments = new Array();
                         quest = "box" + j + "," + k + "of" + rubricNums[i] + "p";
                         pointComments.push(document.getElementById(quest).value);
                         quest = "box" + j + "," + k + "of" + rubricNums[i] + "c";
@@ -155,9 +161,10 @@
                     }                 
                     ques.push(specPos);
                 }
-                rubricData.push(ques);
+                rubricData.set(rubricNums[i], ques);
             }
-            document.getElementById("action2").innerHTML = rubricData;        
+            document.getElementById("action").innerHTML = rubricNums[0];
+            document.getElementById("action2").innerHTML = rubricData.get(rubricNums[0]);      
         }
     </script>
 </body>
