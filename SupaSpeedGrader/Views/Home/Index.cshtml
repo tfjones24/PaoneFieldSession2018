@@ -75,7 +75,7 @@
                         @{ for (int i = 0; i < Model.sections.Count; i++)
                             {
                                 <br />
-                                <input type="checkbox" onClick="uncheck()" checked="checked" id="@Model.sections[i]" name="section" value=@Model.sections[i]>
+                                <input type="checkbox" onClick="uncheck()" checked="checked" id="@Model.sectionID[Model.sections[i]]" name="section" value=@Model.sectionID[Model.sections[i]]>
                                 <label for="section">@Model.sections[i]</label>
                             }
                         }

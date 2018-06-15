@@ -44,11 +44,15 @@ namespace SupaSpeedGrader.Controllers
                     return View("result", model);
                 }
 
-                oauth.accessToken = new userAccessToken("9802~Zvtl4cszHBTBQ9z6aAAQ0Mxn9DnyjdVwEukgemkZViqqwVX8jadCGKSFygMzvz0E", Convert.ToInt64(oauth.custom_canvas_user_id), 15000);
-
                 if (oauth.verifySignature())
                 {
+                    oauth.accessToken = new userAccessToken("9802~Zvtl4cszHBTBQ9z6aAAQ0Mxn9DnyjdVwEukgemkZViqqwVX8jadCGKSFygMzvz0E", Convert.ToInt64(oauth.custom_canvas_user_id), 15000);
                     letsGo = true;
+                }
+                else
+                {
+                    oauth.accessToken = new userAccessToken("9802~Zvtl4cszHBTBQ9z6aAAQ0Mxn9DnyjdVwEukgemkZViqqwVX8jadCGKSFygMzvz0E", 2033, 15000);
+                    //letsGo = true;
                 }
 
                 if (devMode && state == null)
@@ -182,8 +186,23 @@ namespace SupaSpeedGrader.Controllers
         }
 
         //Returns the grading page with the selected question
-        public ActionResult Grade()
+        public ActionResult Grade(string quiz, string[] section, string question, string state)
         {
+            /* Need:
+             * quiz name
+             * question name
+             * question score
+             * question instructions
+             * 
+             * per student:
+             * *student name
+             * *student response
+             * *student score
+             * *student comment
+             */
+            GradeModel model = new GradeModel();
+
+            
             return View(new GradeModel());
         }
 
