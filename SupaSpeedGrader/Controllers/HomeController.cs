@@ -436,7 +436,7 @@ namespace SupaSpeedGrader.Controllers
                 //string remoteFileUrl = rvalQuizReportMake
                 WebClient webClient = new WebClient();
                 webClient.DownloadFile(reportLink, localFileName);
-                JArray rvalSub = await userCalls.getQuizSubmissions("9802~K2vUBhafkYpSjiA53Cn0dzdTbQxc9mw5QMauku6eUFxhWXSqcoUfIeaBeqjfxSOy", "https://" + Request.UrlReferrer.Host, course_id, quizId);
+                JObject rvalSub = await userCalls.getQuizSubmissions("9802~K2vUBhafkYpSjiA53Cn0dzdTbQxc9mw5QMauku6eUFxhWXSqcoUfIeaBeqjfxSOy", "https://" + Request.UrlReferrer.Host, course_id, quizId);
 
                 JArray rval3 = await userCalls.getListQuestionsInQuiz("9802~XGk8BJGRorTVCHIH4fY3bSgqLQabhXoVi7DkY1aO36kBCA0pupuuhS1hVWiWboko", "https://" + Request.UrlReferrer.Host, course_id, quizId);
                 //The quiz submission id needed for getQuizSubmissionQuestions (which gives the 
@@ -445,13 +445,13 @@ namespace SupaSpeedGrader.Controllers
 
 
                 willNameModel model = new willNameModel();
-                string submissionId = rval4.First.First.First.Value<string>("id");
+                //string submissionId = rval4.First.First.First.Value<string>("id");
 
                 //string questionId = rval3.First.Value<string>("id");
                 //Console.WriteLine("submission ID is " + submissionId);
-                JObject rval5 = await userCalls.getQuizSubmissionQuestions("9802~XGk8BJGRorTVCHIH4fY3bSgqLQabhXoVi7DkY1aO36kBCA0pupuuhS1hVWiWboko", "https://" + Request.UrlReferrer.Host, submissionId);
+                //JObject rval5 = await userCalls.getQuizSubmissionQuestions("9802~XGk8BJGRorTVCHIH4fY3bSgqLQabhXoVi7DkY1aO36kBCA0pupuuhS1hVWiWboko", "https://" + Request.UrlReferrer.Host, submissionId);
 
-                model.name = "SUCCESSish";
+                model.name = "SUCCESS!  Data.csv has been downloaded to the D: drive at location " + localFileName;
                 model.id = jsonHelpers.GetJObjectValue(rval, "name");
                 //will likes the smelly bootyhole
                 return View(model);
