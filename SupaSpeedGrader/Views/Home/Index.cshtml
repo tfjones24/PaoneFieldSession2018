@@ -10,87 +10,151 @@
         width: 0px;
         height: 0px;
     }
+
     .visible {
         visibility: visible;
         overflow: visible;
+    }
+    .started{
+        background-color:yellow;
+        color:black;
+    }
+    .done{
+        background-color:green;
+        color:white;
+    }
+    .unstarted{
+        background-color:red;
+        color:white;
     }
 </style>
 
 <body>
     <p></p>
     <div>
-        <div style="float:left">
-            <div>
-                <h2>Quiz</h2>
-                <form>
-                    <select id="quiz" onchange="quizFunction()">
-                        <option value="" selected="selected"></option>
-                        @{
-                            for (int i = 0; i < Model.quizzes.Count; i++)
+        <div style="float:left; width:50%">
+            <form action="../Home/Grade">
+                <div>
+                    <h2>Quiz</h2>
+                    <div>
+                        <select name="quiz" id="quiz" onchange="quizFunction()">
+                            <option value="" selected="selected"></option>
+                            @{
+                                for (int i = 0; i < Model.quizzes.Count; i++)
+                                {
+                                    <option value=@Model.quizID[Model.quizzes[i]] class="@Model.quizColor[Model.quizzes[i]]">@Model.quizzes[i]</option>
+                                }
+                            }
+                        </select>
+                        <p id="demo"></p>
+                    </div>
+                </div>
+                <div>
+
+                    <h2>Section</h2>
+                    <div class="hidden" id="sectionForm">
+
+                        <script language="JavaScript">
+                            function toggle(source) {
+                                checkboxes = document.getElementsByName('foo');
+
+                                for (var i = 0, n = checkboxes.length; i < n; i++) {
+                                    checkboxes[i].checked = source.checked;
+                                }
+
+
+                            }
+                            function uncheck() {
+                                document.getElementById("allsections").checked = false;
+                            }
+                        </script>
+
+                        <input checked="checked" onClick="toggle(this)" type="checkbox" id="allsections" name="section" value="all">
+                        <label for="allsections">Select All</label>
+
+                        @{ for (int i = 0; i < Model.sections.Count; i++)
                             {
-                                <option value=@Model.quizzes[i]>@Model.quizzes[i]</option>
+                                <br />
+                                <input type="checkbox" onClick="uncheck()" checked="checked" id="@Model.sections[i]" name="section" value=@Model.sections[i]>
+                                <label for="section">@Model.sections[i]</label>
                             }
                         }
-                    </select>
-                    <p id="demo"></p>
-                </form>
-            </div>
-            <div>
+                    </div>
+                </div>
 
-                <h2>Section</h2>
-                <form class="hidden" id="sectionForm" >
+                <div>
+                    <h2>Question</h2>
+                    <div>
+                        <select name="question" id="questionDrop" class="hidden">
 
-                    <script language="JavaScript">
-                        function toggle(source) {
-                            checkboxes = document.getElementsByName('foo');
-
-                            for (var i = 0, n = checkboxes.length; i < n; i++) {
-                                checkboxes[i].checked = source.checked;
+                            @{
+                                for (int i = 0; i < Model.quizdata.Count; i++)
+                                {
+                                    <option value=@Model.questions[i] class="@Model.questionColor[Model.questions[i]]">@Model.questions[i]</option>
+                                }
                             }
-
-
-                        }
-                        function uncheck() {
-                            document.getElementById("allsections").checked = false;
-                        }
-                    </script>
-                    <input checked="checked" onClick="toggle(this)" type="checkbox" id="allsections" name="section" value="all" >
-                    <label for="allsections">Select All</label>
-
-                    @{ for (int i = 0; i < Model.sections.Count; i++)
+                        </select>
+                    </div>
+                </div>
+                <p></p>
+                <input class="hidden" type="text" name="state" id="state" value="@Model.state"><br />
+                <input type="image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHfNSX7YyLf4h1XAMiFADq4jJt8c9orN9zvvbb-IQp_aF3maXV-A" alt="launch" height="40" width="40" />
+            </form>
+        </div>
+        <div style="float:left; width:50%">
+            <h2>Rubric</h2>
+            <form action="../Home/Rubric">
+                <select id="rubic">
+                    <option value="" selected="selected"></option>
+                    @{
+                        for (int i = 0; i < Model.rubic.Count; i++)
                         {
-                            <br />
-                            <input type="checkbox" onClick="uncheck()" checked="checked" id="section" name="foo" value=@Model.sections[i] >
-                            <label for="section">@Model.sections[i]</label>
+                            <option value=@Model.rubic[i]>@Model.rubic[i]</option>
                         }
                     }
-                </form>
-            </div>
+                </select>
+                <br />
+                <input type="submit" value="Add a new Rubric " />
 
-            <div>
-                <h2>Question</h2>
-                <form>
-                    <select id="questionDrop" class="hidden">
-
-                        @{
-                            for (int i = 0; i < Model.quizdata.Count; i++)
-                            {
-                                <option value=@Model.questions[i]>@Model.questions[i]</option>
-                            }
-                        }
-                    </select>
-                </form>
-            </div>
-            <p></p>
-            <form action="../Home/Grade"> <input type="image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHfNSX7YyLf4h1XAMiFADq4jJt8c9orN9zvvbb-IQp_aF3maXV-A" alt="launch" height="40" width="40" /> </form>
-        </div>
+            </form>
+</div>
     </div>
 
 
     <script>
         function quizFunction() {
             var x = document.getElementById("quiz").value;
+            var state = document.getElementById("state").value;
+
+            var postData = { "quiz": x , "state" : state};
+
             if (x != "") {
+                $.ajax({
+                   type: "POST",
+                   url: "/api/getQuestions",
+                   data: postData,
+                    success: function (data) {
+                        alert(data.Result);
+                        alert(data.Extra);
+                        var new_options = ['Option 1', 'Option 2', 'Option 3'];
+
+                        obj = JSON.parse(data.Extra);
+                        alert(obj.count);
+
+                        /* Remove all options from the select list */
+                        var sel = document.getElementById("questionDrop");
+
+                        sel.options.length = 0;
+
+                        for (var i = 0; i < new_options.length; i++) {
+                            sel.options[i] = new Option(new_options[i], "aval", false, false);
+                        }
+
+                    },
+                    dataType: "json",
+                    traditional: true
+                });
+
                 document.getElementById("demo").innerHTML = "You selected: " + x;
                 document.getElementById("questionDrop").className = "visible";
                 document.getElementById("sectionForm").className = "visible";
@@ -103,6 +167,7 @@
                 document.getElementById("demo").innerHTML = "";
             }
         }
+
     </script>
 
 </body>

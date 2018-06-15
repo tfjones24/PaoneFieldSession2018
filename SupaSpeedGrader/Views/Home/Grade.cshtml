@@ -8,98 +8,7 @@
     string[] shownSet = new string[10];
     Model.studentAt = 0;
 
-    string[] s0 = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
-    string[] s10 = { "11", "12", "13", "14", "15", "16", "17", "18", "19", "20" };
-    string[] s20 = { "21", "22", "23", "24", "25", "26", "27", "28", "29", "30" };
-    string[] s30 = { "31", "32", "33", "34", "35", "36", "37", "38", "39", "40" };
-    string[] s40 = { "41", "42", "43", "44", "45", "46", "47", "48", "49", "50" };
-    string[] s50 = { "51", "52", "53", "54", "55", "56", "57", "58", "59", "60" };
-    string[] s60 = { "61", "62", "63", "64", "65", "66", "67", "68", "69", "70" };
-    string[] s70 = { "71", "72", "73", "74", "75", "76", "77", "78", "79", "80" };
-    string[] s80 = { "81", "82", "83", "84", "85", "86", "87", "88", "89", "90" };
-    string[] s90 = { "91", "92", "93", "94", "95", "96", "97", "98", "99", "100" };
-    int a = (Model.questionOn / 10);
-    if (Model.questionNum % 10 == 0)
-    {
-        a--;
-    }
-    if (a == 0)
-    {
-        for (int x = 0; x < 10; ++x)
-        {
-            shownSet[x] = s0[x];
-        }
-    }
-    else if (a == 1)
-    {
-        for (int x = 0; x < 10; ++x)
-        {
-            shownSet[x] = s10[x];
-        }
-    }
-    else if (a == 2)
-    {
-        for (int x = 0; x < 10; ++x)
-        {
-            shownSet[x] = s20[x];
-        }
-    }
-    else if (a == 3)
-    {
-        for (int x = 0; x < 10; ++x)
-        {
-            shownSet[x] = s30[x];
-        }
-    }
-    else if (a == 4)
-    {
-        for (int x = 0; x < 10; ++x)
-        {
-            shownSet[x] = s40[x];
-        }
-    }
-    else if (a == 5)
-    {
-        for (int x = 0; x < 10; ++x)
-        {
-            shownSet[x] = s50[x];
-        }
-    }
-    else if (a == 6)
-    {
-        for (int x = 0; x < 10; ++x)
-        {
-            shownSet[x] = s60[x];
-        }
-    }
-    else if (a == 7)
-    {
-        for (int x = 0; x < 10; ++x)
-        {
-            shownSet[x] = s70[x];
-        }
-    }
-    else if (a == 8)
-    {
-        for (int x = 0; x < 10; ++x)
-        {
-            shownSet[x] = s80[x];
-        }
-    }
-    else if (a == 9)
-    {
-        for (int x = 0; x < 10; ++x)
-        {
-            shownSet[x] = s90[x];
-        }
-    }
-    else
-    {
-        for (int x = 0; x < 10; ++x)
-        {
-            shownSet[x] = "Error";
-        }
-    }
+
 
 }
 <head>
@@ -164,42 +73,108 @@
         }
     </style>
         -->
+
+
+
+    <style>
+        .btn-group button {
+            background-color: lightgray; /* gray background */
+            border: 1px solid black; /* black border */
+            color: black; /* black text */
+            padding: 10px 24px; /* Some padding */
+            cursor: pointer; /* Pointer/hand icon */
+            float: left; /* Float the buttons side by side */
+        }
+
+        /* Clear floats (clearfix hack) */
+        .btn-group:after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        .btn-group button:not(:last-child) {
+            border-right: none; /* Prevent double borders */
+        }
+
+        /* Add a background color on hover */
+        .btn-group button:hover {
+            background-color: darkgray;
+        }
+
+        #searchtext span {
+            background-color: #FF9;
+            color: #555;
+        }
+
+
+    </style>
 </head>
-<body>
+<body onload="navBarCheck(); rubricParseCheck();">
+   
     <div style="display: flex; border-bottom:1px solid black">
         <div style="float:left; width:52%">
             <h3 style="color: #21314d"> @Model.questionName </h3>
         </div>
-        <!--Navigation Bar-->
+
+
+
+<!--Navigation Bar-->
         <div style="float:left; width:4%">
             <input type="button" style="width:100%; background-color:#D3D3D3" value="<<" onclick="down10()"/>
         </div>
-        <div style="float:left; width:40%" id="navBar">
-            @for (int x = 0; x < 10; ++x)
+        <!--first set of question numbers-->
+        @{ 
+            string newID = "questionSet0";
+        }
+        <div style="float:left; width:40%" id="@newID">
+            @for (int x = 0; x < 10; x++)
             {
-                string color = "lightGrey";
-                string name = "Question" + x;
-                if (x == Model.questionOn)
-                {
-                    color = "white";
-                }
+                
                 <div style="float:left; width:10%">
-                    <input type="button" style="width:100%; background-color:@color" value="@shownSet[x]"  id="@name" onclick="changeQuestion()"/>
+                    <input type="button" style="width:100%; background-color:lightgray" value="@x" id="questionNumber" name ="questionNumber" onclick="changeQuestion(this)" />
                 </div>
             }
-        </div>     
+        </div>
+        <!--other hidden numbers-->
+        @for (var i = 1; i < (1+(Model.navBarQuestions.Count/10)); i++)
+        {
+            newID = "questionSet" + i;   //Makes ID for set the same, but different for each set
+        <div style="float:left; width:40%; display:none" id="@newID" >
+            @for (int x = (i*10); x < ((i+1)*10); x++)
+            {
+                     
+                   
+                    
+                <div style="float:left; width:10%">
+                    <input type="button" style="width:100%; background-color:lightgray" value="@x"  id="questionNumber" name="questionNumber" onclick="changeQuestion(this)"/>
+                </div>
+            }
+        </div>
+       
+        }
         <div style="float:left; width:4%">
             <input type="button" style="width:100%; background-color:#D3D3D3" value=">>" onclick="up10()"/>
         </div>
     </div>
     <p></p>
-    <div>
+
+
+
+
+    <div id="searchtext">
         <!--- left column--->
         <div style="float:left; width: 75%">
             <!--- question name (under nav bar) --->
             <div>
                 <p>@Model.question </p>
             </div>
+
+
+
+
+
+
             <!--- total response container --->
 
             <div>
@@ -209,6 +184,7 @@
                         <li id='response' style="background-color:white">
                             @{ string color = defaultColor;
                                 string remp = "response" + x;
+                                //string remp2 = "response" + x;
                             }
                             @if (x == Model.studentAt)
                             {
@@ -216,18 +192,21 @@
                             }
                             <div style="display:flex; background-color:transparent">
                                 <div onclick="highlightResponse(this)" style="float:left; width:15%; background-color:@color" id="@remp">
+                                    <!--Student name on the left-->
                                     <p> @Model.names[x]  </p>
                                 </div>
-                                <div  style="float:left; width:50%;  border:1px solid black; border-radius:5px; background-color:white" > 
+                                <div class="trueResponse" onclick="highlightResponse(this)" style="float:left; width:50%;  border:1px solid black; border-radius:5px; background-color:aliceblue" id="@remp">
+                                    <!--Response box-->
                                     <p>@Model.namesGrades[Model.names[x]][0]</p>
                                 </div>
 
-                                <div onclick="highlightResponse(this)" style ="float:left; width:35%; background-color:@color" id="@remp"> 
+                                <div class="numberGrade" onclick="highlightResponse(this)" style="float:left; width:35%; background-color:@color" id="@remp">
+                                    <!--Holds the grade box on the right-->
                                     @{
                                         string demo = "demo" + x;
                                         string grades = "grade" + x;
                                     }
-                                    <p style="text-align:center"> Grade :<input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='@grades' value='@Model.namesGrades[Model.names[x]][1]' onchange=myFunction('@Model.names[x]','@demo',@x) /> / @Model.gradeOutOf</p>
+                                    <p style="text-align:center"> Grade :<input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='@grades' value='@Model.namesGrades[Model.names[x]][1]' onchange="leftSideGrade(this)" /> / @Model.gradeOutOf</p>
 
                                     <p id="@demo"></p>
 
@@ -235,41 +214,58 @@
                             </div>
                         </li>
                         <p></p>
-                                        }
+                    }
                 </ul>
             </div>
 
         </div>
+
+
+    
+
         <!--- right column--->
         <div style="float:left; width: 25%;">
             <!--- top row--->
-            <div style="display: flex">
-                <div style="float:left; width:33%; border-right:2px solid black;">
-                    <form><p style="color: blue; font-size:70%">Highlight Keyword</p></form>
-
-                </div>
-                <div style="float:left; width:33%; border-right:2px solid black;">
-                    <form><p style="color: blue;font-size:70%"> Jump to...</p></form>
-                </div>
-                <div style="float:left; width:33%; ">
-                    <form><p style="color: blue; font-size:70%"> Autograde and Filter</p></form>
-                </div>
+            <div id="buttonInputBar" style="display:none">
+                <input id="searchBar" type="text" name="search" onchange="tripleTrigger(this)">
             </div>
-            <!--- Rubic--->
-            <div>
+
+            <div class="btn-group">
+
+
+                <button onclick="hkReveal()">Highlight Keyword</button>
+                <button onclick="jtReveal()">Jump to...</button>
+                <button onclick="afReveal()">Autograde and Filter</button>
+
+
+            </div>
+
+
+
+
+            <!--- Rubric--->
+
+            <div id="rubricParseWarning">
+                <p style="color:red; font-size:200%">Rubric not found</p>
+
+            </div>
+
+
+
+            <div id="rubricWhole" style="">
                 <p>@Model.rubicTitle</p>
                 @for (int i = 0; i < Model.rubicRows; ++i)
                 {<div style="display: flex">
-                     <div style="float:left;width: @Model.width%; background-color:grey; border:1px solid black" >
-                         @Model.rubic[i][0]
-                     </div>
+                        <div style="float:left;width: @Model.width%; background-color:grey; border:1px solid black">
+                            @Model.rubic[i][0]
+                        </div>
                         @for (int j = 1; j < Model.rubicCols; ++j)
                         {
 
                             string clap = "rubr" + i;
 
                             <div style="float:left; width:@Model.width%;border:1px solid black">
-                                <input onclick=highlightRubic(this) onmouseover="hoverRubric(this)" onmouseout="exitRubric(this)" type="button" style="width:100%; background-color:white; border:none" value="@Model.rubic[i][j]" id='@clap' />
+                                <input class="rubricButton" onclick=highlightRubic(this) onmouseover="hoverRubric(this)" onmouseout="exitRubric(this)" type="button" style="width:100%; background-color:white; border:none" value="@Model.rubic[i][j]" id='@clap' />
                             </div>
                         }
                     </div>
@@ -278,10 +274,14 @@
 
             </div>
             <p></p>
-            <!--- next row--->
+
+
+
+
+            <!--- button row--->
             <div style="display: flex">
                 <div style="float:left; width:33%;">
-                    <form><input type="button" style="width:100%; background-color:#D3D3D3" value=" Revert" onclick=revert() /></form>
+                    <form><input type="button" style="width:100%; background-color:#D3D3D3" value=" Revert" onclick="revert()" /></form>
                 </div>
                 <div style="float:left; width:33%;">
                     <form><input type="button" style="width:100%; background-color:#D3D3D3" value="Save" onclick=save() /></form>
@@ -291,191 +291,181 @@
                 </div>
             </div>
             <p></p>
+
+
+
+
             <!--- Comment Box--->
             <div>
-                <textarea style="height:100px; width:100%; border:1px solid black; border-radius:5px" id="comment">@Model.namesGrades[Model.names[Model.studentAt]][2]</textarea>
-                <input type="button" style="width:30%; background-color:#D3D3D3" value="Clear" onclick="clear()" />
+                <form>
+                    <textarea style="height:100px; width:100%; border:1px solid black; border-radius:5px" onchange="updateComments(this)" id="comment" value=""> </textarea>
+                    <input type="reset" value="Clear">
+                </form>
             </div>
+            <!--clear box-->
+
+            <br />
+            <br />
+
+
+
+
             <!--- Grade Box-->
             <div style="height:10%">
-                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " id="grade" value="@Model.namesGrades[Model.names[Model.studentAt]][1]" onchange="myGrade()"/> /@Model.gradeOutOf </p>
+                <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " id="grade" value="@Model.namesGrades[Model.names[Model.studentAt]][1]" onchange="myGrade()" /> /@Model.gradeOutOf </p>
             </div>
             <p id="graded"></p>
         </div>
     </div>
 
     <p id="action"></p>
+    <p id="action1"></p>
     <p id="action2"></p>
     <p id="action3"></p>
     
     
+
+
+
+
+
     
     <script>
+        var questionSetCurrent = 0;
         var studentAt = 0;
         var comments = [];
-        @{int c = 0;}
-        for (var x = 0; x < @Model.names.Count(); ++x) {
-            comments.push(@Model.namesGrades[Model.names[c]][2]);
-            @{c++;}
+       // @{int c = 0;}
+        for (var x = 0; x < @Model.names.Count(); x++) {
+            //if (@Model.namesGrades[Model.names[c]][2]== undefined) {
+                comments[x]="";
+            //}
+        
+         //   @{c++;}
         }
-        function down10() {
-               @{ if (shownSet[0] == s10[0])
-                {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s0[x];
-                    }
-                }
-                else if (shownSet[0] == s20[0])
-                {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s10[x];
-                    }
-                }
-                else if (shownSet[0] == s30[0])
-                {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s20[x];
-                    }
-                }
-                else if (shownSet[0] == s40[0])
-                {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s30[x];
-                    }
-                }
-                else if (shownSet[0] == s50[0])
-                {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s40[x];
-                    }
-                }
-                else if (shownSet[0] == s60[0])
-                {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s50[x];
-                    }
-                }
-                else if (shownSet[0] == s70[0])
-                {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s60[x];
-                    }
-                }
-                else if (shownSet[0] == s80[0])
-                {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s70[x];
-                    }
-                }
-                else if (shownSet[0] == s90[0])
-                {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s80[x];
-                    }
-                }
-                else
-                {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = "Error";
-                    }
-                }
-                }
-            document.getElementById("action2").innerHTML = "You pressed the down button 1";
-            @{ int y = 0;}
-            for (var x = 0; x < 11; ++x)
-            {
-                @{string question = "Question" + y; }
-                    document.getElementById(@question).value = @shownSet[y];
-                @{y++;}
+
+
+
+
+        var highlight = 0;
+        var jumpto = 0;
+        var autograde = 0;
+        function hkReveal() {
+            var searchBar = document.getElementById("buttonInputBar");
+            searchBar.style = "";
+            highlight = 1;
+            jumpto = 0;
+            autograde = 0;                                                                      //working
+            document.getElementById("searchBar").placeholder = "Word to highlight...";
+            document.getElementById("searchBar").value = "";
+        }
+        
+        function jtReveal() {
+            var searchBar = document.getElementById("buttonInputBar");
+            searchBar.style = "";
+            highlight = 0;
+            jumpto = 1;
+            autograde = 0;
+            document.getElementById("searchBar").placeholder = "Jump to Response...";           //working
+            document.getElementById("searchBar").value = "";
+            document.getElementById("searchBar").type = "number";
+        }
+
+        function afReveal() {
+            var searchBar = document.getElementById("buttonInputBar");
+            searchBar.style = "";
+            highlight = 0;
+            jumpto = 0;
+            autograde = 1;
+            document.getElementById("searchBar").placeholder = 'Autograde value...';            //not working
+            document.getElementById("searchBar").value = "";
+        }
+
+
+
+
+
+        //Functionality for the 3 buttons over rubric
+        function tripleTrigger(source) {
+            if (highlight == 1) {
+                var text = document.getElementById("searchBar").value;
+                var query = new RegExp("(\\b" + text + "\\b)", "gim");
+                var e = document.getElementById("searchtext").innerHTML;
+                var enew = e.replace(/(<span>|<\/span>)/igm, "");
+                document.getElementById("searchtext").innerHTML = enew;
+                var newe = enew.replace(query, "<span>$1</span>");
+                document.getElementById("searchtext").innerHTML = newe;
             }
-            document.getElementById("action3").innerHTML = "You pressed the down button 2";
+            else if (jumpto == 1) {
+                
+                highlightResponse(document.getElementById("response" + source.value));
+                studentAt = source.value;
+            }
+            else if (autograde == 1) {
+                //need to implement, reference response values and adjust grade to full 
+                var responses = document.getElementsByName("trueResponse");
+                for (var i = 0; i < response.length; i++) {
+                    if (responses[i].value == document.getElementById("searchBar").value) {
+
+                        var responseWeWant = document.getElementsByName("numberGrade");
+                        for (var j = 0; j < responseWeWant.length; j++) {
+                            if (responseWeWant[j].id = responses[i].id) {
+                                responseWeWant[j] = @Model.gradeOutOf;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+
+
+
+
+        //NAV BAR FUNCTIONS FOR MOVING
+        function down10() {
+            if (questionSetCurrent > 0) {
+                questionSetCurrent--;
+                var oldQuestions = document.querySelectorAll("#questionSet" + (questionSetCurrent + 1));
+                var newQuestions = document.querySelectorAll("#questionSet" + questionSetCurrent);
+
+                for (var i = 0; i < oldQuestions.length; i++) {
+                    oldQuestions[i].style = "float:left; width:40%; display:none";
+                }
+                for (var i = 0; i < newQuestions.length; i++) {
+                    newQuestions[i].style = "float:left; width:40%"
+                }
+
+              //  document.getElementById("action2").innerHTML = "You pressed the down button";
+            }
         }
        
-        function up10() {
-            document.getElementById("action").innerHTML = "You pressed up button";
-            @{
-                if (shownSet[0] == s0[0]) {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s10[x];
-                    }
-                }
-                else if (shownSet[0] == s10[0]) {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s20[x];
-                    }
-                }
-                else if (shownSet[0] == s20[0]) {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s30[x];
-                    }
-                }
-                else if (shownSet[0] == s30[0]) {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s40[x];
-                    }
-                }
-                else if (shownSet[0] == s40[0]) {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s50[x];
-                    }
-                }
-                else if (shownSet[0] == s50[0]) {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s60[x];
-                    }
-                }
-                else if (shownSet[0] == s60[0]) {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s70[x];
-                    }
-                }
-                else if (shownSet[0] == s70[0]) {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s80[x];
-                    }
-                }
-                else if (shownSet[0] == s80[0]) {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = s90[x];
-                    }
-                }
-                else
-                {
-                    for (int x = 0; x < 10; ++x)
-                    {
-                        shownSet[x] = "Error";
-                    }
-                }
-            }
-            @{ y = 0;}
-            for (var x = 0; x < 11; ++x)
-            {
-                @{string question1 = "Question" + y; }
+        function up10() {       //moves the nav bar to the next 10 entries with the right arrow button
 
-                    document.getElementById(@question1).value = @shownSet[y];
-                @{y++;}
-            }
+            if (questionSetCurrent < (@Model.navBarQuestions.Count/10)-1) {
+                questionSetCurrent++;
+                var oldQuestions = document.querySelectorAll("#questionSet" + (questionSetCurrent - 1));
+                var newQuestions = document.querySelectorAll("#questionSet" + questionSetCurrent);
 
+                for (var i = 0; i < oldQuestions.length; i++) {
+                    oldQuestions[i].style = "float:left; width:40%; display:none";
+                }
+                for (var i = 0; i < newQuestions.length; i++) {
+                    newQuestions[i].style = "float:left; width:40%"
+                }
+
+             //   document.getElementById("action2").innerHTML = "You pressed the up button";
+            }
+                        
         }
+
+
+        function updateComments(source) {
+            comments[studentAt] = source.value;
+        }
+
+
 
         function exitRubric(source) {
             if (source.style.backgroundColor == "lightblue") {
@@ -488,63 +478,118 @@
             }
         }
 
-        function myFunction(x, z, num) {
-            var y = document.getElementById(x).value;
-            document.getElementById(z).innerHTML = "You wrote: " + y;
-            if (num ==studentAt) {
-                document.getElementById("grade").value = y;
-            }
+        function leftSideGrade(source) {
+            //ar y = document.getElementById(x).value;
+            //document.getElementById(z).innerHTML = "You wrote: " + y;
+            //if (num ==studentAt) {
+            //    document.getElementById("grade").value = y;
+            //}
+
+            
+            document.getElementById("grade").value = source.value;
+            
 
         }
-        function myGrade() {
+
+
+        function myGrade() {        //counterpart to leftSideGrade, does the same thing but from the right.
             var y = document.getElementById("grade").value;
-            document.getElementById("graded").innerHTML = "You wrote: " + y;
+           // document.getElementById("graded").innerHTML = "You wrote: " + y;
             var grade = "grade" + studentAt; 
             document.getElementById(grade).value = y;
 
         }
-        function revert() {
-            document.getElementById("action").innerHTML = "You pressed revert";
+
+
+        function revert() {                 //a function to nuke the response back to ground zero and rebuild. (shoutout to fallout 76 being released soon)
+            
+            document.getElementById("comment").value = "";
+            //document.getElementById("action").innerHTML = "You pressed revert";
+            updateComments(document.getElementById("comment"));
+            document.getElementById("grade").value = 0;
+            document.getElementById("grade" + studentAt).value = 0;
+            var rubricPieces = document.querySelectorAll(".rubricButton");
+            for (var i = 0; i < rubricPieces.length; i++) {
+                rubricPieces[i].style.backgroundColor="@defaultColor"
+            }
         }
+
+
+
         function save() {
-            document.getElementById("action").innerHTML = "You pressed save-------------@Model.studentAt";
+            //document.getElementById("action").innerHTML = "You pressed save-------------@Model.studentAt";
+
+            updateComments(document.getElementById("comment"));
+
         }
-        function clear() {
-            document.getElementByName("comment").value = "";
-            document.getElementById("action").innerHTML = "You pressed the click button";
+
+
+
+
+        function navBarCheck() {
+
+            var questionNums = document.getElementsByName("questionNumber");
+            //alert("Page is loaded");
+            for (var i = 0; i < questionNums.length; i++) {
+                if (questionNums[i].value > @Model.navBarQuestions.Count()) {
+                    questionNums[i].style.visibility="hidden";
+                }
+            }
         }
 
-       
 
-        @*function saveNext(source) {
-            document.getElementById("action").innerHTML = "You pressed save&next with @Model.studentAt out of @Model.names.Count()";    //only says 0, will update only to 0
-            //remove highlight from initial
-           @{ string y = Model.studentAt + "2";
-               }
-            var responses = document.querySelectorAll('#' + source.id);
-            for (var i = 0; i < responses.length; i++) {
-                updateResponseHighlight(responses[i], false);
+
+        function highlightResponse(source) {
+            var newResponse = document.querySelectorAll('#' + source.id);   //populate with new response selection elements
+            var lastID = "#response" + studentAt;                           //Id of last selection pulled using studentAt variable
+            var oldResponse = document.querySelectorAll(lastID);            //populate with old response selection elements
+
+
+            for (var i = 0; i < oldResponse.length; i++) {                          //Deselect the old one
+                if (oldResponse[i].style.backgroundColor == "aliceblue") {
+                    //don't color response gray
+                }
+                else {
+                    oldResponse[i].style.backgroundColor = "@defaultColor";
+                }
+
+            }
+            for (var i = 0; i < newResponse.length; i++) {
+                if (newResponse[i].style.backgroundColor == "aliceblue") {              //Highlight new one
+                    //don't color response gray
+                }
+                else {
+                    newResponse[i].style.backgroundColor = "@highlightColor";
+                }
+
             }
 
-         //   updateResponseHighlight("@Model.studentAt",false);
-         //   updateResponseHighlight("@y", false);
-            @{
-                Model.studentAt = (Model.studentAt + 1) % Model.names.Count();
-            }
-            //add highlight to update
-          //  updateResponseHighlight("@Model.studentAt", true);
-          //  updateResponseHighlight("@y", true);
 
-            for (var i = 0; i < responses.length; i++){
-                updateResponseHighlight(responses[responses.length], true);
+
+            studentAt = parseInt(source.id.substr(8));  //update studentAt
+            //document.getElementById("action").innerHTML = "studentAt is set to " + studentAt;       //doublecheck we right
+
+            //CLEAR RIGHT HAND SIDE
+            
+            var rubricPieces = document.querySelectorAll(".rubricButton");
+            for (var i = 0; i < rubricPieces.length; i++) {
+                rubricPieces[i].style.backgroundColor="@defaultColor"
             }
 
-            document.getElementById("grade").value = @Model.namesGrade[Model.names[Model.studentAt]];
-            document.getElementById("action2").innerHTML = "You pressed save&next with @Model.studentAt out of @Model.names.Count()";   //only says 1 and updates once
-        }*@
+
+            //Correctly add in things on right side
+            document.getElementById("grade").value = document.getElementById("grade"+studentAt).value;
+            document.getElementById("comment").value = comments[studentAt]; //TODO comment is returning as undefined still
+
+
+        }
+
+
+
+
 
         function saveNext() {               //used for save and next button for next question highlighting
-            document.getElementById("action").innerHTML = "You pressed save&next with " + (studentAt+1) + " out of @Model.names.Count()";    //only says 0, will update only to 0
+           // document.getElementById("action").innerHTML = "You pressed save&next with " + (studentAt+1) + " out of @Model.names.Count()";    //only says 0, will update only to 0
             if (studentAt != (@Model.names.Count()-1)) {
 
 
@@ -556,22 +601,31 @@
 
 
                 for (var i = 0; i < responseToDeselect.length; i++) {
-                    responseToDeselect[i].style.backgroundColor = "@defaultColor";
+                    if (responseToDeselect[i].style.backgroundColor != "aliceblue") {
+                        responseToDeselect[i].style.backgroundColor = "@defaultColor";
+                    }
                 }
 
                 for (var j = 0; j < responseToHighlight.length; j++) {
-                    responseToHighlight[j].style.backgroundColor = "@highlightColor";
+                    if (responseToHighlight[j].style.backgroundColor != "aliceblue") {
+                        responseToHighlight[j].style.backgroundColor = "@highlightColor";
+                    }
                 }
             }
-            else {
-                document.getElementById("action2").innerHTML = "You are at the end of the file";   //only says 1 and updates once
-            }
+           
             var grade ="grade" + studentAt; 
 
-            document.getElementById("action2").innerHTML = "You pressed save&next with " + (studentAt + 1) + " out of @Model.names.Count()";   //only says 1 and updates once
-            // it is not updating
+           // document.getElementById("action2").innerHTML = "You pressed save&next with " + (studentAt + 1) + " out of @Model.names.Count()";   //only says 1 and updates once
+
+
+
+            var rubricPieces = document.querySelectorAll(".rubricButton");
+            for (var i = 0; i < rubricPieces.length; i++) {
+                rubricPieces[i].style.backgroundColor="@defaultColor"
+            }
+
             document.getElementById("grade").value = document.getElementById(grade).value;
-            document.getElementById("comment").value = comments[studentAt];
+            document.getElementById("comment").value = comments[studentAt]; //TODO comment is returning as undefined still
         }
 
 
@@ -600,37 +654,33 @@
         }
 
 
+            function changeQuestion(source) {
+                //make api call to change page to question of this number(reference value of button)
 
-        @*function highlightResponse(source) {
-            var responseCurrent = document.querySelectorAll('#' + source.id);
-            @{
-                string potato ="#response" + Model.studentAt;
+                    document.getElementById("action").innerHTML = "Button pressed to move to question " + source.value;
+                
             }
-            var responseLast = document.querySelectorAll(@potato);
-            for (var i = 0; i < responseLast.length; i++) {
-                responseLast[i].style.backgroundColor = @defaultColor;
+
+
+
+        //not needed right now until implementing the parsing rubric check. currently not working. going to comment error message
+        function rubricParseCheck() {
+
+           //alert("RUBRIC CHECK RUN with rubricParsed as " + @Model.rubricParsed);
+            var source = document.getElementById("rubricWhole");
+           // document.getElementById("rubricParseWarning").style = "display:none";
+
+            if (@Model.rubricParsed == 1) {
+         
+                source.style ="display:none";
+
             }
-            for (var i = 0; i < responseCurrent.length; i++) {
-                responseCurrent[i].style.backgroundColor = @highlightColor;
+            else {
+
+                document.getElementById("rubricParseWarning").style = "display:none";
             }
-            studentAt = parseInt(source.id.substr(9));
-        }*@
 
-
-
- @*//       function highlightResponse(source) {
-            //var responses = document.querySelectAll('#' + source.id)
-            //  for (var i = 0; i < responses.length; i++) {
-            //        responses[i] =
-            //}
- //           document.getElementById("action").innerHTML = "POTATO";
- //           var responses = document.querySelectorAll('#response');
- //           for (var x = 0; x < responses.length) {
-  //              responses[x].style = "background-color:white";
- //           }
-  //          source.style = "background-color:lightgreen"
-
-//        }*@
+        }
     </script>
 </body>
 
