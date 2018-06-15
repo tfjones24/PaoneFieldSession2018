@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -310,23 +311,45 @@ namespace SupaSpeedGrader.Controllers
         public async Task<ActionResult> willName()
         {
             oauthHelper oauth = new oauthHelper(Request);
-
-            /***********************************************************/
+            
             //	Make sure the LTI signature is valid
             /***********************************************************/
             if (oauth.verifySignature())
             {
                 string user_id = Request.Form.Get("custom_canvas_user_id");
+                string course_id = Request.Form.Get("custom_canvas_course_id");
 
                 Uri testUri = Request.Url;
+                //Changed these API keys to Mark's
+                JObject rval = await userCalls.getUserData("9802~K2vUBhafkYpSjiA53Cn0dzdTbQxc9mw5QMauku6eUFxhWXSqcoUfIeaBeqjfxSOy", "https://" + Request.UrlReferrer.Host, user_id);
+                
+                JArray rval2 = await userCalls.getListQuizzesInCourse("9802~K2vUBhafkYpSjiA53Cn0dzdTbQxc9mw5QMauku6eUFxhWXSqcoUfIeaBeqjfxSOy", "https://" + Request.UrlReferrer.Host, course_id);
+                string quizId = rval2.Last.Value<string>("id");
+                JObject rvalQuizReportMake = await userCalls.createQuizReport("9802~K2vUBhafkYpSjiA53Cn0dzdTbQxc9mw5QMauku6eUFxhWXSqcoUfIeaBeqjfxSOy", "https://" + Request.UrlReferrer.Host, course_id, quizId);
+                string reportLink = rvalQuizReportMake.Last.Previous.First.Value<string>("url");
+                //rvalQuizReportLink = await userCalls.getQuizReportLink(("9802~K2vUBhafkYpSjiA53Cn0dzdTbQxc9mw5QMauku6eUFxhWXSqcoUfIeaBeqjfxSOy", "https://" + Request.UrlReferrer.Host, course_id, quizId, reportLink);
+                string localFileName = "D:\\putShitHere\\data.csv";
+                //string remoteFileUrl = rvalQuizReportMake
+                WebClient webClient = new WebClient();
+                webClient.DownloadFile(reportLink, localFileName);
+                JArray rvalSub = await userCalls.getQuizSubmissions("9802~K2vUBhafkYpSjiA53Cn0dzdTbQxc9mw5QMauku6eUFxhWXSqcoUfIeaBeqjfxSOy", "https://" + Request.UrlReferrer.Host, course_id, quizId);
 
-                JObject rval = await userCalls.getUserData("9802~jT11gMJZiaByfs7vBVI2PFQje0YhKwtunlzpw8h6HAMuELHGXodejJzT2mONVMdS", "https://" + Request.UrlReferrer.Host, user_id);
-
+                JArray rval3 = await userCalls.getListQuestionsInQuiz("9802~XGk8BJGRorTVCHIH4fY3bSgqLQabhXoVi7DkY1aO36kBCA0pupuuhS1hVWiWboko", "https://" + Request.UrlReferrer.Host, course_id, quizId);
+                //The quiz submission id needed for getQuizSubmissionQuestions (which gives the 
+                JObject rval4 = await userCalls.getQuizSubmissions("9802~XGk8BJGRorTVCHIH4fY3bSgqLQabhXoVi7DkY1aO36kBCA0pupuuhS1hVWiWboko", "https://" + Request.UrlReferrer.Host, course_id, quizId);
                 
 
+
                 willNameModel model = new willNameModel();
+                string submissionId = rval4.First.First.First.Value<string>("id");
+
+                //string questionId = rval3.First.Value<string>("id");
+                //Console.WriteLine("submission ID is " + submissionId);
+                JObject rval5 = await userCalls.getQuizSubmissionQuestions("9802~XGk8BJGRorTVCHIH4fY3bSgqLQabhXoVi7DkY1aO36kBCA0pupuuhS1hVWiWboko", "https://" + Request.UrlReferrer.Host, submissionId);
+
                 model.name = "SUCCESSish";
                 model.id = jsonHelpers.GetJObjectValue(rval, "name");
+                //will likes the smelly bootyhole
                 return View(model);
             }
             return View(new willNameModel());
