@@ -6,6 +6,7 @@ using SupaSpeedGrader.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -193,6 +194,23 @@ namespace SupaSpeedGrader.Controllers
         public ActionResult Rubric()
         {
             return View(new RubricModel());
+
+        }
+
+
+        public ActionResult FileUpload()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Upload(HttpPostedFileBase myFile)
+        {
+            var fileName = Path.GetFileName(myFile.FileName);
+            myFile.SaveAs(Path.Combine(@"c:\projects", fileName));
+
+            HttpFileCollectionBase files = Request.Files;
+            return View("FileUpload");
         }
 
         // Following code copied in as a base, then modified for our own use
