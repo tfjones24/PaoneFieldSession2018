@@ -49,9 +49,9 @@
                         @{string box = "box" + i + "," + 0 + "of" + x;
                             string al = box + "n";
                         }
-                        <div id="@box" style="float:left; width :10%:; " class="noDisplay">
+                        <div id="@box" style="float:left; width :10%; " class="noDisplay">
                             <p style="font-size:80%"> Criteria Name </p>
-                            <input type="text" style="height:20px; width:50px; border:1px solid black; background-color:transparent " id='@al' />
+                            <textarea style="height:50px; width:100%;border:1px solid black; background-color:transparent " id='@al'></textarea>
                         </div>
                         @for (int j = 1; j < 9; j++)
                         {
@@ -62,7 +62,7 @@
 
                             <div id="@box" style="float:left; width :11.25%" class="noDisplay">
                                 <p style="font-size:80%"> Points <input type="number" style="height:20px; width:50px; border:1px solid black; background-color:transparent " id='@points'  /></p>
-                                <p style="font-size:80%">Comment <input type="text" style="height:20px; width:50px; border:1px solid black; background-color:transparent " id='@comment' /></p>
+                                <p style="font-size:80%">Comment</p> <textarea style="height:25px; width:100%;border:1px solid black; background-color:transparent " id='@comment'></textarea>
                             </div>
                         }
                     </div>
@@ -135,7 +135,6 @@
 
         }
         function submitData() {
-            document.getElementById("action").innerHTML = "start";
             rubricName = document.getElementById("rubrName").value; 
             questNum = document.getElementById("numQuestions").value; 
             for (var i = 0; i < rubricNums.length; ++i) {
@@ -162,9 +161,7 @@
                     ques.push(specPos);
                 }
                 rubricData.set(rubricNums[i], ques);
-            }
-            document.getElementById("action").innerHTML = rubricNums[0];
-            document.getElementById("action2").innerHTML = rubricData.get(rubricNums[0]);      
+            }  
         }
     </script>
 </body>
