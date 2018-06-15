@@ -7,9 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+
 
 namespace SupaSpeedGrader.Controllers
 {
@@ -48,12 +50,75 @@ namespace SupaSpeedGrader.Controllers
                 }
 
             }
-            _logger.Error("Calling for questions");
-            JArray questions = await userCalls.getListQuestionsInQuiz(oauth.accessToken.accessToken, "https://" + oauth.host, oauth.custom_canvas_course_id, quiz);
+            _logger.Error("Calling for quiz report");
 
-            _logger.Error("Call for questions returned:" + questions.ToString());
+            JObject rvalQuizReportMake = await userCalls.createQuizReport(oauth.accessToken.accessToken, "https://" + oauth.host, oauth.custom_canvas_course_id, quiz);
 
-            return Json(new { Result = "SUCCESS", Extra = questions.ToString() });
+            bool gotET = false;
+            bool mayFailed = true;
+            string reportLink = "";
+            int count = 0;
+
+            while (!gotET)
+            {
+                System.Threading.Thread.Sleep(1000);
+                count++;
+                if (count > 12)
+                {
+                    gotET = true;
+                    mayFailed = true;
+                }
+
+                rvalQuizReportMake = await userCalls.createQuizReport(oauth.accessToken.accessToken, "https://" + oauth.host, oauth.custom_canvas_course_id, quiz);
+                try
+                {
+                    reportLink = rvalQuizReportMake.Last.Previous.First.Value<string>("url");
+                    gotET = true;
+                }
+                catch
+                {
+
+                }
+            }
+
+            if (mayFailed && reportLink == "")
+            {
+                _logger.Error("Call for quiz report failed in " + count + ": " + reportLink);
+                return Json(new { Result = "FAILED" });
+            }
+
+            //reportLink = rvalQuizReportMake.Last.Previous.First.Value<string>("url");
+
+            string localFileName = "C:\\qqg_temp_data\\"+quiz+"_report.csv";
+
+            WebClient webClient = new WebClient();
+            webClient.DownloadFile(reportLink, localFileName);
+
+            _logger.Error("Call for quiz report returned in "+ count + ": " + reportLink);
+
+            var parser = new Microsoft.VisualBasic.FileIO.TextFieldParser(localFileName);
+            parser.TextFieldType = Microsoft.VisualBasic.FileIO.FieldType.Delimited;
+            parser.SetDelimiters(new string[] { "," });
+            List<string[]> dataToParse = new List<string[]>();
+            while (!parser.EndOfData)
+            {
+                string[] row = parser.ReadFields();
+                /* do something */
+                _logger.Error("Here's a row: " + row.ToString());
+                dataToParse.Add(row);
+            }
+
+            _logger.Error("Let's do a parse! Quiz: " + quiz);
+
+            if (dataToParse[0][0] != "name" && dataToParse[0][1] != "id")
+            {
+                _logger.Error("Call for quiz report failed because: 00=" + dataToParse[0][0] + " 01=" + dataToParse[0][1] + " 10=" + dataToParse[1][0]);
+                return Json(new { Result = "FAILED" });
+            }
+
+            _logger.Error("We goo! Quiz: " + quiz);
+
+            return Json(new { Result = "SUCCESS" });
         }
     }
 }

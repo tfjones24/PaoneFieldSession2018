@@ -61,10 +61,15 @@ namespace SupaSpeedGrader.Helpers
 		/// Create a hardcoded access token
 		/// </summary>
 		/// <param name="token">Access key generated in Canvas</param>
-		public userAccessToken(string token)
+		public userAccessToken(string token, long userID, int tokenLife)
         {
             accessToken = token;
+            userId = userID;
+            this.tokenLife = tokenLife;
+
             staticKey = true;
+
+            sqlHelper.storeUserAccessToken(this);
         }
 
         /// <summary>

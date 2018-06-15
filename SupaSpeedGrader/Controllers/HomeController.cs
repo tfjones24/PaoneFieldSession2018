@@ -17,7 +17,7 @@ namespace SupaSpeedGrader.Controllers
 {
     public class HomeController : Controller
     {
-        public static bool devMode = false;
+        public static bool devMode = true;
 
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
@@ -44,7 +44,7 @@ namespace SupaSpeedGrader.Controllers
                     return View("result", model);
                 }
 
-                oauth.accessToken = new userAccessToken("9802~XGk8BJGRorTVCHIH4fY3bSgqLQabhXoVi7DkY1aO36kBCA0pupuuhS1hVWiWboko");
+                oauth.accessToken = new userAccessToken("9802~Zvtl4cszHBTBQ9z6aAAQ0Mxn9DnyjdVwEukgemkZViqqwVX8jadCGKSFygMzvz0E", Convert.ToInt64(oauth.custom_canvas_user_id), 15000);
 
                 if (oauth.verifySignature())
                 {
@@ -55,7 +55,7 @@ namespace SupaSpeedGrader.Controllers
                 {
                     Guid stateId = Guid.NewGuid();
                     string jsonState = Newtonsoft.Json.JsonConvert.SerializeObject(oauth);
-                    //sqlHelper.storeState(stateId, jsonState);
+                    sqlHelper.storeState(stateId, jsonState);
                     state = stateId.ToString();
                 }
 
