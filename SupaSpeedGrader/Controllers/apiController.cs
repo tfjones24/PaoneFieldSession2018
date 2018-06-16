@@ -116,8 +116,34 @@ namespace SupaSpeedGrader.Controllers
                 return Json(new { Result = "FAILED" });
             }
 
+            //TODO: Parse CSV into SQL database
+            //SQL idea:
+            /*  drop table of quizid_courseid
+             *  create table of quizid_courseid
+             *  columns are:
+             *      questionid
+             *      possible score
+             *      repeat following for all students:
+             *          studentid:respone
+             *          studentid:score
+             *          studentid:comment
+             * 
+             *  fill table per column
+             * 
+             *  functions needed for SQL:
+             *      recreate table quizid_courseid
+             *      create columns
+             *      update studentid submission for questionid
+             *      get studentid submission for questionid
+             */ 
+
+
+
+
+
             _logger.Error("We goo! Quiz: " + quiz);
 
+            //TODO: Return a list of questions in order w/ names and ids
             return Json(new { Result = "SUCCESS" });
         }
     }
