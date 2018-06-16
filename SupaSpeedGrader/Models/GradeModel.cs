@@ -7,6 +7,16 @@ namespace SupaSpeedGrader.Models
 {
     public class GradeModel
     {
+        //Quiz name and ID
+        public string quizName;
+        public string quizID;
+        //Question name and ID
+        public string questionName;
+        public string questionID;
+
+
+
+
         public List<int> navBarQuestions = new List<int>();
         public int rubricParsed;
         public int questionNum;   
@@ -14,9 +24,9 @@ namespace SupaSpeedGrader.Models
         public int gradeOutOf;
         public int questionOn;
         public int questionStartShow;
-        public string questionName;
-        public string question;
+
         public List<string> names = new List<string>();
+
         /* element 0 = answer, element 1 = grade, element 2 = comment*/
         public Dictionary<string, string[]> namesGrades = new Dictionary<string, string[]>();
         
@@ -33,7 +43,7 @@ namespace SupaSpeedGrader.Models
         }
 
 
-        public GradeModel(int numStudents, int gradeOutof, List<string> names, Dictionary<string, string[]> namesGrades, int rubicRows, int rubicCols, List<List<string>> rubric)
+        public GradeModel(string quiz, string quizID, string question, string questionID, int numStudents, int gradeOutof, List<string> names, Dictionary<string, string[]> namesGrades, int rubicRows, int rubicCols, List<List<string>> rubric)
         {
             this.numStudent = numStudents;
             this.gradeOutOf = gradeOutof;
@@ -97,8 +107,8 @@ namespace SupaSpeedGrader.Models
             questionNum = 30;
             questionOn = 12;
             questionStartShow = (questionOn / 10) * 10;
-            questionName = "Quiz Name";
-            question = "Question name";
+            quizName = "Quiz Name";
+            questionName = "Question name";
             for(int i=0; i < 25; i++)
             {
                 navBarQuestions.Add(i);
