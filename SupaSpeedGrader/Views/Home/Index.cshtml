@@ -35,6 +35,7 @@
         <div style="float:left; width:50%">
             <form action="../Home/Grade">
                 <div>
+                   
                     <h2>Quiz</h2>
                     <div>
                         <select name="quiz" id="quiz" onchange="quizFunction()">
@@ -53,7 +54,7 @@
 
                     <h2>Section</h2>
                     <div class="hidden" id="sectionForm">
-
+                        @* this sets up how the check boxes function*@
                         <script language="JavaScript">
                             function toggle(source) {
                                 checkboxes = document.getElementsByName('foo');
@@ -101,10 +102,12 @@
                 <input type="image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHfNSX7YyLf4h1XAMiFADq4jJt8c9orN9zvvbb-IQp_aF3maXV-A" alt="launch" height="40" width="40" />
             </form>
         </div>
+        <!-- right hand column-->
         <div style="float:left; width:50%">
             <h2>Rubric</h2>
             <form action="../Home/Rubric">
                 <select id="rubic">
+                    @* this form gives the options to select from existing rubrics*@
                     <option value="" selected="selected"></option>
                     @{
                         for (int i = 0; i < Model.rubic.Count; i++)
@@ -114,7 +117,8 @@
                     }
                 </select>
                 <br />
-                <input type="submit" value="Add a new Rubric " />
+                <input type="submit" value="Add a new Rubric " />@* if selected it will autoredirect to the rubric page*@
+        
 
             </form>
 </div>
