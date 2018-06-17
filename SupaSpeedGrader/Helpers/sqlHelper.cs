@@ -376,10 +376,18 @@ namespace SupaSpeedGrader.Helpers
                     SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     adapter.Fill(ds);
 
-                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                    // Check to see if the row exists at all
+                    if (ds != null && ds.Tables[0].Rows.Count == 1 && ds.Tables[0].Rows[0].ItemArray.Length == 3)
                     {
+                        // Oh it does! Wait, does this submission exist?
+                        if (!string.IsNullOrEmpty(ds.Tables[0].Rows[0].ItemArray[1].ToString()))
+                        {
+                            // Oh it does! Quick return it!
+                            return new string[] { ds.Tables[0].Rows[0].ItemArray[0].ToString(), ds.Tables[0].Rows[0].ItemArray[1].ToString(), ds.Tables[0].Rows[0].ItemArray[2].ToString() };
+                        }
+                        // Fuck, it doesn't :( return an empty array tho, like our dreams and our database
+                        rval = new string[] { "", "", "" };
                         //we found an existing token, return the shit
-                        rval = new string[] { "horrible" };
                     }
                 }
             }
