@@ -24,6 +24,8 @@ namespace SupaSpeedGrader.Models
 
 
         public List<string> names = new List<string>(); //I think this is each student.
+        public Dictionary<string, string> userNameToID = new Dictionary<string, string>(); //key for this is student name, returns user id
+
 
         /* element 0 = answer, element 1 = grade, element 2 = comment*/
         //names is the key for this dictionary. in the string array that is returned for each key, the first entry will be the student response, second will be their grade, and the third will be the comment
