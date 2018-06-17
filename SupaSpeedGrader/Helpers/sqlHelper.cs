@@ -311,7 +311,7 @@ namespace SupaSpeedGrader.Helpers
                 {
                     cmd.CommandType = CommandType.Text;
 
-                    sql = string.Format("create table quiz{0}_{1}( questionID integer PRIMARY KEY, maxScore text", quizID, courseID);
+                    sql = string.Format("create table quiz{0}_{1}( questionID integer PRIMARY KEY, questionText text, maxScore text", quizID, courseID);
 
                     for (int i = 0; i < studentIDs.Length; i++)
                     {
@@ -328,7 +328,7 @@ namespace SupaSpeedGrader.Helpers
         }
 
         //TODO: Implement updating student submission
-        public static bool updateStudentSubmissionSQL(string quizID, string courseID, string questionID, string maxScore, string studentID, string studentScore, string studentResponse, string comment)
+        public static bool updateStudentSubmissionSQL(string quizID, string courseID, string questionID, string questionText, string maxScore, string studentID, string studentScore, string studentResponse, string comment)
         {
             bool rval = true;
 
@@ -344,7 +344,7 @@ namespace SupaSpeedGrader.Helpers
 
                     if (studentSub == null)
                     {
-                        sql = string.Format("insert into quiz{0}_{1} (questionID, maxScore, response_{2}, score_{2}, comment_{2}) values ('{3}', '{4}', '{5}', '{6}', '{7}')", quizID, courseID, studentID, questionID, maxScore, studentResponse, studentScore, comment);
+                        sql = string.Format("insert into quiz{0}_{1} (questionID, maxScore, response_{2}, score_{2}, comment_{2}, questionText) values ('{3}', '{4}', '{5}', '{6}', '{7}', '{8}')", quizID, courseID, studentID, questionID, maxScore, studentResponse, studentScore, comment, questionText);
                     }
                     else
                     {

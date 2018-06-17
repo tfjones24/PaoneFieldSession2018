@@ -19,7 +19,7 @@ namespace SupaSpeedGrader.Controllers
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public async Task<JsonResult> getQuestions(string quiz, string state)
+        public async Task<ActionResult> getQuestions(string quiz, string state)
         {
             _logger.Error("Pulling in a saved state: " + state);
             oauthHelper oauth = Newtonsoft.Json.JsonConvert.DeserializeObject<oauthHelper>(sqlHelper.getStateJson(Guid.Parse(state)));
@@ -152,7 +152,8 @@ namespace SupaSpeedGrader.Controllers
                 bool didcreate = sqlHelper.createQuizTable(quiz, oauth.custom_canvas_course_id, students);
 
                 // Okay, table made, let's parse!
-
+                string toReturn = "{ \"questionArray\": [";
+                int z = 0;
                 // Let's go by questions, across the columns
                 for (int x = 7; x < dataToParse[0].Length - 3; x = x + 2)
                 {
@@ -162,34 +163,46 @@ namespace SupaSpeedGrader.Controllers
                     string score = dataToParse[0][x + 1];
 
                     // Remove everything after : including :
+                    string questionText = question.Substring(question.IndexOf(":")+1);
                     question = question.Substring(0, question.IndexOf(":"));
-                    
+                    if (z > 0)
+                    {
+                        toReturn = toReturn + ", ";
+                    }
+                    toReturn = toReturn + " {\"name\": \"" + questionText + "\", \"id\": \"" + question + "\"}";
+                    z++;
                     // Now grab and upload each student reponse
                     for (int y = 1; y < dataToParse.Count; y++)
                     {
                         string studentResponse = dataToParse[y][x];
                         string studentScore = dataToParse[y][x + 1];
 
-                        bool doThatUpdate = sqlHelper.updateStudentSubmissionSQL(quiz, oauth.custom_canvas_course_id, question, score, students[y - 1], studentScore, studentResponse, "");
+                        bool doThatUpdate = sqlHelper.updateStudentSubmissionSQL(quiz, oauth.custom_canvas_course_id, question, questionText, score, students[y - 1], studentScore, studentResponse, "");
                     }
                 }
 
+                toReturn = toReturn + "] }";
                 // Okay, data is parsed, so lets..pass off a list of questions!
                 // Make sure to include id's...
+
+                _logger.Error("We goo! Quiz: " + quiz);
+
+
+
+                //TODO: Return a list of questions in order w/ names and ids
+                return Json(new { Result = "SUCCESS", Questions = toReturn });
+                //return Content(toReturn, "application/json");
             }
             else
             {
                 //TODO: No submissions....
+                _logger.Error("We goo! Quiz: " + quiz);
+
+                //TODO: Return a list of questions in order w/ names and ids
+                return Json(new { Result = "SUCCESS", Questions = new { } });
             }
 
 
-
-
-
-            _logger.Error("We goo! Quiz: " + quiz);
-
-            //TODO: Return a list of questions in order w/ names and ids
-            return Json(new { Result = "SUCCESS", questions });
         }
     }
 }

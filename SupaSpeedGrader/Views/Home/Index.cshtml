@@ -139,19 +139,18 @@
                    data: postData,
                     success: function (data) {
                         alert(data.Result);
-                        alert(data.Extra);
-                        var new_options = ['Option 1', 'Option 2', 'Option 3'];
+                        //alert(data.Questions);
 
-                        obj = JSON.parse(data.Extra);
-                        alert(obj.count);
+                        obj = JSON.parse(data.Questions);
+                        //alert(obj.questionArray.length);
 
                         /* Remove all options from the select list */
                         var sel = document.getElementById("questionDrop");
 
                         sel.options.length = 0;
 
-                        for (var i = 0; i < new_options.length; i++) {
-                            sel.options[i] = new Option(new_options[i], "aval", false, false);
+                        for (var i = 0; i < obj.questionArray.length; i++) {
+                            sel.options[i] = new Option((i+1) + ": " + obj.questionArray[i].name, obj.questionArray[i].id, false, false);
                         }
 
                     },
