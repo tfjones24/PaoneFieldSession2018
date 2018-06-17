@@ -311,7 +311,7 @@ namespace SupaSpeedGrader.Helpers
                 {
                     cmd.CommandType = CommandType.Text;
 
-                    sql = string.Format("create table quiz{0}_{1}( questionID uniqueidentifier PRIMARY KEY, maxScore text", quizID, courseID);
+                    sql = string.Format("create table quiz{0}_{1}( questionID integer PRIMARY KEY, maxScore text", quizID, courseID);
 
                     for (int i = 0; i < studentIDs.Length; i++)
                     {
@@ -363,7 +363,7 @@ namespace SupaSpeedGrader.Helpers
         {
             string[] rval = null;
 
-            string sql = string.Format("select response_{3},  score_{3}, comment_{3} from quiz{0}_{1} where questionID = '{2}'", quizID, courseID, questionID, studentID);
+            string sql = string.Format("select response_{3},  score_{3}, comment_{3} from quiz{0}_{1} where questionID = {2}", quizID, courseID, questionID, studentID);
             using (SqlConnection dbcon = new SqlConnection(_camsConnectionString))
             {
                 dbcon.Open();
@@ -372,11 +372,11 @@ namespace SupaSpeedGrader.Helpers
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandText = sql;
 
-                    DataSet ds = null;
+                    DataSet ds = new DataSet();
                     SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     adapter.Fill(ds);
 
-                    if (ds != null)
+                    if (ds != null && ds.Tables[0].Rows.Count > 0)
                     {
                         //we found an existing token, return the shit
                         rval = new string[] { "horrible" };

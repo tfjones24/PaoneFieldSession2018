@@ -154,13 +154,16 @@ namespace SupaSpeedGrader.Controllers
                 // Okay, table made, let's parse!
 
                 // Let's go by questions, across the columns
-                for (int x = 7; x < dataToParse[0].Length - 3; x++)
+                for (int x = 7; x < dataToParse[0].Length - 3; x = x + 2)
                 {
                     // Grab the question data
                     //TODO: remove : and everything after
                     string question = dataToParse[0][x];
                     string score = dataToParse[0][x + 1];
 
+                    // Remove everything after : including :
+                    question = question.Substring(0, question.IndexOf(":"));
+                    
                     // Now grab and upload each student reponse
                     for (int y = 1; y < dataToParse.Count; y++)
                     {
@@ -170,6 +173,9 @@ namespace SupaSpeedGrader.Controllers
                         bool doThatUpdate = sqlHelper.updateStudentSubmissionSQL(quiz, oauth.custom_canvas_course_id, question, score, students[y - 1], studentScore, studentResponse, "");
                     }
                 }
+
+                // Okay, data is parsed, so lets..pass off a list of questions!
+                // Make sure to include id's...
             }
             else
             {
@@ -183,7 +189,7 @@ namespace SupaSpeedGrader.Controllers
             _logger.Error("We goo! Quiz: " + quiz);
 
             //TODO: Return a list of questions in order w/ names and ids
-            return Json(new { Result = "SUCCESS" });
+            return Json(new { Result = "SUCCESS", questions });
         }
     }
 }
