@@ -1,12 +1,11 @@
 ﻿@model SupaSpeedGrader.Models.GradeModel
 
 @{ 
-    ViewBag.Title = "Grade";
+    ViewBag.Title = "Grade";        //not sure 
 
-    string defaultColor = "white";
-    string highlightColor = "lightgray";
-    string[] shownSet = new string[10];
-    Model.studentAt = 0;
+    string defaultColor = "white";          //non selected color
+    string highlightColor = "lightgray";    //selected container color
+    Model.studentAt = 0;                    //Initializes the Model.studentAt. Kinda useless as we start at 0 anyways and use a javascript variable
 
 
 
@@ -15,68 +14,15 @@
     <link rel="stylesheet" type="text/css" href="StyleSheet1.css" />
 
 
-    <!--DECLARING VARIABLES IN THIS SCRIPT BELOW-->
+    
 
 
 
+    <style>             
+        /*everything in here is used for the buttons of jumpto, highlight, and autograde*/
 
 
 
-    <!--<style>
-        /* Style The Dropdown Button */
-        .dropbtn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 16px;
-            font-size: 16px;
-            border: none;
-            cursor: pointer;
-        }
-
-        /* The container <div> - needed to position the dropdown content */
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        /* Dropdown Content (Hidden by Default) */
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
-
-            /* Links inside the dropdown */
-            .dropdown-content a {
-                color: black;
-                padding: 12px 16px;
-                text-decoration: none;
-                display: block;
-            }
-
-                /* Change color of dropdown links on hover */
-                .dropdown-content a:hover {
-                    background-color: #f1f1f1
-                }
-
-        /* Show the dropdown menu on hover */
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        /* Change the background color of the dropdown button when the dropdown content is shown */
-        .dropdown:hover .dropbtn {
-            background-color: #3e8e41;
-        }
-    </style>
-        -->
-
-
-
-    <style>
         .btn-group button {
             background-color: lightgray; /* gray background */
             border: 1px solid black; /* black border */
@@ -110,51 +56,53 @@
 
     </style>
 </head>
-<body onload="navBarCheck(); rubricParseCheck();">
+<body onload="navBarCheck(); rubricParseCheck();">          <!--navBarCheck basically takes the extra cells that are generated and makes them invisible at the end of the nav list
+                                                                rubricParseCheck relies on the rubricParsed variable in model to tell it if we're using a rubric or not. 1 for yes 0 for no-->
    
     <div style="display: flex; border-bottom:1px solid black">
         <div style="float:left; width:52%">
-            <h3 style="color: #21314d"> @Model.quizName </h3>
+            <h3 style="color: #21314d"> @Model.quizName </h3>   <!--name of the quiz-->
         </div>
 
 
 
-<!--Navigation Bar-->
+        <!--Navigation Bar-->
         <div style="float:left; width:4%">
-            <input type="button" style="width:100%; background-color:#D3D3D3" value="<<" onclick="down10()"/>
+            <input type="button" style="width:100%; background-color:#D3D3D3" value="<<" onclick="down10()" />       <!--arrow to move down-->
         </div>
         <!--first set of question numbers-->
-        @{ 
+        @{
             string newID = "questionSet0";
         }
         <div style="float:left; width:40%" id="@newID">
+            <!--populates the first 10 questions, value of each button will increment up with x var-->
             @for (int x = 0; x < 10; x++)
             {
-                
+
                 <div style="float:left; width:10%">
-                    <input type="button" style="width:100%; background-color:lightgray" value="@x" id="questionNumber" name ="questionNumber" onclick="changeQuestion(this)" />
+                    <input type="button" style="width:100%; background-color:lightgray" value="@x" id="questionNumber" name="questionNumber" onclick="changeQuestion(this)" />
                 </div>
             }
         </div>
+
+
         <!--other hidden numbers-->
-        @for (var i = 1; i < (1+(Model.navBarQuestions.Count/10)); i++)
+        <!--everything past the first 10 questions, value also increments with for loop-->
+        @for (var i = 1; i < (1 + (Model.navBarQuestions.Count / 10)); i++)
         {
-            newID = "questionSet" + i;   //Makes ID for set the same, but different for each set
-        <div style="float:left; width:40%; display:none" id="@newID" >
-            @for (int x = (i*10); x < ((i+1)*10); x++)
-            {
-                     
-                   
-                    
-                <div style="float:left; width:10%">
-                    <input type="button" style="width:100%; background-color:lightgray" value="@x"  id="questionNumber" name="questionNumber" onclick="changeQuestion(this)"/>
-                </div>
-            }
-        </div>
-       
+            newID = "questionSet" + i;
+            <div style="float:left; width:40%; display:none" id="@newID">
+                @for (int x = (i * 10); x < ((i + 1) * 10); x++)
+                {
+                    <div style="float:left; width:10%">
+                        <input type="button" style="width:100%; background-color:lightgray" value="@x" id="questionNumber" name="questionNumber" onclick="changeQuestion(this)" />
+                    </div>
+                }
+            </div>
+
         }
         <div style="float:left; width:4%">
-            <input type="button" style="width:100%; background-color:#D3D3D3" value=">>" onclick="up10()"/>
+            <input type="button" style="width:100%; background-color:#D3D3D3" value=">>" onclick="up10()" />    <!--button to move the responses to the next 10-->
         </div>
     </div>
     <p></p>
@@ -165,6 +113,9 @@
     <div id="searchtext">
         <!--- left column--->
         <div style="float:left; width: 75%">
+
+
+
             <!--- question name (under nav bar) --->
             <div>
                 <p>@Model.questionName </p>
@@ -175,18 +126,21 @@
 
 
 
-            <!--- total response container --->
+            <!--- total response container that holds student names, responses, and small grade square --->
 
             <div>
                 <ul style=" list-style-type: none; padding: 0; overflow: auto; width:100%; max-height:500px">
+                    <!--populates each individual student field as a div-->
                     @for (int x = 0; x < Model.numStudent; x++)
                     {
-                        <li id='response' style="background-color:white">
-                            @{ string color = defaultColor;
-                                string remp = "response" + x;
-                                //string remp2 = "response" + x;
+                        string uniqueName = "studentResponse" + x;                  //each response's name is studentResponse plus whatever number the reponse is. i.e. studentResponse12
+                        <li id='response' name ="@uniqueName" style="background-color:white">
+                            @{ string color = defaultColor; //variable that is changed when the response is highlighted
+                                string remp = "response" + x;   //variable used to set the id for each group of elements to tie them together, i.e. response12 for all 3 of these elements in this response container
                             }
-                            @if (x == Model.studentAt)
+
+                                                        
+                            @if (x == Model.studentAt)  //used to highlight the first response on page load
                             {
                                 color = highlightColor;
                             }
@@ -227,11 +181,12 @@
         <div style="float:left; width: 25%;">
             <!--- top row--->
             <div id="buttonInputBar" style="display:none">
-                <input id="searchBar" type="text" name="search" onchange="tripleTrigger(this)">
+                <input id="searchBar" type="text" name="search" onchange="tripleTrigger(this)"> <!--tripleTrigger is a function for the search bar that is revealed on button press to 
+                                                                                                    make the button functionality work-->
             </div>
 
             <div class="btn-group">
-
+                <!--buttons for the secondary functionality, lives above the rubric-->
 
                 <button onclick="hkReveal()">Highlight Keyword</button>
                 <button onclick="jtReveal()">Jump to...</button>
@@ -246,23 +201,22 @@
             <!--- Rubric--->
 
             <div id="rubricParseWarning">
-                <p style="color:red; font-size:200%">Rubric not found</p>
-
+                <p style="color:red; font-size:200%">Rubric not found</p> <!--error message that displays when rubricParsed is set to 0, hides full rubric-->
             </div>
 
 
 
-            <div id="rubricWhole" style="">
-                <p>@Model.rubicTitle</p>
+            <div id="rubricWhole" style=""><!--rubric container, holds the rubric-->
+                <p>@Model.rubicTitle</p><!--Model.rubicTitle=what the rubric has been named-->
                 @for (int i = 0; i < Model.rubicRows; ++i)
                 {<div style="display: flex">
                         <div style="float:left;width: @Model.width%; background-color:grey; border:1px solid black">
-                            @Model.rubic[i][0]
+                            @Model.rubic[i][0]      <!--michelle has the rubric parsing in so the beginning of each row is colored gray as the description of how to grade that part-->
                         </div>
                         @for (int j = 1; j < Model.rubicCols; ++j)
                         {
 
-                            string clap = "rubr" + i;
+                            string clap = "rubr" + i;   //used to set unique ids for the rubric buttons. i.e. rubr12
 
                             <div style="float:left; width:@Model.width%;border:1px solid black">
                                 <input class="rubricButton" onclick=highlightRubic(this) onmouseover="hoverRubric(this)" onmouseout="exitRubric(this)" type="button" style="width:100%; background-color:white; border:none" value="@Model.rubic[i][j]" id='@clap' />
@@ -281,13 +235,13 @@
             <!--- button row--->
             <div style="display: flex">
                 <div style="float:left; width:33%;">
-                    <form><input type="button" style="width:100%; background-color:#D3D3D3" value=" Revert" onclick="revert()" /></form>
+                    <form><input type="button" style="width:100%; background-color:#D3D3D3" value=" Revert" onclick="revert()" /></form><!--just the button for revert-->
                 </div>
                 <div style="float:left; width:33%;">
-                    <form><input type="button" style="width:100%; background-color:#D3D3D3" value="Save" onclick=save() /></form>
+                    <form><input type="button" style="width:100%; background-color:#D3D3D3" value="Save" onclick=save() /></form><!--button for save-->
                 </div>
                 <div style="float:left; width:33%;">
-                    <form><input type="button" style="width:100%; background-color:#D3D3D3" value="Save&Next" onclick=saveNext() /></form>
+                    <form><input type="button" style="width:100%; background-color:#D3D3D3" value="Save&Next" onclick=saveNext() /></form><!--button for save and next-->
                 </div>
             </div>
             <p></p>
@@ -299,7 +253,7 @@
             <div>
                 <form>
                     <textarea style="height:100px; width:100%; border:1px solid black; border-radius:5px" onchange="updateComments(this)" id="comment" value=""> </textarea>
-                    <input type="reset" value="Clear">
+                    <input type="reset" value="Clear">  <!--clear button with no need for a function. heckin yeah thanks stackoverflow-->
                 </form>
             </div>
             <!--clear box-->
@@ -311,13 +265,15 @@
 
 
             <!--- Grade Box-->
-            <div style="height:10%">
+            <div style="height:10%"> <!--this is the grade box on the right hand side of the screen. used to grade the response highlighted-->
                 <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " id="grade" value="@Model.namesGrades[Model.names[Model.studentAt]][1]" onchange="myGrade()" /> /@Model.gradeOutOf </p>
             </div>
             <p id="graded"></p>
         </div>
     </div>
 
+
+    <!--just random text things we used for debugging. nothing should reference these by the end-->
     <p id="action"></p>
     <p id="action1"></p>
     <p id="action2"></p>
@@ -331,26 +287,24 @@
 
     
     <script>
-        var questionSetCurrent = 0;
-        var studentAt = 0;
-        var comments = [];
-       // @{int c = 0;}
+        var questionSetCurrent = 0; //used to check if we can move up or down in the nav bar. represents the number of the set of questions displayed (0-10=0, 11-20=1, so on)
+        var studentAt = 0;          //tracks the current student response that is being referenced. initializes the first response at studentAt=0
+        var comments = [];          //Holds the comments for each student respones. Array position is equal to the studentAt number of each response
+ 
         for (var x = 0; x < @Model.names.Count(); x++) {
-            //if (@Model.namesGrades[Model.names[c]][2]== undefined) {
-                comments[x]="";
-            //}
-        
-         //   @{c++;}
+            comments[x]="";                           //function used to populate comment array with empty comments for every response
         }
 
 
 
-
+        //set of variables used by tripleTrigger to determine which functionality is being used for the singular search bar
         var highlight = 0;
         var jumpto = 0;
         var autograde = 0;
+
+
         function hkReveal() {
-            var searchBar = document.getElementById("buttonInputBar");
+            var searchBar = document.getElementById("buttonInputBar");                      //fucntion to reveal highlight search bar
             searchBar.style = "";
             highlight = 1;
             jumpto = 0;
@@ -360,7 +314,7 @@
         }
         
         function jtReveal() {
-            var searchBar = document.getElementById("buttonInputBar");
+            var searchBar = document.getElementById("buttonInputBar");                      //function to reveal jumpto search bar
             searchBar.style = "";
             highlight = 0;
             jumpto = 1;
@@ -371,7 +325,7 @@
         }
 
         function afReveal() {
-            var searchBar = document.getElementById("buttonInputBar");
+            var searchBar = document.getElementById("buttonInputBar");                      //function to reveal autograde and filter search bar
             searchBar.style = "";
             highlight = 0;
             jumpto = 0;
@@ -386,7 +340,7 @@
 
         //Functionality for the 3 buttons over rubric
         function tripleTrigger(source) {
-            if (highlight == 1) {
+            if (highlight == 1) {                                           //this if triggers for highlight, not sure how it works but meh
                 var text = document.getElementById("searchBar").value;
                 var query = new RegExp("(\\b" + text + "\\b)", "gim");
                 var e = document.getElementById("searchtext").innerHTML;
@@ -395,12 +349,12 @@
                 var newe = enew.replace(query, "<span>$1</span>");
                 document.getElementById("searchtext").innerHTML = newe;
             }
-            else if (jumpto == 1) {
+            else if (jumpto == 1) {                                         //this if triggers jumpTo functionality, easily works
                 
                 highlightResponse(document.getElementById("response" + source.value));
                 studentAt = source.value;
             }
-            else if (autograde == 1) {
+            else if (autograde == 1) {                                      //this if triggers autograde functionality, not sure what I'm trying but it doesn't work, please ignore
                 //need to implement, reference response values and adjust grade to full 
                 var responses = document.getElementsByName("trueResponse");
                 for (var i = 0; i < response.length; i++) {
@@ -427,17 +381,17 @@
         function down10() {
             if (questionSetCurrent > 0) {
                 questionSetCurrent--;
-                var oldQuestions = document.querySelectorAll("#questionSet" + (questionSetCurrent + 1));
-                var newQuestions = document.querySelectorAll("#questionSet" + questionSetCurrent);
+                var oldQuestions = document.querySelectorAll("#questionSet" + (questionSetCurrent + 1));    //selects the old question buttons
+                var newQuestions = document.querySelectorAll("#questionSet" + questionSetCurrent);          //selects the new ones
 
                 for (var i = 0; i < oldQuestions.length; i++) {
-                    oldQuestions[i].style = "float:left; width:40%; display:none";
+                    oldQuestions[i].style = "float:left; width:40%; display:none";      //hides the old buttons
                 }
                 for (var i = 0; i < newQuestions.length; i++) {
-                    newQuestions[i].style = "float:left; width:40%"
+                    newQuestions[i].style = "float:left; width:40%"                     //shows the new buttons
                 }
 
-              //  document.getElementById("action2").innerHTML = "You pressed the down button";
+
             }
         }
        
@@ -445,56 +399,49 @@
 
             if (questionSetCurrent < (@Model.navBarQuestions.Count/10)-1) {
                 questionSetCurrent++;
-                var oldQuestions = document.querySelectorAll("#questionSet" + (questionSetCurrent - 1));
-                var newQuestions = document.querySelectorAll("#questionSet" + questionSetCurrent);
+                var oldQuestions = document.querySelectorAll("#questionSet" + (questionSetCurrent - 1));        //gets old questions
+                var newQuestions = document.querySelectorAll("#questionSet" + questionSetCurrent);              //gets new questions
 
                 for (var i = 0; i < oldQuestions.length; i++) {
-                    oldQuestions[i].style = "float:left; width:40%; display:none";
+                    oldQuestions[i].style = "float:left; width:40%; display:none";              //hides old questions
                 }
                 for (var i = 0; i < newQuestions.length; i++) {
-                    newQuestions[i].style = "float:left; width:40%"
+                    newQuestions[i].style = "float:left; width:40%"                 //shows new questions
                 }
 
-             //   document.getElementById("action2").innerHTML = "You pressed the up button";
+            
             }
                         
         }
 
 
         function updateComments(source) {
-            comments[studentAt] = source.value;
+            comments[studentAt] = source.value;     //basically pushes the comment from the comment box into the comment array variable initialized at the top of <script>
         }
 
 
 
         function exitRubric(source) {
-            if (source.style.backgroundColor == "lightblue") {
+            if (source.style.backgroundColor == "lightblue") {  //used when your mouse leaves the square of a rubric piece
                 source.style.backgroundColor = "white";
            }
         }
         function hoverRubric(source) {
-            if (source.style.backgroundColor=="white") {
+            if (source.style.backgroundColor=="white") {    //when the mouse enters the square of a rubric piece
                 source.style.backgroundColor = "lightblue";
             }
         }
 
         function leftSideGrade(source) {
-            //ar y = document.getElementById(x).value;
-            //document.getElementById(z).innerHTML = "You wrote: " + y;
-            //if (num ==studentAt) {
-            //    document.getElementById("grade").value = y;
-            //}
-
-            
+                                                                        //used to set the right hand side grade to         
             document.getElementById("grade").value = source.value;
             
-
         }
 
 
         function myGrade() {        //counterpart to leftSideGrade, does the same thing but from the right.
             var y = document.getElementById("grade").value;
-           // document.getElementById("graded").innerHTML = "You wrote: " + y;
+          
             var grade = "grade" + studentAt; 
             document.getElementById(grade).value = y;
 
@@ -504,7 +451,7 @@
         function revert() {                 //a function to nuke the response back to ground zero and rebuild. (shoutout to fallout 76 being released soon)
             
             document.getElementById("comment").value = "";
-            //document.getElementById("action").innerHTML = "You pressed revert";
+
             updateComments(document.getElementById("comment"));
             document.getElementById("grade").value = 0;
             document.getElementById("grade" + studentAt).value = 0;
@@ -516,11 +463,8 @@
 
 
 
-        function save() {
-            //document.getElementById("action").innerHTML = "You pressed save-------------@Model.studentAt";
-
+        function save() {                       //need api call to upload this to canvas**********
             updateComments(document.getElementById("comment"));
-
         }
 
 
@@ -529,7 +473,6 @@
         function navBarCheck() {
 
             var questionNums = document.getElementsByName("questionNumber");
-            //alert("Page is loaded");
             for (var i = 0; i < questionNums.length; i++) {
                 if (questionNums[i].value > @Model.navBarQuestions.Count()) {
                     questionNums[i].style.visibility="hidden";
@@ -546,7 +489,7 @@
 
 
             for (var i = 0; i < oldResponse.length; i++) {                          //Deselect the old one
-                if (oldResponse[i].style.backgroundColor == "aliceblue") {
+                if (oldResponse[i].style.backgroundColor == "aliceblue") {  //using alice blue as an easy color that is unique to the response field
                     //don't color response gray
                 }
                 else {
@@ -568,6 +511,7 @@
 
             studentAt = parseInt(source.id.substr(8));  //update studentAt
             //document.getElementById("action").innerHTML = "studentAt is set to " + studentAt;       //doublecheck we right
+
 
             //CLEAR RIGHT HAND SIDE
             
@@ -592,17 +536,17 @@
            // document.getElementById("action").innerHTML = "You pressed save&next with " + (studentAt+1) + " out of @Model.names.Count()";    //only says 0, will update only to 0
             if (studentAt != (@Model.names.Count()-1)) {
 
+                    
+                var responseToHighlight = document.querySelectorAll("#response" + (studentAt + 1)); //get response to highlight
 
-                var responseToHighlight = document.querySelectorAll("#response" + (studentAt + 1));
-
-                var responseToDeselect = document.querySelectorAll("#response" + studentAt);
-                studentAt++;
+                var responseToDeselect = document.querySelectorAll("#response" + studentAt);    //get response to deselect
+                studentAt++;    //fix studentAt
 
 
 
                 for (var i = 0; i < responseToDeselect.length; i++) {
                     if (responseToDeselect[i].style.backgroundColor != "aliceblue") {
-                        responseToDeselect[i].style.backgroundColor = "@defaultColor";
+                        responseToDeselect[i].style.backgroundColor = "@defaultColor";          //highlight and deselect this shit
                     }
                 }
 
@@ -613,11 +557,10 @@
                 }
             }
            
-            var grade ="grade" + studentAt; 
-
-           // document.getElementById("action2").innerHTML = "You pressed save&next with " + (studentAt + 1) + " out of @Model.names.Count()";   //only says 1 and updates once
+            var grade ="grade" + studentAt; //used to reference the correct responses grade box
 
 
+            //everything else used to update right hand side to the selected response info including clearing rubric, populating comment and grade box
 
             var rubricPieces = document.querySelectorAll(".rubricButton");
             for (var i = 0; i < rubricPieces.length; i++) {
@@ -625,22 +568,13 @@
             }
 
             document.getElementById("grade").value = document.getElementById(grade).value;
-            document.getElementById("comment").value = comments[studentAt]; //TODO comment is returning as undefined still
+            document.getElementById("comment").value = comments[studentAt]; //this works now
         }
 
 
 
-        @*function updateResponseHighlight(x, highlight) {
-            if (highlight == true) {
-                x.style.backgroundColor = "@highlightColor";
-            }
-            else {
-                x.style.backgroundColor = "@defaultColor";
-            }
-        }*@
-
-
-        function highlightRubic(source) {
+        function highlightRubic(source) {               //function used to highlight rubric piece, 
+                                                        //TODO: add grade value from rubric piece to grade boxes**********************************************************************
 
             var buttons = document.querySelectorAll('#' + source.id);
 
