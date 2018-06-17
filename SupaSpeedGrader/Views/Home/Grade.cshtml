@@ -147,7 +147,7 @@
                             <div style="display:flex; background-color:transparent">
                                 <div onclick="highlightResponse(this)" style="float:left; width:15%; background-color:@color" id="@remp">
                                     <!--Student name on the left-->
-                                    <p> @Model.names[x]  </p>
+                                    <p> @x. @Model.names[x]  </p>
                                 </div>
                                 <div class="trueResponse" onclick="highlightResponse(this)" style="float:left; width:50%;  border:1px solid black; border-radius:5px; background-color:aliceblue" id="@remp">
                                     <!--Response box-->
@@ -190,7 +190,7 @@
 
                 <button onclick="hkReveal()">Highlight Keyword</button>
                 <button onclick="jtReveal()">Jump to...</button>
-                <button onclick="afReveal()">Autograde and Filter</button>
+                @*<button onclick="afReveal()">Autograde and Filter</button>*@
 
 
             </div>
@@ -356,9 +356,22 @@
                 var studentScore = document.getElementById("grade" + studentAt).value;
                 ajaxSave(arrayOfStudents[studentAt], comments[studentAt], studentScore);
 
+                if (source.value > -1 && source.value < @Model.numStudent) {
+                    highlightResponse(document.getElementById("response" + source.value));
+                    studentAt = source.value;
+                }
+                else if (source.value < 0) {
+                    source.value = 0;
+                    highlightResponse(document.getElementById("response" + source.value));
+                    studentAt = source.value;
+                }
+                else if (source.value > @Model.numStudent) {
+                    source.value = @Model.numStudent;
+                    highlightResponse(document.getElementById("response" + source.value));
+                    studentAt = source.value;
+                }
 
-                highlightResponse(document.getElementById("response" + source.value));
-                studentAt = source.value;
+
             }
             else if (autograde == 1) {                                      //this if triggers autograde functionality, not sure what I'm trying but it doesn't work, please ignore
                 //need to implement, reference response values and adjust grade to full 
