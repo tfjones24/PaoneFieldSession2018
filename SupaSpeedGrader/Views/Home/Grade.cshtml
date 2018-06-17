@@ -290,7 +290,7 @@
         var questionSetCurrent = 0; //used to check if we can move up or down in the nav bar. represents the number of the set of questions displayed (0-10=0, 11-20=1, so on)
         var studentAt = 0;          //tracks the current student response that is being referenced. initializes the first response at studentAt=0
         var comments = [];          //Holds the comments for each student respones. Array position is equal to the studentAt number of each response
-        var arrayOfStudents = @Model.names;
+      //  var arrayOfStudents = @Model.names;
       //  var userNameToID = @Model.userNameToID;
 
         for (var x = 0; x < @Model.names.Count(); x++) {
@@ -662,12 +662,12 @@
 
 
 
-        function ajaxSave(studentName, comment, score) {
+        @*function ajaxSave(studentName, comment, score) {
             var questionId = @Model.questionID;
             var quizId = @Model.quizID;
          //   var userID = userNameToID[studentName];
 
-        }
+        }*@
 
     </script>
 </body>
