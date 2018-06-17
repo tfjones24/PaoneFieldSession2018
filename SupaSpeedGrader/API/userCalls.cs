@@ -10,6 +10,7 @@ using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using SupaSpeedGrader.Helpers;
 using NLog;
+using RestSharp;
 
 namespace SupaSpeedGrader.API
 {
@@ -101,7 +102,7 @@ namespace SupaSpeedGrader.API
         public static async Task<dynamic> getQuizzesAssignmentsSubmissions(string accessToken, string baseUrl, string canvasCourseId, string assignmentId)
         {
             dynamic rval = null;
-            string urlCommand = "/api/v1/courses/:course_id/assignments/:assignment_id/submissions";
+            string urlCommand = "/api/v1/courses/:course_id/assignments/:assignment_id/submissions?include[]=submission_comments";
 
             urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
             urlCommand = urlCommand.Replace(":assignment_id", assignmentId);
@@ -153,6 +154,31 @@ namespace SupaSpeedGrader.API
         }
 
         public static async Task<dynamic> createQuizReport(string accessToken, string baseUrl, string canvasCourseId, string quizId)
+        {
+            dynamic rval = null;
+            string urlCommand = "/api/v1/courses/:course_id/quizzes/:quiz_id/reports?quiz_report[report_type]=student_analysis";
+
+            urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
+            urlCommand = urlCommand.Replace(":quiz_id", quizId);
+
+            using (HttpResponseMessage response = await clsHttpMethods.httpPOST(baseUrl, urlCommand, accessToken, null))
+            {
+                string result = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    rval = JsonConvert.DeserializeObject(result);
+                }
+                else
+                {
+                    throw new Exception(result);
+                }
+            }
+
+            return rval;
+
+        }
+
+        public static async Task<dynamic> deleteOldQuizReport(string accessToken, string baseUrl, string canvasCourseId, string quizId)
         {
             dynamic rval = null;
             string urlCommand = "/api/v1/courses/:course_id/quizzes/:quiz_id/reports?quiz_report[report_type]=student_analysis";
@@ -331,6 +357,10 @@ namespace SupaSpeedGrader.API
         /// <param name="studentId"></param>
 		/// <param name="vars">List of each API parameter and associated value</param>
 		/// <returns>returns a json object representing a quiz, will throw an exception</returns>
+        /// 
+        /// 
+        /// NOTE: This should be unused, it has bee supersceeded by putQuizQuestionScoreComment()
+        /// 
 		public static async Task<dynamic> putQuizScore(string accessToken, string baseUrl, string courseID, string quizID, string studentID, Dictionary<string, string> vars)
         {
             //IF this fails, check https://community.canvaslms.com/thread/6062 for some massively important JSON context information, especially regarding required parameters
@@ -441,17 +471,71 @@ namespace SupaSpeedGrader.API
 
         }
 
+
+
+
+        //FUNCTION FOR POSTING QUESTION COMMENTS AND GRADES
+        //NOTE: THIS WILL ONLY WORK FOR SINGLE SUBMISSION/ATTEMPT QUIZZES
+        //This is because the attempt number must be passed back as part of the JSON object
+#pragma warning disable IDE1006 // Naming Styles
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+        public static async Task<dynamic> putQuizQuestionScoreComment(string accessToken, string baseUrl, string courseID, string quizID, string submissionID, string questionID, string questionScore, string questionComment)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+#pragma warning restore IDE1006 // Naming Styles
+        {
+            //IF this fails, check https://community.canvaslms.com/thread/6062 for some massively important JSON context information, especially regarding required parameters
+            string urlCommand = "/api/v1/courses/:course_id/quizzes/:quiz_id/submissions/:id";
+            string jsonData = "{\"quiz_submissions\":[{\"attempt\": 1,\"questions\": {\"" + questionID + "\": {\"score\": " + questionScore + ",\"comment\": \"" + questionComment + "\"}}}]}";
+
+            urlCommand = urlCommand.Replace(":course_id", courseID);
+            urlCommand = urlCommand.Replace(":quiz_id", quizID);
+            urlCommand = urlCommand.Replace(":id", submissionID);
+
+            var client = new RestClient(baseUrl+urlCommand);
+            var request = new RestRequest(Method.PUT);
+            request.AddHeader("Authorization", "Bearer " + accessToken);
+            request.AddHeader("Content-Type", "application/json");
+            request.AddParameter("undefined", jsonData, ParameterType.RequestBody);
+            IRestResponse response = client.Execute(request);
+
+            return response;
+        }
+
+        //This is now unused, it was used for making the putQuizQuestionScoreComment() function above
+        //public static async task<dynamic> temptestforput()
+        //{
+        //    dynamic result = null;
+
+        //    var client = new restclient("https://elearning.mines.edu/api/v1/courses/12282/quizzes/6648/submissions/170700");
+        //    var request = new restrequest(method.put);
+        //    request.addheader("postman-token", "56a13d39-3fb9-4db2-859f-33729aac3931");
+        //    request.addheader("cache-control", "no-cache");
+        //    string jsondata = "{\"quiz_submissions\": [{\"attempt\": 1,\"questions\": {\"36113\": {\"score\": 50,\"comment\": \"this is mark trying to change the comment on the first question x3\"}}}]}";
+        //    request.addheader("authorization", "bearer 9802~k2vubhafkypsjia53cn0dzdtbqxc9mw5qmauku6eufxhwxsqcoufieabeqjfxsoy");
+        //    request.addheader("content-type", "application/json");
+        //    request.addparameter("undefined", jsondata, parametertype.requestbody);
+        //    irestresponse response = client.execute(request);
+
+        //    return response;
+        //}
+
+
+
+
+
+
+
         /* OAuth Functions */
         /// <summary>
-		/// Call this method to either genreate a new access token, or refresh an existing access token,
-		/// to all you to make API calls using the identity of the user who is logged into canvas
-		/// </summary>
-		/// <param name="oauth">our [state] object containing our launch parameters</param>
-		/// <param name="oauth2ResponseUrl">this url must match the url defined in your Developer Key</param>
-		/// <param name="grantType">used to ask canvsa to generate a new access token, or refresh an existing access token</param>
-		/// <param name="code">the code returned by canvas during the authorize redirect</param>
-		/// <param name="refreshToken">if performing a refresh, this is the refreshToken value</param>
-		/// <returns></returns>
+        /// Call this method to either genreate a new access token, or refresh an existing access token,
+        /// to all you to make API calls using the identity of the user who is logged into canvas
+        /// </summary>
+        /// <param name="oauth">our [state] object containing our launch parameters</param>
+        /// <param name="oauth2ResponseUrl">this url must match the url defined in your Developer Key</param>
+        /// <param name="grantType">used to ask canvsa to generate a new access token, or refresh an existing access token</param>
+        /// <param name="code">the code returned by canvas during the authorize redirect</param>
+        /// <param name="refreshToken">if performing a refresh, this is the refreshToken value</param>
+        /// <returns></returns>
         public static async Task<bool> requestUserToken(oauthHelper oauth, string oauth2ResponseUrl, string grantType, string code = null, string refreshToken = null)
         {
             bool rval = true;
