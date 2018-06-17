@@ -469,7 +469,7 @@
 
 
 
-        function save() {                       //need api call to upload this to canvas**********
+        function save() {                       //need ajax call to upload this to canvas**********
             updateComments(document.getElementById("comment"));
 
             var studentScore = document.getElementById("grade" + studentAt).value;
@@ -617,7 +617,7 @@
             ajaxSave(arrayOfStudents[studentAt], comments[studentAt], studentScore);
 
 
-                //make api call to change page to question of this number(reference value of button)
+                //make ajax call to change page to question of this number(reference value of button)
 
                     document.getElementById("action").innerHTML = "Button pressed to move to question " + source.value;
                 
