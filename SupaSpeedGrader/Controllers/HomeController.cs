@@ -516,7 +516,7 @@ namespace SupaSpeedGrader.Controllers
                 
 
                 JArray rval2 = await userCalls.getListQuizzesInCourse("9802~K2vUBhafkYpSjiA53Cn0dzdTbQxc9mw5QMauku6eUFxhWXSqcoUfIeaBeqjfxSOy", "https://" + Request.UrlReferrer.Host, course_id);
-                string quizId = rval2.First.Next.Value<string>("id");
+                string quizId = rval2.First.Next.Next.Value<string>("id");
                 JObject rvalQuizReportMake = await userCalls.createQuizReport("9802~K2vUBhafkYpSjiA53Cn0dzdTbQxc9mw5QMauku6eUFxhWXSqcoUfIeaBeqjfxSOy", "https://" + Request.UrlReferrer.Host, course_id, quizId);
                 
                 string reportLink = rvalQuizReportMake.Last.Previous.First.Value<string>("url");
@@ -546,17 +546,17 @@ namespace SupaSpeedGrader.Controllers
 
                 //This will parse the given .csv file into an array of size (Rows x Cols)
                 //Reminder: each row (other than the first) corresponds to a student's quiz submission, following the format for collumns of 
-                var parser = new Microsoft.VisualBasic.FileIO.TextFieldParser(localFileName);
-                parser.TextFieldType = Microsoft.VisualBasic.FileIO.FieldType.Delimited;
-                parser.SetDelimiters(new string[] { "," });
-                List<string[]> dataToParse = new List<string[]>();
-                while (!parser.EndOfData)
-                {
-                    string[] row = parser.ReadFields();
-                    /* do something */
-                    _logger.Error("Here's a row: " + row.ToString());
-                    dataToParse.Add(row);
-                }
+                //var parser = new Microsoft.VisualBasic.FileIO.TextFieldParser(localFileName);
+                //parser.TextFieldType = Microsoft.VisualBasic.FileIO.FieldType.Delimited;
+                //parser.SetDelimiters(new string[] { "," });
+                //List<string[]> dataToParse = new List<string[]>();
+                //while (!parser.EndOfData)
+                //{
+                //    string[] row = parser.ReadFields();
+                //    /* do something */
+                //    _logger.Error("Here's a row: " + row.ToString());
+                //    dataToParse.Add(row);
+                //}
 
 
                 willNameModel model = new willNameModel();

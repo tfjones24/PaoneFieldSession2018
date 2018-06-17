@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using SupaSpeedGrader.Helpers;
 using NLog;
 using RestSharp;
+using Newtonsoft.Json.Linq;
 
 namespace SupaSpeedGrader.API
 {
@@ -54,7 +55,7 @@ namespace SupaSpeedGrader.API
         public static async Task<dynamic> getListQuizzesInCourse(string accessToken, string baseUrl, string canvasCourseId)
         {
             dynamic rval = null;
-            string urlCommand = "/api/v1/courses/:course_id/quizzes";
+            string urlCommand = "/api/v1/courses/:course_id/quizzes?per_page=150";
 
             urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
 
@@ -78,7 +79,7 @@ namespace SupaSpeedGrader.API
         public static async Task<dynamic> getListQuizzesAssignmentsInCourse(string accessToken, string baseUrl, string canvasCourseId)
         {
             dynamic rval = null;
-            string urlCommand = "/api/v1/courses/:course_id/assignments";
+            string urlCommand = "/api/v1/courses/:course_id/assignments?per_page=150";
 
             urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
 
@@ -102,7 +103,7 @@ namespace SupaSpeedGrader.API
         public static async Task<dynamic> getQuizzesAssignmentsSubmissions(string accessToken, string baseUrl, string canvasCourseId, string assignmentId)
         {
             dynamic rval = null;
-            string urlCommand = "/api/v1/courses/:course_id/assignments/:assignment_id/submissions?include[]=submission_comments";
+            string urlCommand = "/api/v1/courses/:course_id/assignments/:assignment_id/submissions?include[]=submission_comments&per_page=150";
 
             urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
             urlCommand = urlCommand.Replace(":assignment_id", assignmentId);
@@ -131,7 +132,7 @@ namespace SupaSpeedGrader.API
         public static async Task<dynamic> getListQuestionsInQuiz(string accessToken, string baseUrl, string canvasCourseId, string quizId)
         {
             dynamic rval = null;
-            string urlCommand = "/api/v1/courses/:course_id/quizzes/:quiz_id/questions";
+            string urlCommand = "/api/v1/courses/:course_id/quizzes/:quiz_id/questions?per_page=150";
 
             urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
             urlCommand = urlCommand.Replace(":quiz_id", quizId);
@@ -177,14 +178,18 @@ namespace SupaSpeedGrader.API
             return rval;
 
         }
-
+        //I don't think this needs to exist actually TODO
         public static async Task<dynamic> deleteOldQuizReport(string accessToken, string baseUrl, string canvasCourseId, string quizId)
         {
             dynamic rval = null;
-            string urlCommand = "/api/v1/courses/:course_id/quizzes/:quiz_id/reports?quiz_report[report_type]=student_analysis";
+            JObject rval2 = await getQuizReports(accessToken, "https://" + baseUrl, canvasCourseId, quizId);
+            string reportId = rval2.First.Value<string>("id");
+
+            string urlCommand = "/api/v1/courses/:course_id/quizzes/:quiz_id/reports/:id";
 
             urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
             urlCommand = urlCommand.Replace(":quiz_id", quizId);
+            urlCommand = urlCommand.Replace(":id", reportId);
 
             using (HttpResponseMessage response = await clsHttpMethods.httpPOST(baseUrl, urlCommand, accessToken, null))
             {
@@ -203,14 +208,14 @@ namespace SupaSpeedGrader.API
 
         }
 
-        public static async Task<dynamic> getQuizReportLink(string accessToken, string baseUrl, string canvasCourseId, string quizId, string reportId)
+        public static async Task<dynamic> getQuizReports(string accessToken, string baseUrl, string canvasCourseId, string quizId)
         {
             dynamic rval = null;
-            string urlCommand = "/api/v1/courses/:course_id/quizzes/:quiz_id/reports/:id";
+            string urlCommand = "/api/v1/courses/:course_id/quizzes/:quiz_id/reports";
 
             urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
             urlCommand = urlCommand.Replace(":quiz_id", quizId);
-            urlCommand = urlCommand.Replace(":id", reportId);
+            
 
             using (HttpResponseMessage response = await clsHttpMethods.httpGET(baseUrl, urlCommand, accessToken))
             {
@@ -290,7 +295,7 @@ namespace SupaSpeedGrader.API
         public static async Task<dynamic> getQuizSubmissions(string accessToken, string baseUrl, string canvasCourseId, string canvasQuizId)
         {
             dynamic rval = null;
-            string urlCommand = "/api/v1/courses/:course_id/quizzes/:quiz_id/submissions";
+            string urlCommand = "/api/v1/courses/:course_id/quizzes/:quiz_id/submissions?per_page=150";
 
             urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
             urlCommand = urlCommand.Replace(":quiz_id", canvasQuizId);
@@ -324,7 +329,7 @@ namespace SupaSpeedGrader.API
         public static async Task<dynamic> getQuizSubmissionQuestions(string accessToken, string baseUrl, string canvasQuizSubmissionId)
         {
             dynamic rval = null;
-            string urlCommand = "/api/v1/quiz_submissions/:quiz_submission_id/questions?include=quiz_question";
+            string urlCommand = "/api/v1/quiz_submissions/:quiz_submission_id/questions?per_page=150";
 
             urlCommand = urlCommand.Replace(":quiz_submission_id", canvasQuizSubmissionId);
 
