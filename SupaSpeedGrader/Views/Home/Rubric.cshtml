@@ -28,30 +28,32 @@
     </div>
     <p id="action"></p>
     <p id="action2"></p>
+    <!-- For loop to set up the questions as hidden-->
     @for (int x = 1; x < 100; x++)
     {
         string questionNum = "questionNum" + x;
         string rubricNum = "rubricNum" + x;
         string rubricButton = "button" + x;
-        string critNum = "crit" + x;
-        string specNum = "spec" + x;
+        string criteriaNum = "crit" + x;
+        string optionsNum = "opt" + x;
         <div class="noDisplay" id="@questionNum">
             <p>Question @x</p>
             <input type="button" value="+ Rubric" onclick="rubricNum(@x)" id="@rubricButton" />
             <div class="noDisplay" id="@rubricNum">
 
-                <p>Number of Criteria <input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='@critNum' onchange="crit(this,@x)" value="0" /></p>
-                <p>Number of Options per Criteria<input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='@specNum' onchange="spec(this,@x)" value="0" /></p>
-                @* row ->i; col -> j*@
+                <p>Number of Criteria <input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='@criteriaNum' onchange="crit(this,@x)" value="0" /></p>
+                <p>Number of Options per Criteria<input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='@optionsNum' onchange="opt(this,@x)" value="0" /></p>
+                @* row ->i; col -> j These for loops create the grids of the rubric. *@
                 @for (int i = 0; i < 11; i++)
                 {
                     <div style="display:flex">
+                        <!-- the boxes are named a specific way to make it so it is easier to grab the boxes in the bottom-->
                         @{string box = "box" + i + "," + 0 + "of" + x;
-                            string al = box + "n";
+                            string firstBinForRow = box + "n";
                         }
                         <div id="@box" style="float:left; width :10%; " class="noDisplay">
                             <p style="font-size:80%"> Criteria Name </p>
-                            <textarea style="height:50px; width:100%;border:1px solid black; background-color:transparent " id='@al'></textarea>
+                            <textarea style="height:50px; width:100%;border:1px solid black; background-color:transparent " id='@firstBinForRow'></textarea>
                         </div>
                         @for (int j = 1; j < 9; j++)
                         {
@@ -94,42 +96,43 @@
 
         }
         function crit(source, a) {
-            var crit = "spec" + a;
-            var critNum = document.getElementById(crit).value
+            @* this pulls the oprions num to make it adjustable*@
+            var opt = "opt" + a;
+            var optNum = document.getElementById(opt).value
             var e = source.value;
             for (var c = 0; c < e; c++) {
-                var quest = "box" + c + "," + "0" + "of" + a;
-                document.getElementById(quest).className = "yesDisplay";
-                document.getElementById(quest).style.backgroundColor = "lightgrey";
-                document.getElementById(quest).style.border = "1px solid black";
-                critNum++;
-                for (var b = critNum; b < 9; ++b) {
-                    quest = "box" + c + "," + b + "of" + a;
-                    document.getElementById(quest).className = "noShow";
+                var box = "box" + c + "," + "0" + "of" + a;
+                document.getElementById(box).className = "yesDisplay";
+                document.getElementById(box).style.backgroundColor = "lightgrey";
+                document.getElementById(box).style.border = "1px solid black";
+                optNum++;
+                for (var b = optNum; b < 9; ++b) {
+                    box= "box" + c + "," + b + "of" + a;
+                    document.getElementById(box).className = "noShow";
                 }
             }
             for (var c = e; c < 11; c++) {
                 for (var b = 0; b < 9; ++b) {
-                    quest = "box" + c + "," + b + "of" + a;
-                    document.getElementById(quest).className = "noDisplay";
+                    box= "box" + c + "," + b + "of" + a;
+                    document.getElementById(box).className = "noDisplay";
                 }
             }
 
         }
-        function spec(source, a) {
+        function opt(source, a) {
             var crit = "crit" + a;
             var critNum = document.getElementById(crit).value
             var d = source.value;
             d++;
             for (var c = 0; c < critNum; c++) {
                 for (var b = 1; b < d; b++) {
-                    var quest = "box" + c + "," + b + "of" + a;
-                    document.getElementById(quest).className = "yesDisplay";
-                    document.getElementById(quest).style.border = "1px solid black";
+                    var box = "box" + c + "," + b + "of" + a;
+                    document.getElementById(box).className = "yesDisplay";
+                    document.getElementById(box).style.border = "1px solid black";
                 }
                 for (var b = d; b < 9; ++b) {
-                    var quest = "box" + c + "," + b + "of" + a;
-                    document.getElementById(quest).className = "noShow";
+                    var box = "box" + c + "," + b + "of" + a;
+                    document.getElementById(box).className = "noShow";
                 }
             }
 
@@ -138,23 +141,23 @@
             rubricName = document.getElementById("rubrName").value; 
             questNum = document.getElementById("numQuestions").value; 
             for (var i = 0; i < rubricNums.length; ++i) {
-                var spec = "spec" + rubricNums[i];
-                var specNum = document.getElementById(spec).value; 
+                var opt = "opt" + rubricNums[i];
+                var optNum = document.getElementById(opt).value; 
                 var crit = "crit" + rubricNums[i];
                 var critNum = document.getElementById(crit).value;
                 var ques = new Array();
                 for (var j = 0; j < critNum; ++j) {
                     var specPos = new Array();
-                    var quest = "box" + j + "," + 0 + "of" + rubricNums[i] + "n";
+                    var box = "box" + j + "," + 0 + "of" + rubricNums[i] + "n";
                     var pointComments = new Array();
-                    pointComments.push(document.getElementById(quest).value);
+                    pointComments.push(document.getElementById(box).value);
                     specPos.push(pointComments); 
-                    for (var k = 1; k <= specNum; ++k) {
+                    for (var k = 1; k <= optNum; ++k) {
                         pointComments = new Array();
-                        quest = "box" + j + "," + k + "of" + rubricNums[i] + "p";
-                        pointComments.push(document.getElementById(quest).value);
-                        quest = "box" + j + "," + k + "of" + rubricNums[i] + "c";
-                        pointComments.push(document.getElementById(quest).value);
+                        box = "box" + j + "," + k + "of" + rubricNums[i] + "p";
+                        pointComments.push(document.getElementById(box).value);
+                        box= "box" + j + "," + k + "of" + rubricNums[i] + "c";
+                        pointComments.push(document.getElementById(box).value);
                         specPos.push(pointComments);
                         
                     }                 
