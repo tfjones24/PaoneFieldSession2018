@@ -35,6 +35,7 @@
         <div style="float:left; width:50%">
             <form action="../Home/Grade">
                 <div>
+                   
                     <h2>Quiz</h2>
                     <div>
                         <select name="quiz" id="quiz" onchange="quizFunction()">
@@ -53,7 +54,7 @@
 
                     <h2>Section</h2>
                     <div class="hidden" id="sectionForm">
-
+                        @* this sets up how the check boxes function*@
                         <script language="JavaScript">
                             function toggle(source) {
                                 checkboxes = document.getElementsByName('foo');
@@ -75,7 +76,7 @@
                         @{ for (int i = 0; i < Model.sections.Count; i++)
                             {
                                 <br />
-                                <input type="checkbox" onClick="uncheck()" checked="checked" id="@Model.sections[i]" name="section" value=@Model.sections[i]>
+                                <input type="checkbox" onClick="uncheck()" checked="checked" id="@Model.sectionID[Model.sections[i]]" name="section" value=@Model.sectionID[Model.sections[i]]>
                                 <label for="section">@Model.sections[i]</label>
                             }
                         }
@@ -101,10 +102,12 @@
                 <input type="image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHfNSX7YyLf4h1XAMiFADq4jJt8c9orN9zvvbb-IQp_aF3maXV-A" alt="launch" height="40" width="40" />
             </form>
         </div>
+        <!-- right hand column-->
         <div style="float:left; width:50%">
             <h2>Rubric</h2>
             <form action="../Home/Rubric">
                 <select id="rubic">
+                    @* this form gives the options to select from existing rubrics*@
                     <option value="" selected="selected"></option>
                     @{
                         for (int i = 0; i < Model.rubic.Count; i++)
@@ -114,7 +117,8 @@
                     }
                 </select>
                 <br />
-                <input type="submit" value="Add a new Rubric " />
+                <input type="submit" value="Add a new Rubric " />@* if selected it will autoredirect to the rubric page*@
+        
 
             </form>
 </div>
@@ -135,19 +139,18 @@
                    data: postData,
                     success: function (data) {
                         alert(data.Result);
-                        alert(data.Extra);
-                        var new_options = ['Option 1', 'Option 2', 'Option 3'];
+                        //alert(data.Questions);
 
-                        obj = JSON.parse(data.Extra);
-                        alert(obj.count);
+                        obj = JSON.parse(data.Questions);
+                        //alert(obj.questionArray.length);
 
                         /* Remove all options from the select list */
                         var sel = document.getElementById("questionDrop");
 
                         sel.options.length = 0;
 
-                        for (var i = 0; i < new_options.length; i++) {
-                            sel.options[i] = new Option(new_options[i], "aval", false, false);
+                        for (var i = 0; i < obj.questionArray.length; i++) {
+                            sel.options[i] = new Option((i+1) + ": " + obj.questionArray[i].name, obj.questionArray[i].id, false, false);
                         }
 
                     },

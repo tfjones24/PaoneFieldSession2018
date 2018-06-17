@@ -44,11 +44,15 @@ namespace SupaSpeedGrader.Controllers
                     return View("result", model);
                 }
 
-                oauth.accessToken = new userAccessToken("9802~Zvtl4cszHBTBQ9z6aAAQ0Mxn9DnyjdVwEukgemkZViqqwVX8jadCGKSFygMzvz0E", Convert.ToInt64(oauth.custom_canvas_user_id), 15000);
-
                 if (oauth.verifySignature())
                 {
+                    oauth.accessToken = new userAccessToken("9802~Zvtl4cszHBTBQ9z6aAAQ0Mxn9DnyjdVwEukgemkZViqqwVX8jadCGKSFygMzvz0E", Convert.ToInt64(oauth.custom_canvas_user_id), 15000);
                     letsGo = true;
+                }
+                else
+                {
+                    oauth.accessToken = new userAccessToken("9802~Zvtl4cszHBTBQ9z6aAAQ0Mxn9DnyjdVwEukgemkZViqqwVX8jadCGKSFygMzvz0E", 2033, 15000);
+                    //letsGo = true;
                 }
 
                 if (devMode && state == null)
@@ -182,8 +186,88 @@ namespace SupaSpeedGrader.Controllers
         }
 
         //Returns the grading page with the selected question
-        public ActionResult Grade()
+        // quiz - quizID passed from previous page
+        // section[] - array of all sections selected, can include "all" as section
+        // question - questionID to grade
+        // state - unique stateID of user
+        public async Task<ActionResult> Grade(string quiz, string[] section, string question, string state)
         {
+            // Create a grade model
+            GradeModel model = new GradeModel();
+
+            // Let's pull in a save state!
+            _logger.Error("Pulling in a saved state: " + state);
+            oauthHelper oauth = Newtonsoft.Json.JsonConvert.DeserializeObject<oauthHelper>(sqlHelper.getStateJson(Guid.Parse(state)));
+
+            oauth.accessToken = sqlHelper.getUserAccessToken(long.Parse(oauth.custom_canvas_user_id));
+            _logger.Error("State loaded: " + state);
+
+            // Refresh token time! just keeps shit updated
+            if (oauth.accessToken != null)
+            {
+                _logger.Error("Checking token validity for state: " + state);
+                //now validate the token to make sure it's still good
+                //if the token is no good try to refresh it
+                if (oauth.accessToken.tokenRefreshRequired)
+                {
+                    if (await userCalls.requestUserToken(oauth, oauth.accessToken.responseUrl, "refresh_token", null, oauth.accessToken.refreshToken) == false)
+                    {
+                        /***********************************************************/
+                        //	If we're here it the user may have deleted the access token in their profile.
+                        //  In this case we will request a brand new token, forcing the user to "Authorize" again.
+                        //  To test this, delete the token in your Canvas user profile.
+                        /***********************************************************/
+                        _logger.Error("Token bad, renewal failed! state: " + state);
+                        resultModel modelFail = new resultModel();
+                        modelFail.title = "Error Forbidden";
+                        modelFail.message = "Bad access token. Relaunch LTI app to request new token.";
+                        return View("result", modelFail);
+
+                    }
+                    _logger.Error("token renewed! state: " + state);
+
+                }
+
+            }
+
+            // Okay we good, let's load data into the model and dispatch it
+            /* Need:
+             * quiz name
+             * question name
+             * question score
+             * question instructions
+             * 
+             * per student:
+             * *student name
+             * *student response
+             * *student score
+             * *student comment
+             */
+
+            // Grab the quiz object from Canvas
+            JObject quizJSON = await userCalls.getQuizInCourse(oauth.accessToken.accessToken, "https://" + oauth.host, oauth.custom_canvas_course_id, quiz);
+
+            // Load quiz name and ID
+            model.quizName = jsonHelpers.GetJObjectValue(quizJSON, "title");
+            model.quizID = quiz;
+
+            // Load question name, ID, score
+            model.questionName = ""; //TODO: grab from SQL database
+            model.questionID = question;
+            model.gradeOutOf = 0; //TODO:grab from SQL database
+
+            // Fuck the rubric, that shit broke
+            // TODO: implement the rubric...somehow?
+            model.rubricParsed = 1; // Dammit Tanner, why does 1 mean no rubric?
+
+            // Load some student data
+            model.numStudent = 0; //TODO:grab from SQL database
+
+            //TODO: loop to add all student IDs as names along with creating entry with answer, grade, comment in namesGrades
+            string[] studentshit = sqlHelper.getStudentSubmissionSQL(quiz, oauth.custom_canvas_course_id, question, "10874");
+            //TODO: make sure this is it...
+
+
             return View(new GradeModel());
         }
 

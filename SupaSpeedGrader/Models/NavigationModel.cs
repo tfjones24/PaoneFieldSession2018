@@ -35,6 +35,8 @@ namespace SupaSpeedGrader.Models
             for (int i = 0; i < quizzes.Count; i++)
             {
                 quizdata.Add(quizzes[i], questions);
+                quizID.Add(quizzes[i], quizzes[i]);
+                sectionID.Add(sections[i], sections[i]);
             }
         }
 
