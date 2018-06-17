@@ -17,8 +17,8 @@ namespace SupaSpeedGrader.Models
 
 
 
-        public List<int> navBarQuestions = new List<int>();
-        public int rubricParsed;            //tells whether we are using the rubric or not. set to 0 for no rubric, 1 for a rubric
+        public List<int> navBarQuestions = new List<int>(); //List of question numbers nav bar populates with
+        public int rubricParsed;            //tells whether we are using the rubric or not. set to 1 for no rubric, 0 for a rubric
         public int numStudent;              //number of students who have responded to this question
         public int gradeOutOf;              //max number of points for the question
 

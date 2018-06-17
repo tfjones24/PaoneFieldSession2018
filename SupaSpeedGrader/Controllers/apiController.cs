@@ -135,7 +135,46 @@ namespace SupaSpeedGrader.Controllers
              *      create columns
              *      update studentid submission for questionid
              *      get studentid submission for questionid
-             */ 
+             */
+
+            if (dataToParse.Count > 1)
+            {
+                // Generate a list of student IDs
+                List<string> studentIDList = new List<string>();
+                for (int x = 1; x < dataToParse.Count; x++)
+                {
+                    studentIDList.Add(dataToParse[x][1]);
+                }
+
+                // Convert to array because something?
+                string[] students = studentIDList.ToArray();
+                // Create that table!
+                bool didcreate = sqlHelper.createQuizTable(quiz, oauth.custom_canvas_course_id, students);
+
+                // Okay, table made, let's parse!
+
+                // Let's go by questions, across the columns
+                for (int x = 7; x < dataToParse[0].Length - 3; x++)
+                {
+                    // Grab the question data
+                    //TODO: remove : and everything after
+                    string question = dataToParse[0][x];
+                    string score = dataToParse[0][x + 1];
+
+                    // Now grab and upload each student reponse
+                    for (int y = 1; y < dataToParse.Count; y++)
+                    {
+                        string studentResponse = dataToParse[y][x];
+                        string studentScore = dataToParse[y][x + 1];
+
+                        bool doThatUpdate = sqlHelper.updateStudentSubmissionSQL(quiz, oauth.custom_canvas_course_id, question, score, students[y - 1], studentScore, studentResponse, "");
+                    }
+                }
+            }
+            else
+            {
+                //TODO: No submissions....
+            }
 
 
 
