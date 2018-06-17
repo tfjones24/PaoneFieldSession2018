@@ -19,11 +19,9 @@ namespace SupaSpeedGrader.Models
 
         public List<int> navBarQuestions = new List<int>();
         public int rubricParsed;
-        public int questionNum;   
         public int numStudent;
         public int gradeOutOf;
-        public int questionOn;
-        public int questionStartShow;
+
 
         public List<string> names = new List<string>();
 
@@ -104,9 +102,8 @@ namespace SupaSpeedGrader.Models
                 }
                 rubic.Add(row);
             }
-            questionNum = 30;
-            questionOn = 12;
-            questionStartShow = (questionOn / 10) * 10;
+
+
             quizName = "Quiz Name";
             questionName = "Question name";
             for(int i=0; i < 25; i++)
