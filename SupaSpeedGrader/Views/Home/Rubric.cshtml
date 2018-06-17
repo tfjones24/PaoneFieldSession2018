@@ -30,8 +30,8 @@
     <p id="action2"></p>
     <!-- For loop to set up the questions as hidden-->
     @for (int x = 1; x < 100; x++)
-    {
-        string questionNum = "questionNum" + x;
+    {   // all of these variables reference the question number and what they are connected to so anything related to question 1 is a string to identify what is pointing to and the question number
+        string questionNum = "questionNum" + x; 
         string rubricNum = "rubricNum" + x;
         string rubricButton = "button" + x;
         string criteriaNum = "crit" + x;
@@ -40,14 +40,14 @@
             <p>Question @x</p>
             <input type="button" value="+ Rubric" onclick="rubricNum(@x)" id="@rubricButton" />
             <div class="noDisplay" id="@rubricNum">
-
+                @*These appear if the rubric is sleected to determine the layout of the points*@
                 <p>Number of Criteria <input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='@criteriaNum' onchange="criteria(this,@x)" value="0" /></p>
                 <p>Number of Options per Criteria<input type="number" style="height:20px; width:100px; border:1px solid black; background-color:transparent " id='@optionsNum' onchange="option(this,@x)" value="0" /></p>
                 @* row ->i; col -> j These for loops create the grids of the rubric. *@
                 @for (int i = 0; i < 11; i++)
                 {
                     <div style="display:flex">
-                        <!-- the boxes are named a specific way to make it so it is easier to grab the boxes in the bottom-->
+                        <!-- the boxes are named as identifid by their position and which grid they are on The ID adjust to which input it points to within the box-->
                         @{string boxID = "box" + i + "," + 0 + "of" + x;
                             string firstBinForRow = boxID + "n";
                         }
@@ -76,6 +76,8 @@
     }
     <input type="button" value="Submit" onclick="submitData()" />
     <script>
+        @* these variables stores all the data, the numbers with rubrics are stored in rubric Num and all of the data is stored in the rubric map
+            *@
         var rubricNums = new Array();
         var rubricData = new Map();
         var rubricName;
@@ -108,7 +110,7 @@
                 document.getElementById(box).className = "yesDisplay";
                 document.getElementById(box).style.backgroundColor = "lightgrey";
                 document.getElementById(box).style.border = "1px solid black";
-                @* option number need to be increrased so it doen't erase needed data but provides the gap for formatting*@
+                @*\this helps with the formatting of the lines wihtout this section it formats incorrectly*@
                 optionNum++;
                 for (var b = optionNum; b < 9; ++b) {
                     box= "box" + c + "," + b + "of" + a;
@@ -145,7 +147,9 @@
         @* submits the data*@
         function submitData() {
             rubricName = document.getElementById("rubrName").value; 
-            questionNumber = document.getElementById("numQuestions").value; 
+            questionNumber = document.getElementById("numQuestions").value;
+            @* this loops puts everything into the map*@
+
             for (var i = 0; i < rubricNums.length; ++i) {
                 var options = "opt" + rubricNums[i];
                 var optionsNum = document.getElementById(options).value; 
