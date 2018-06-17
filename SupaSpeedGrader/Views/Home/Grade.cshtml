@@ -290,7 +290,9 @@
         var questionSetCurrent = 0; //used to check if we can move up or down in the nav bar. represents the number of the set of questions displayed (0-10=0, 11-20=1, so on)
         var studentAt = 0;          //tracks the current student response that is being referenced. initializes the first response at studentAt=0
         var comments = [];          //Holds the comments for each student respones. Array position is equal to the studentAt number of each response
- 
+        var arrayOfStudents = @Model.names;
+
+
         for (var x = 0; x < @Model.names.Count(); x++) {
             comments[x]="";                           //function used to populate comment array with empty comments for every response
         }
@@ -350,7 +352,11 @@
                 document.getElementById("searchtext").innerHTML = newe;
             }
             else if (jumpto == 1) {                                         //this if triggers jumpTo functionality, easily works
-                
+                //ajax save current state
+                var studentScore = document.getElementById("grade" + studentAt).value;
+                ajaxSave(arrayOfStudents[studentAt], comments[studentAt], studentScore);
+
+
                 highlightResponse(document.getElementById("response" + source.value));
                 studentAt = source.value;
             }
@@ -465,6 +471,9 @@
 
         function save() {                       //need api call to upload this to canvas**********
             updateComments(document.getElementById("comment"));
+
+            var studentScore = document.getElementById("grade" + studentAt).value;
+            ajaxSave(arrayOfStudents[studentAt], comments[studentAt], studentScore);
         }
 
 
@@ -483,6 +492,11 @@
 
 
         function highlightResponse(source) {
+            //ajax save old state
+            var studentScore = document.getElementById("grade" + studentAt).value;
+            ajaxSave(arrayOfStudents[studentAt], comments[studentAt], studentScore);
+
+
             var newResponse = document.querySelectorAll('#' + source.id);   //populate with new response selection elements
             var lastID = "#response" + studentAt;                           //Id of last selection pulled using studentAt variable
             var oldResponse = document.querySelectorAll(lastID);            //populate with old response selection elements
@@ -533,6 +547,15 @@
 
 
         function saveNext() {               //used for save and next button for next question highlighting
+
+            //ajax save old state
+            var studentScore = document.getElementById("grade" + studentAt).value;
+            ajaxSave(arrayOfStudents[studentAt], comments[studentAt], studentScore);
+
+
+
+
+
            // document.getElementById("action").innerHTML = "You pressed save&next with " + (studentAt+1) + " out of @Model.names.Count()";    //only says 0, will update only to 0
             if (studentAt != (@Model.names.Count()-1)) {
 
@@ -588,7 +611,12 @@
         }
 
 
-            function changeQuestion(source) {
+        function changeQuestion(source) {
+            //ajax save current state
+            var studentScore = document.getElementById("grade" + studentAt).value;
+            ajaxSave(arrayOfStudents[studentAt], comments[studentAt], studentScore);
+
+
                 //make api call to change page to question of this number(reference value of button)
 
                     document.getElementById("action").innerHTML = "Button pressed to move to question " + source.value;
@@ -615,6 +643,16 @@
             }
 
         }
+
+
+
+        function ajaxSave(name, comment, score) {
+            var questionId = @Model.questionID;
+            var quizId = @Model.quizID;
+
+
+        }
+
     </script>
 </body>
 
