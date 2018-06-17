@@ -18,27 +18,26 @@ namespace SupaSpeedGrader.Models
 
 
         public List<int> navBarQuestions = new List<int>();
-        public int rubricParsed;
-        public int numStudent;
-        public int gradeOutOf;
+        public int rubricParsed;            //tells whether we are using the rubric or not. set to 0 for no rubric, 1 for a rubric
+        public int numStudent;              //number of students who have responded to this question
+        public int gradeOutOf;              //max number of points for the question
 
 
-        public List<string> names = new List<string>();
+        public List<string> names = new List<string>(); //I think this is each student.
 
         /* element 0 = answer, element 1 = grade, element 2 = comment*/
+        //names is the key for this dictionary. in the string array that is returned for each key, the first entry will be the student response, second will be their grade, and the third will be the comment
         public Dictionary<string, string[]> namesGrades = new Dictionary<string, string[]>();
         
-        public int rubicRows;
-        public int rubicCols;
-        public int width;
-        public List<List<string>> rubic = new List<List<string>>();
+        public int rubicRows;   //number of rows of the rubric
+        public int rubicCols;   //number of columns of the rubric
+        public int width;       //a variable used for setting the width of some element. not sure what michelle did here
+        public List<List<string>> rubic = new List<List<string>>(); //the actual 2d list to store the rubric things.        TODO:need to rework to fit with michelle's page
 
-        public string rubicTitle = "Rubric";
-        public int studentAt;
+        public string rubicTitle = "Rubric";        //title of rubric, needs to be updated to set name
+        public int studentAt;                   //basically useless but we have it. don't change this?
 
-        public void AddOneToStudentAt(ref int studentAt){
-            studentAt++;
-        }
+       
 
 
         public GradeModel(string quiz, string quizID, string question, string questionID, int numStudents, int gradeOutof, List<string> names, Dictionary<string, string[]> namesGrades, int rubicRows, int rubicCols, List<List<string>> rubric)
