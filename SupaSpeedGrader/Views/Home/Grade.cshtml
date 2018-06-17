@@ -291,7 +291,7 @@
         var studentAt = 0;          //tracks the current student response that is being referenced. initializes the first response at studentAt=0
         var comments = [];          //Holds the comments for each student respones. Array position is equal to the studentAt number of each response
         var arrayOfStudents = @Model.names;
-        var userNameToID = @Model.userNameToID;
+      //  var userNameToID = @Model.userNameToID;
 
         for (var x = 0; x < @Model.names.Count(); x++) {
             comments[x]="";                           //function used to populate comment array with empty comments for every response
@@ -485,6 +485,7 @@
         function save() {                       //need api call to upload this to canvas**********
             updateComments(document.getElementById("comment"));
 
+
             var studentScore = document.getElementById("grade" + studentAt).value;
             ajaxSave(arrayOfStudents[studentAt], comments[studentAt], studentScore);
         }
@@ -662,7 +663,7 @@
         function ajaxSave(studentName, comment, score) {
             var questionId = @Model.questionID;
             var quizId = @Model.quizID;
-            var userID = userNameToID[studentName];
+         //   var userID = userNameToID[studentName];
 
         }
 
