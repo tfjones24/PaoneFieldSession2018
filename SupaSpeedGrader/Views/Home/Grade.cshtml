@@ -353,8 +353,8 @@
             }
             else if (jumpto == 1) {                                         //this if triggers jumpTo functionality, easily works
                 //ajax save current state
-            //    var studentScore = document.getElementById("grade" + studentAt).value;
-            //    ajaxSave(arrayOfStudents[studentAt], comments[studentAt], studentScore);
+                var studentScore = document.getElementById("grade" + studentAt).value;
+                ajaxSave(arrayOfStudents[studentAt], comments[studentAt], studentScore);
 
 
 
@@ -488,8 +488,8 @@
             updateComments(document.getElementById("comment"));
 
 
-           // var studentScore = document.getElementById("grade" + studentAt).value;
-          //  ajaxSave(arrayOfStudents[studentAt], comments[studentAt], studentScore);
+            var studentScore = document.getElementById("grade" + studentAt).value;
+            ajaxSave(arrayOfStudents[studentAt], comments[studentAt], studentScore);
         }
 
 
@@ -509,8 +509,8 @@
 
         function highlightResponse(source) {
             //ajax save old state
-          //  var studentScore = document.getElementById("grade" + studentAt).value;
-            //ajaxSave(arrayOfStudents[studentAt], comments[studentAt], studentScore);
+            var studentScore = document.getElementById("grade" + studentAt).value;
+            ajaxSave(arrayOfStudents[studentAt], comments[studentAt], studentScore);
 
 
             var newResponse = document.querySelectorAll('#' + source.id);   //populate with new response selection elements
@@ -565,8 +565,8 @@
         function saveNext() {               //used for save and next button for next question highlighting
 
             //ajax save old state
-          //  var studentScore = document.getElementById("grade" + studentAt).value;
-          //  ajaxSave(arrayOfStudents[studentAt], comments[studentAt], studentScore);
+            var studentScore = document.getElementById("grade" + studentAt).value;
+            ajaxSave(arrayOfStudents[studentAt], comments[studentAt], studentScore);
 
 
 
@@ -629,8 +629,8 @@
 
         function changeQuestion(source) {
             //ajax save current state
-         //   var studentScore = document.getElementById("grade" + studentAt).value;
-         //   ajaxSave(arrayOfStudents[studentAt], comments[studentAt], studentScore);
+            var studentScore = document.getElementById("grade" + studentAt).value;
+            ajaxSave(arrayOfStudents[studentAt], comments[studentAt], studentScore);
 
 
                 //make ajax call to change page to question of this number(reference value of button)
@@ -662,12 +662,12 @@
 
 
 
-        @*function ajaxSave(studentName, comment, score) {
+        function ajaxSave(studentName, comment, score) {
             var questionId = @Model.questionID;
             var quizId = @Model.quizID;
          //   var userID = userNameToID[studentName];
 
-        }*@
+        }
 
     </script>
 </body>

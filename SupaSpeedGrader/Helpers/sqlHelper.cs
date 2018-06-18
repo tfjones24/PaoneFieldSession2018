@@ -266,7 +266,7 @@ namespace SupaSpeedGrader.Helpers
 
 
 
-        /*  The following functions act as our "API" to store and retrieve
+        /*  The following functions act as our "SQL API" to store and retrieve
          *  parsed submission information taken from quiz reports generated
          *  by the Canvas API. While the basic code structure is followed 
          *  from the above calls, all queries and stored information was 
@@ -327,7 +327,8 @@ namespace SupaSpeedGrader.Helpers
             return rval;
         }
 
-        //TODO: Implement updating student submission
+
+
         public static bool updateStudentSubmissionSQL(string quizID, string courseID, string questionID, string questionText, string maxScore, string studentID, string studentScore, string studentResponse, string comment)
         {
             bool rval = true;
@@ -358,7 +359,7 @@ namespace SupaSpeedGrader.Helpers
             return rval;
         }
 
-        //TODO: Implement getting student submission
+
         public static string[] getStudentSubmissionSQL(string quizID, string courseID, string questionID, string studentID)
         {
             string[] rval = null;
@@ -367,7 +368,7 @@ namespace SupaSpeedGrader.Helpers
             using (SqlConnection dbcon = new SqlConnection(_camsConnectionString))
             {
                 dbcon.Open();
-                using (SqlCommand cmd = new SqlCommand("dbo.getUserAccessToken", dbcon))
+                using (SqlCommand cmd = new SqlCommand("dbo.getStudentSubmission", dbcon))
                 {
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandText = sql;
@@ -394,5 +395,113 @@ namespace SupaSpeedGrader.Helpers
 
             return rval;
         }
-	}
+
+        public static string getQuestionMaxScore(string quizID, string courseID, string questionID)
+        {
+            string rval = null;
+
+            string sql = string.Format("select maxScore from quiz{0}_{1} where questionID = {2}", quizID, courseID, questionID);
+            using (SqlConnection dbcon = new SqlConnection(_camsConnectionString))
+            {
+                dbcon.Open();
+                using (SqlCommand cmd = new SqlCommand("dbo.getQuestionMaxScore", dbcon))
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = sql;
+
+                    DataSet ds = new DataSet();
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    adapter.Fill(ds);
+
+                    // Check to see if the row exists at all
+                    if (ds != null && ds.Tables[0].Rows.Count == 1 && ds.Tables[0].Rows[0].ItemArray.Length == 1)
+                    {
+                        // Oh it does! Wait, does this submission exist?
+                        if (!string.IsNullOrEmpty(ds.Tables[0].Rows[0].ItemArray[0].ToString()))
+                        {
+                            // Oh it does! Quick return it!
+                            return ds.Tables[0].Rows[0].ItemArray[0].ToString();
+                        }
+                        // Fuck, it doesn't :( return an empty array tho, like our dreams and our database
+                        rval = "";
+                        //we found an existing token, return the shit
+                    }
+                }
+            }
+
+            return rval;
+        }
+
+        public static string getQuestionName(string quizID, string courseID, string questionID)
+        {
+            string rval = null;
+
+            string sql = string.Format("select questionText from quiz{0}_{1} where questionID = {2}", quizID, courseID, questionID);
+            using (SqlConnection dbcon = new SqlConnection(_camsConnectionString))
+            {
+                dbcon.Open();
+                using (SqlCommand cmd = new SqlCommand("dbo.getQuestionText", dbcon))
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = sql;
+
+                    DataSet ds = new DataSet();
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    adapter.Fill(ds);
+
+                    // Check to see if the row exists at all
+                    if (ds != null && ds.Tables[0].Rows.Count == 1 && ds.Tables[0].Rows[0].ItemArray.Length == 1)
+                    {
+                        // Oh it does! Wait, does this submission exist?
+                        if (!string.IsNullOrEmpty(ds.Tables[0].Rows[0].ItemArray[0].ToString()))
+                        {
+                            // Oh it does! Quick return it!
+                            return ds.Tables[0].Rows[0].ItemArray[0].ToString();
+                        }
+                        // Fuck, it doesn't :( return an empty array tho, like our dreams and our database
+                        rval = "";
+                        //we found an existing token, return the shit
+                    }
+                }
+            }
+
+            return rval;
+        }
+
+        public static string getNumberQuestions(string quizID, string courseID)
+        {
+            string rval = null;
+
+            string sql = string.Format("SELECT COUNT(*) FROM quiz{0}_{1}", quizID, courseID);
+            using (SqlConnection dbcon = new SqlConnection(_camsConnectionString))
+            {
+                dbcon.Open();
+                using (SqlCommand cmd = new SqlCommand("dbo.getCountQuestions", dbcon))
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = sql;
+
+                    DataSet ds = new DataSet();
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    adapter.Fill(ds);
+
+                    // Check to see if the row exists at all
+                    if (ds != null && ds.Tables[0].Rows.Count == 1 && ds.Tables[0].Rows[0].ItemArray.Length == 1)
+                    {
+                        // Oh it does! Wait, does this submission exist?
+                        if (!string.IsNullOrEmpty(ds.Tables[0].Rows[0].ItemArray[0].ToString()))
+                        {
+                            // Oh it does! Quick return it!
+                            return ds.Tables[0].Rows[0].ItemArray[0].ToString();
+                        }
+                        // Fuck, it doesn't :( return an empty array tho, like our dreams and our database
+                        rval = "";
+                        //we found an existing token, return the shit
+                    }
+                }
+            }
+
+            return rval;
+        }
+    }
 }

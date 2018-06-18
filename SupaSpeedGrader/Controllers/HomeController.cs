@@ -252,23 +252,23 @@ namespace SupaSpeedGrader.Controllers
             model.quizID = quiz;
 
             // Load question name, ID, score
-            model.questionName = ""; //TODO: grab from SQL database
+            model.questionName = sqlHelper.getQuestionName(quiz, oauth.custom_canvas_course_id, question); 
             model.questionID = question;
-            model.gradeOutOf = 0; //TODO:grab from SQL database
+            model.gradeOutOf = Int32.Parse(sqlHelper.getQuestionMaxScore(quiz, oauth.custom_canvas_course_id, question)); 
 
             // Fuck the rubric, that shit broke
             // TODO: implement the rubric...somehow?
             model.rubricParsed = 1; // Dammit Tanner, why does 1 mean no rubric?
 
             // Load some student data
-            model.numStudent = 0; //TODO:grab from SQL database
+            model.numStudent = Int32.Parse(sqlHelper.getNumberQuestions(quiz, oauth.custom_canvas_course_id)); //TODO:grab from SQL database
 
             //TODO: loop to add all student IDs as names along with creating entry with answer, grade, comment in namesGrades
             string[] studentshit = sqlHelper.getStudentSubmissionSQL(quiz, oauth.custom_canvas_course_id, question, "10874");
             //TODO: make sure this is it...
 
 
-            return View(new GradeModel());
+            return View(model);
         }
 
         //Let's see some help
