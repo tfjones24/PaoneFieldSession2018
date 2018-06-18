@@ -148,8 +148,11 @@ namespace SupaSpeedGrader.Controllers
 
                 // Convert to array because something?
                 string[] students = studentIDList.ToArray();
+
                 // Create that table!
                 bool didcreate = sqlHelper.createQuizTable(quiz, oauth.custom_canvas_course_id, students);
+
+                
 
                 // Okay, table made, let's parse!
                 string toReturn = "{ \"questionArray\": [";
@@ -162,6 +165,8 @@ namespace SupaSpeedGrader.Controllers
                     string question = dataToParse[0][x];
                     string score = dataToParse[0][x + 1];
 
+
+
                     // Remove everything after : including :
                     string questionText = question.Substring(question.IndexOf(":")+1);
                     question = question.Substring(0, question.IndexOf(":"));
@@ -171,6 +176,10 @@ namespace SupaSpeedGrader.Controllers
                     }
                     toReturn = toReturn + " {\"name\": \"" + questionText + "\", \"id\": \"" + question + "\"}";
                     z++;
+
+                    // Store our list of students
+                    sqlHelper.updateListStudentSQL(quiz, oauth.custom_canvas_course_id, question, students);
+
                     // Now grab and upload each student reponse
                     for (int y = 1; y < dataToParse.Count; y++)
                     {

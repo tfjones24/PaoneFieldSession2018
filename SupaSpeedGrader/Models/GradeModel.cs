@@ -39,6 +39,10 @@ namespace SupaSpeedGrader.Models
         public string rubicTitle = "Rubric";        //title of rubric, needs to be updated to set name
         public int studentAt;                   //basically useless but we have it. don't change this?
 
+        public GradeModel()
+        {
+
+        }
        
 
 
@@ -55,7 +59,7 @@ namespace SupaSpeedGrader.Models
             this.width = 100 / rubicCols;
         }
 
-        public GradeModel()
+        public GradeModel(bool custom)
         {
             string[] alphabet = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
             numStudent = 11;
@@ -113,6 +117,14 @@ namespace SupaSpeedGrader.Models
             }
             rubricParsed = 0;
 
+        }
+
+        public void buildNavBar(int numQuestions)
+        {
+            for (int i = 0; i < numQuestions; i++)
+            {
+                navBarQuestions.Add(i);
+            }
         }
 
     }

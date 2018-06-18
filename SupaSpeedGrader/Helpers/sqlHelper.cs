@@ -311,7 +311,7 @@ namespace SupaSpeedGrader.Helpers
                 {
                     cmd.CommandType = CommandType.Text;
 
-                    sql = string.Format("create table quiz{0}_{1}( questionID integer PRIMARY KEY, questionText text, maxScore text", quizID, courseID);
+                    sql = string.Format("create table quiz{0}_{1}( questionID integer PRIMARY KEY, questionText text, maxScore text, studentList text", quizID, courseID);
 
                     for (int i = 0; i < studentIDs.Length; i++)
                     {
@@ -349,10 +349,82 @@ namespace SupaSpeedGrader.Helpers
                     }
                     else
                     {
-                        sql = string.Format("update quiz{0}_{1} set response_{2}='{3}', score_{2}='{4}', comment_{2}='{5}' where questionID = '{6}'", quizID, courseID, studentID, studentResponse, studentScore, comment, questionID);
+                        sql = string.Format("update quiz{0}_{1} set response_{2}='{3}', score_{2}='{4}', comment_{2}='{5}', maxScore='{7}', questionText='{8}' where questionID = '{6}'", quizID, courseID, studentID, studentResponse, studentScore, comment, questionID, maxScore, questionText);
                     }
                     cmd.CommandText = sql;
                     cmd.ExecuteNonQuery();
+                }
+            }
+
+            return rval;
+        }
+
+        public static bool updateListStudentSQL(string quizID, string courseID, string questionID, string[] students)
+        {
+            bool rval = true;
+
+            string sql = string.Empty;
+            string[] studentSub = getStudentSubmissionSQL(quizID, courseID, questionID, students[0]);
+
+            //TODO: convert students to studentJSON or something
+            string studentsJSON = Newtonsoft.Json.JsonConvert.SerializeObject(students);
+
+            //string[] test = Newtonsoft.Json.JsonConvert.DeserializeObject<string[]>(studentsJSON);
+
+            using (SqlConnection dbcon = new SqlConnection(_camsConnectionString))
+            {
+                dbcon.Open();
+                using (SqlCommand cmd = new SqlCommand("dbo.updateStudentList", dbcon))
+                {
+                    cmd.CommandType = CommandType.Text;
+
+                    if (studentSub == null)
+                    {
+                        sql = string.Format("insert into quiz{0}_{1} (questionID, studentList) values ('{2}', '{3}')", quizID, courseID, questionID, studentsJSON);
+                    }
+                    else
+                    {
+                        sql = string.Format("update quiz{0}_{1} set studentList='{2}' where questionID = '{3}'", quizID, courseID, studentsJSON, questionID);
+                    }
+                    cmd.CommandText = sql;
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            return rval;
+        }
+
+        public static string[] getStudentListSQL(string quizID, string courseID, string questionID)
+        {
+            string[] rval = null;
+
+            string sql = string.Format("select studentList from quiz{0}_{1} where questionID = {2}", quizID, courseID, questionID);
+            using (SqlConnection dbcon = new SqlConnection(_camsConnectionString))
+            {
+                dbcon.Open();
+                using (SqlCommand cmd = new SqlCommand("dbo.getStudentList", dbcon))
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = sql;
+
+                    DataSet ds = new DataSet();
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    adapter.Fill(ds);
+
+                    // Check to see if the row exists at all
+                    if (ds != null && ds.Tables[0].Rows.Count == 1 && ds.Tables[0].Rows[0].ItemArray.Length == 1)
+                    {
+                        // Oh it does! Wait, does this submission exist?
+                        if (!string.IsNullOrEmpty(ds.Tables[0].Rows[0].ItemArray[0].ToString()))
+                        {
+                            // Oh it does! Quick return it!
+
+                            return Newtonsoft.Json.JsonConvert.DeserializeObject<string[]>(ds.Tables[0].Rows[0].ItemArray[0].ToString());
+                        }
+                        // Fuck, it doesn't :( return an empty array tho, like our dreams and our database
+                        rval = new string[] { "" };
+                        //we found an existing token, return the shit
+                    }
                 }
             }
 

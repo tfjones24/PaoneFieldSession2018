@@ -235,7 +235,7 @@ namespace SupaSpeedGrader.Controllers
              * quiz name
              * question name
              * question score
-             * question instructions
+             * question instructions/text
              * 
              * per student:
              * *student name
@@ -254,17 +254,32 @@ namespace SupaSpeedGrader.Controllers
             // Load question name, ID, score
             model.questionName = sqlHelper.getQuestionName(quiz, oauth.custom_canvas_course_id, question); 
             model.questionID = question;
-            model.gradeOutOf = Int32.Parse(sqlHelper.getQuestionMaxScore(quiz, oauth.custom_canvas_course_id, question)); 
+            string stuff = sqlHelper.getQuestionMaxScore(quiz, oauth.custom_canvas_course_id, question);
+            model.gradeOutOf = (int)Convert.ToDouble(sqlHelper.getQuestionMaxScore(quiz, oauth.custom_canvas_course_id, question)); 
 
             // Fuck the rubric, that shit broke
             // TODO: implement the rubric...somehow?
             model.rubricParsed = 1; // Dammit Tanner, why does 1 mean no rubric?
 
+
+            model.buildNavBar((int)Convert.ToDouble(sqlHelper.getNumberQuestions(quiz, oauth.custom_canvas_course_id))); 
+            
             // Load some student data
-            model.numStudent = Int32.Parse(sqlHelper.getNumberQuestions(quiz, oauth.custom_canvas_course_id)); //TODO:grab from SQL database
 
             //TODO: loop to add all student IDs as names along with creating entry with answer, grade, comment in namesGrades
-            string[] studentshit = sqlHelper.getStudentSubmissionSQL(quiz, oauth.custom_canvas_course_id, question, "10874");
+            string[] students = sqlHelper.getStudentListSQL(quiz, oauth.custom_canvas_course_id, question);
+
+            for (int x = 0; x < students.Length; x++)
+            {
+                string[] studentshit = sqlHelper.getStudentSubmissionSQL(quiz, oauth.custom_canvas_course_id, question, students[x]);
+
+                model.names.Add(students[x]); //TODO: real name
+                model.namesGrades.Add(students[x], studentshit);
+                model.userNameToID.Add(students[x], students[x]); //TODO:real name
+            }
+
+            model.numStudent = model.names.Count; //TODO: fix it so this is NOT needed CODE CLEANUP
+            //string[] studentshit = sqlHelper.getStudentSubmissionSQL(quiz, oauth.custom_canvas_course_id, question, "10874");
             //TODO: make sure this is it...
 
 
