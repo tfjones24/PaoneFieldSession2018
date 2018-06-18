@@ -251,14 +251,16 @@ namespace SupaSpeedGrader.Controllers
             model.quizName = jsonHelpers.GetJObjectValue(quizJSON, "title");
             model.quizID = quiz;
 
+            model.state = state;
+
             // Load question name, ID, score
             model.questionName = sqlHelper.getQuestionName(quiz, oauth.custom_canvas_course_id, question); 
             model.questionID = question;
             string stuff = sqlHelper.getQuestionMaxScore(quiz, oauth.custom_canvas_course_id, question);
             model.gradeOutOf = (int)Convert.ToDouble(sqlHelper.getQuestionMaxScore(quiz, oauth.custom_canvas_course_id, question)); 
 
-            // Fuck the rubric, that shit broke
-            // TODO: implement the rubric...somehow?
+            // TODO: implement the rubric...somehow? NOT NOW 
+
             model.rubricParsed = 1; // Dammit Tanner, why does 1 mean no rubric?
 
 
@@ -266,20 +268,19 @@ namespace SupaSpeedGrader.Controllers
             
             // Load some student data
 
-            //TODO: loop to add all student IDs as names along with creating entry with answer, grade, comment in namesGrades
+            //loop to add all student IDs as names along with creating entry with answer, grade, comment in namesGrades
             string[] students = sqlHelper.getStudentListSQL(quiz, oauth.custom_canvas_course_id, question);
 
             for (int x = 0; x < students.Length; x++)
             {
                 string[] studentshit = sqlHelper.getStudentSubmissionSQL(quiz, oauth.custom_canvas_course_id, question, students[x]);
 
-                model.names.Add(students[x]); //TODO: real name
+                model.names.Add(students[x]); //TODO: real name?
                 model.namesGrades.Add(students[x], studentshit);
-                model.userNameToID.Add(students[x], students[x]); //TODO:real name
+                model.userNameToID.Add(students[x], students[x]); //TODO:real name?
             }
 
             model.numStudent = model.names.Count; //TODO: fix it so this is NOT needed CODE CLEANUP
-            //string[] studentshit = sqlHelper.getStudentSubmissionSQL(quiz, oauth.custom_canvas_course_id, question, "10874");
             //TODO: make sure this is it...
 
 

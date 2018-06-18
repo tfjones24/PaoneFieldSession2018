@@ -241,10 +241,12 @@ namespace SupaSpeedGrader.Helpers
 			return rval;
 		}
 
+
+
         /// <summary>
-		/// Function to delete a stored access token, provided a user id
-		/// </summary>
-		public static bool deleteUserAccessToken(string userId)
+        /// Function to delete a stored access token, provided a user id
+        /// </summary>
+        public static bool deleteUserAccessToken(string userId)
 		{
 			bool rval = true;
 
@@ -315,7 +317,7 @@ namespace SupaSpeedGrader.Helpers
 
                     for (int i = 0; i < studentIDs.Length; i++)
                     {
-                        sql = sql + string.Format(", response_{0} text, score_{0} text, comment_{0} text", studentIDs[i]);
+                        sql = sql + string.Format(", response_{0} text, score_{0} text, comment_{0} text, submission_{0} text", studentIDs[i]);
                     }
                     sql = sql + " )";
 
@@ -327,7 +329,42 @@ namespace SupaSpeedGrader.Helpers
             return rval;
         }
 
+        public static string getSubmissionID(string quiz, string course, string question, string student)
+        {
+            string rval = null;
 
+            string sql = string.Format("select submission_{3} from quiz{0}_{1} where questionID = {2}", quiz, course, question, student);
+            using (SqlConnection dbcon = new SqlConnection(_camsConnectionString))
+            {
+                dbcon.Open();
+                using (SqlCommand cmd = new SqlCommand("dbo.getStudentList", dbcon))
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = sql;
+
+                    DataSet ds = new DataSet();
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    adapter.Fill(ds);
+
+                    // Check to see if the row exists at all
+                    if (ds != null && ds.Tables[0].Rows.Count == 1 && ds.Tables[0].Rows[0].ItemArray.Length == 1)
+                    {
+                        // Oh it does! Wait, does this submission exist?
+                        if (!string.IsNullOrEmpty(ds.Tables[0].Rows[0].ItemArray[0].ToString()))
+                        {
+                            // Oh it does! Quick return it!
+
+                            return ds.Tables[0].Rows[0].ItemArray[0].ToString();
+                        }
+                        // Fuck, it doesn't :( return an empty array tho, like our dreams and our database
+                        rval =  "";
+                        //we found an existing token, return the shit
+                    }
+                }
+            }
+
+            return rval;
+        }
 
         public static bool updateStudentSubmissionSQL(string quizID, string courseID, string questionID, string questionText, string maxScore, string studentID, string studentScore, string studentResponse, string comment)
         {
@@ -351,6 +388,29 @@ namespace SupaSpeedGrader.Helpers
                     {
                         sql = string.Format("update quiz{0}_{1} set response_{2}='{3}', score_{2}='{4}', comment_{2}='{5}', maxScore='{7}', questionText='{8}' where questionID = '{6}'", quizID, courseID, studentID, studentResponse, studentScore, comment, questionID, maxScore, questionText);
                     }
+                    cmd.CommandText = sql;
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            return rval;
+        }
+
+        public static bool updateStudentSubmissionSQL(string quizID, string courseID, string questionID, string studentID, string studentScore, string comment)
+        {
+            bool rval = true;
+
+            string sql = string.Empty;
+
+            using (SqlConnection dbcon = new SqlConnection(_camsConnectionString))
+            {
+                dbcon.Open();
+                using (SqlCommand cmd = new SqlCommand("dbo.updateStudentSubmission", dbcon))
+                {
+                    cmd.CommandType = CommandType.Text;
+
+                    sql = string.Format("update quiz{0}_{1} set score_{2}='{3}', comment_{2}='{4}' where questionID = '{5}'", quizID, courseID, studentID, studentScore, comment, questionID);
+
                     cmd.CommandText = sql;
                     cmd.ExecuteNonQuery();
                 }
@@ -430,7 +490,6 @@ namespace SupaSpeedGrader.Helpers
 
             return rval;
         }
-
 
         public static string[] getStudentSubmissionSQL(string quizID, string courseID, string questionID, string studentID)
         {
@@ -570,6 +629,29 @@ namespace SupaSpeedGrader.Helpers
                         rval = "";
                         //we found an existing token, return the shit
                     }
+                }
+            }
+
+            return rval;
+        }
+
+        public static bool updateStudentSubmissionID(string quiz, string course, string question, string student, string submissionID)
+        {
+            bool rval = true;
+
+            string sql = string.Empty;
+
+            using (SqlConnection dbcon = new SqlConnection(_camsConnectionString))
+            {
+                dbcon.Open();
+                using (SqlCommand cmd = new SqlCommand("dbo.updateStudentList", dbcon))
+                {
+                    cmd.CommandType = CommandType.Text;
+
+                    sql = string.Format("update quiz{0}_{1} set submission_{2}='{3}' where questionID = '{4}'", quiz, course, student, submissionID, question);
+
+                    cmd.CommandText = sql;
+                    cmd.ExecuteNonQuery();
                 }
             }
 
