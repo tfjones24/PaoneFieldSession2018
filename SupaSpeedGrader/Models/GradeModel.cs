@@ -14,7 +14,8 @@ namespace SupaSpeedGrader.Models
         public string questionName;
         public string questionID;
 
-
+        //State ID
+        public string state;
 
 
         public List<int> navBarQuestions = new List<int>(); //List of question numbers nav bar populates with

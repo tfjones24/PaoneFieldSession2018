@@ -87,7 +87,6 @@ namespace SupaSpeedGrader.Controllers
                 return Json(new { Result = "FAILED" });
             }
 
-            //reportLink = rvalQuizReportMake.Last.Previous.First.Value<string>("url");
 
             string localFileName = "C:\\qqg_temp_data\\"+quiz+"_report.csv";
 
@@ -116,8 +115,13 @@ namespace SupaSpeedGrader.Controllers
                 return Json(new { Result = "FAILED" });
             }
 
-            //TODO: Parse CSV into SQL database
-            //SQL idea:
+            JObject rval4 = await userCalls.getQuizSubmissions(oauth.accessToken.accessToken, "https://" + oauth.host, oauth.custom_canvas_course_id, quiz);
+
+            //JToken maybechilds = rval4.First.First[0];
+            //JToken maybemore = rval4.First.First[1];
+
+            //Parse CSV into SQL database
+            //SQL flow pseudocode:
             /*  drop table of quizid_courseid
              *  create table of quizid_courseid
              *  columns are:
@@ -153,19 +157,16 @@ namespace SupaSpeedGrader.Controllers
                 bool didcreate = sqlHelper.createQuizTable(quiz, oauth.custom_canvas_course_id, students);
 
                 
-
                 // Okay, table made, let's parse!
                 string toReturn = "{ \"questionArray\": [";
                 int z = 0;
+
                 // Let's go by questions, across the columns
                 for (int x = 7; x < dataToParse[0].Length - 3; x = x + 2)
                 {
                     // Grab the question data
-                    //TODO: remove : and everything after
                     string question = dataToParse[0][x];
                     string score = dataToParse[0][x + 1];
-
-
 
                     // Remove everything after : including :
                     string questionText = question.Substring(question.IndexOf(":")+1);
@@ -183,10 +184,20 @@ namespace SupaSpeedGrader.Controllers
                     // Now grab and upload each student reponse
                     for (int y = 1; y < dataToParse.Count; y++)
                     {
+                        // Get student respone
                         string studentResponse = dataToParse[y][x];
                         string studentScore = dataToParse[y][x + 1];
 
+                        // Get submission ID
+                        JToken maybechilds = rval4.First.First[y - 1];
+
+                        string id = maybechilds.Value<string>("id");
+                        string userid = maybechilds.Value<string>("user_id");
+                        
+                        // Update submission and submissionID
                         bool doThatUpdate = sqlHelper.updateStudentSubmissionSQL(quiz, oauth.custom_canvas_course_id, question, questionText, score, students[y - 1], studentScore, studentResponse, "");
+
+                        sqlHelper.updateStudentSubmissionID(quiz, oauth.custom_canvas_course_id, question, userid, id);
                     }
                 }
 
@@ -212,6 +223,54 @@ namespace SupaSpeedGrader.Controllers
             }
 
 
+        }
+
+        public async Task<ActionResult> updateScore(string quiz, string state, string question, string student, string comment, string score)
+        {
+            // Load saved state
+            _logger.Error("Pulling in a saved state: " + state);
+            oauthHelper oauth = Newtonsoft.Json.JsonConvert.DeserializeObject<oauthHelper>(sqlHelper.getStateJson(Guid.Parse(state)));
+
+            oauth.accessToken = sqlHelper.getUserAccessToken(long.Parse(oauth.custom_canvas_user_id));
+            _logger.Error("State loaded: " + state);
+
+            if (oauth.accessToken != null)
+            {
+                _logger.Error("Checking token validity for state: " + state);
+                //now validate the token to make sure it's still good
+                //if the token is no good try to refresh it
+                if (oauth.accessToken.tokenRefreshRequired)
+                {
+                    if (await userCalls.requestUserToken(oauth, oauth.accessToken.responseUrl, "refresh_token", null, oauth.accessToken.refreshToken) == false)
+                    {
+                        /***********************************************************/
+                        //	If we're here it the user may have deleted the access token in their profile.
+                        //  In this case we will request a brand new token, forcing the user to "Authorize" again.
+                        //  To test this, delete the token in your Canvas user profile.
+                        /***********************************************************/
+                        _logger.Error("Token bad, renewal failed! state: " + state);
+                        return Json(new { Result = "AUTHFAIL" });
+
+                    }
+                    _logger.Error("token renewed! state: " + state);
+
+                }
+
+            }
+
+            //TODO: upload grade BY TEST
+
+            //get submission ID (SQL)
+            string submissionID = sqlHelper.getSubmissionID(quiz, oauth.custom_canvas_course_id, question, student);
+
+            //put score in SQL database
+            sqlHelper.updateStudentSubmissionSQL(quiz, oauth.custom_canvas_course_id, question, student, score, comment);
+
+            //put score in canvas!
+            RestSharp.RestResponse finalSubmitTest = await userCalls.putQuizQuestionScoreComment(oauth.accessToken.accessToken, "https://" + oauth.host, oauth.custom_canvas_course_id, quiz, submissionID, question, score, comment);
+
+            //TODO: return status of how shit went. Probably just this tbh
+            return Json(new {Result = "GOO!"});
         }
     }
 }

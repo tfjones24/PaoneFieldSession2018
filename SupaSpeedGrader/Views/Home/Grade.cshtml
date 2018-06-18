@@ -666,7 +666,24 @@
             var questionId = @Model.questionID;
             var quizId = @Model.quizID;
             //   var userID = userNameToID[studentName];
-            alert("Call sorta made!");
+            alert("Call sorta made!" + studentName + " " + comment + " " + score);
+
+            var state = "@Model.state";
+
+            var postData = { "quiz": quizId, "state": state, "question": questionId, "student": studentName, "comment": comment, "score":score };
+
+            $.ajax({
+                type: "POST",
+                url: "/api/updateScore",
+                data: postData,
+                success: function (data) {
+                    alert(data.Result);
+                },
+                dataType: "json",
+                traditional: true
+            });
+
+
         }
 
     </script>
