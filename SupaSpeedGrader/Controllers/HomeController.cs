@@ -517,7 +517,7 @@ namespace SupaSpeedGrader.Controllers
 
 
 
-        // OH GOD WILLS authentication token: 9802~jT11gMJZiaByfs7vBVI2PFQje0YhKwtunlzpw8h6HAMuELHGXodejJzT2mONVMdS
+        // OH GOD WILLS authentication token: REMOVED EYYY
         // Just a good reference for post-token creation work, inclduign sample API call
         public async Task<ActionResult> willName()
         {
