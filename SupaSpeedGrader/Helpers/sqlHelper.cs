@@ -808,9 +808,9 @@ namespace SupaSpeedGrader.Helpers
 
                     if (ds != null && ds.Tables[0].Rows.Count > 0)
                     {
-                        for (int x = 0; x < ds.Tables[0].Rows.Count, x++)
+                        for (int x = 0; x < ds.Tables[0].Rows.Count; x++)
                         {
-                            rval.Add(ds.Tables[0].Rows[0][0].ToString());
+                            rval.Add(ds.Tables[0].Rows[x][0].ToString());
                         }
                     }
 

@@ -189,6 +189,8 @@ namespace SupaSpeedGrader.Controllers
             NavigationModel nav2 = new NavigationModel();
             nav2.addHardValue();
             nav2.state = state;
+            nav2.rubic = sqlHelper.getAllRubricNames();
+
             return View(nav2);
         }
 
