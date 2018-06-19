@@ -83,10 +83,15 @@
         </div>
     </form>
 
+    <p id="testArea"></p>
+
+
+
+
     <script>
         @* these variables stores all the data, the numbers with rubrics are stored in rubric Num and all of the data is stored in the rubric map
             *@
-        var rubricNums = new Array();
+        var rubricNums = [];
         var rubricData = new Map();
         var rubricName;
         var questionNumber;
@@ -114,11 +119,13 @@
             rubricNums.push(x);
 
         }
+
+
         @* unhides criteria based on number given*@ 
         function criteria(source, a) {
             @* this pulls the oprions num to make it adjustable*@
             var options = "opt" + a;
-            var optionNum = document.getElementById(options).value
+            var optionNum = document.getElementById(options).value;
             var criteria = source.value;
             for (var c = 0; c < criteria; c++) {
                 var box = "box" + c + "," + "0" + "of" + a;
@@ -143,7 +150,7 @@
         @* unhides options based on number given *@ 
         function option(source, a) {
             var criteria = "crit" + a;
-            var criteriaNum = document.getElementById(criteria).value
+            var criteriaNum = document.getElementById(criteria).value;
             var option = source.value;
             option++;
             for (var c = 0; c < criteriaNum; c++) {
@@ -161,23 +168,37 @@
         }
         @* submits the data*@
         function submitData() {
+
+
             rubricName = document.getElementById("rubrName").value; 
             questionNumber = document.getElementById("numQuestions").value;
             @* this loops puts everything into the map*@
 
-            for (var i = 0; i < rubricNums.length; ++i) {
+
+
+            for (var i = 0; i < rubricNums.length; i++) {
+
+
                 var options = "opt" + rubricNums[i];
+
                 var optionsNum = document.getElementById(options).value; 
+
                 var criteria = "crit" + rubricNums[i];
-                var criteriaNum = document.getElementById(crit).value;
-                var rubricTable = new Array();
-                for (var j = 0; j < critNum; ++j) {
-                    var row= new Array();
+
+                var criteriaNum = document.getElementById(criteria).value;
+
+                var rubricTable = [];
+
+
+
+                for (var j = 0; j < criteriaNum; j++) {
+
+                    var row= [];
                     var box = "box" + j + "," + 0 + "of" + rubricNums[i] + "n";
-                    var pointComments = new Array();
+                    var pointComments = [];
                     pointComments.push(document.getElementById(box).value);
                     row.push(pointComments); 
-                    for (var k = 1; k <= optNum; ++k) {
+                    for (var k = 1; k <= optionsNum; k++) {
                         pointComments = new Array();
                         box = "box" + j + "," + k + "of" + rubricNums[i] + "p";
                         pointComments.push(document.getElementById(box).value);
@@ -190,6 +211,8 @@
                 }
                 rubricData.set(rubricNums[i], rubricTable);
             }
+
+
 
             document.getElementById("json").value = JSON.stringify(rubricData);
             document.jsonForm.submit();
