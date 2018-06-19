@@ -276,7 +276,12 @@ namespace SupaSpeedGrader.Controllers
         public ActionResult RubricSubmission(string state, string json, string questionCount, string nameBrick)
         {
             //TODO: oh god please no
-            return Json(new { Result = "FACK!" });
+            sqlHelper.storeRubric((new Random()).Next(10000, 99999).ToString(), nameBrick, json, questionCount);
+
+            string redirectUrl = string.Format("../Home/Index?state={0}", state);
+            Response.Redirect(redirectUrl, true);
+
+            return View();
         }
     }
 }

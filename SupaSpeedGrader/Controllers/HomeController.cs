@@ -298,6 +298,7 @@ namespace SupaSpeedGrader.Controllers
         {
             return View(new helpModel(state));
         }
+
         public ActionResult Rubric(string state)
         {
             return View(new RubricModel(state));

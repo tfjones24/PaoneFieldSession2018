@@ -37,7 +37,7 @@
         <div style="float:left; width:50%">
             <form action="../Home/Grade">
                 <div>
-                   
+
                     <h2>Quiz</h2>
                     <div>
                         <select name="quiz" id="quiz" onchange="quizFunction()">
@@ -100,30 +100,39 @@
                     </div>
                 </div>
                 <p></p>
+                <div>
+                    <h2>Rubric</h2>
+                    <div>
+                        <select id="rubic">
+                            @* this form gives the options to select from existing rubrics*@
+                            <option value="" selected="selected"></option>
+                            @{
+                                for (int i = 0; i < Model.rubic.Count; i++)
+                                {
+                                    <option value=@Model.rubic[i]>@Model.rubic[i]</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+
                 <input class="hidden" type="text" name="state" id="state" value="@Model.state"><br />
                 <input type="image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHfNSX7YyLf4h1XAMiFADq4jJt8c9orN9zvvbb-IQp_aF3maXV-A" alt="launch" height="40" width="40" />
             </form>
         </div>
-        <!-- right hand column-->
-        <div style="float:left; width:50%">
-            <h2>Rubric</h2>
-            <form action="../Home/Rubric">
-                <select id="rubic">
-                    @* this form gives the options to select from existing rubrics*@
-                    <option value="" selected="selected"></option>
-                    @{
-                        for (int i = 0; i < Model.rubic.Count; i++)
-                        {
-                            <option value=@Model.rubic[i]>@Model.rubic[i]</option>
-                        }
-                    }
-                </select>
-                <br />
-                <input type="submit" value="Add a new Rubric " />@* if selected it will autoredirect to the rubric page*@
-        
 
+        <!-- right hand column-->
+        <div style="float:right; width:50%">
+            <h2>Create a Rubric</h2>
+            <form action="../Home/Rubric">
+
+                <input class="hidden" type="text" name="state" id="state" value="@Model.state">
+                <input type="submit" value="Add a new Rubric " />@* if selected it will autoredirect to the rubric page*@
+                <br />
+                <br />
             </form>
         </div>
+
     </div>
 
 

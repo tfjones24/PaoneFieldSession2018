@@ -221,6 +221,7 @@
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
     <Content Include="SqlServer\accessTokenCache.sql" />
+    <Content Include="SqlServer\rubrics.sql" />
     <Content Include="SqlServer\stateCache.sql" />
     <Content Include="Views\Home\codeForNavbar.html" />
     <Content Include="Views\Home\Index.cshtml" />
