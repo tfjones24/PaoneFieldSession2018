@@ -169,8 +169,9 @@ namespace SupaSpeedGrader.Controllers
                     }
                 }
 
-
-                //TODO: Put question data in model
+                //TODO: Put rubric stuff in model
+                nav.rubic = sqlHelper.getAllRubricNames();
+                
                 //Put section and quiz info into nav model
                 nav.sections = sections;
                 nav.sectionID = sectionIDs;
@@ -196,7 +197,7 @@ namespace SupaSpeedGrader.Controllers
         // section[] - array of all sections selected, can include "all" as section
         // question - questionID to grade
         // state - unique stateID of user
-        public async Task<ActionResult> Grade(string quiz, string[] section, string question, string state)
+        public async Task<ActionResult> Grade(string quiz, string[] section, string question, string state, string rubric)
         {
             // Create a grade model
             GradeModel model = new GradeModel();
@@ -269,6 +270,12 @@ namespace SupaSpeedGrader.Controllers
 
             model.rubricParsed = 1; // Dammit Tanner, why does 1 mean no rubric?
 
+            model.rubricJSON = sqlHelper.getRubricJsonByName(rubric);
+
+            if (model.rubricJSON != "")
+            {
+                model.rubricParsed = 0;
+            }
 
             model.buildNavBar((int)Convert.ToDouble(sqlHelper.getNumberQuestions(quiz, oauth.custom_canvas_course_id))); 
             

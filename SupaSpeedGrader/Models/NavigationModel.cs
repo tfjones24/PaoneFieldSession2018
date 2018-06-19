@@ -16,8 +16,9 @@ namespace SupaSpeedGrader.Models
         public Dictionary<string, string> quizColor = new Dictionary<string, string>();
 
         public Dictionary<string, List<string>> quizdata = new Dictionary<string, List<string>>();
+
         public List<string> rubic = new List<string>();
-        //Garbage to ignore, only for hardcoded bullshit
+
         public List<string> questions = new List<string>();
         public Dictionary<string, string> questionColor = new Dictionary<string, string>();
 

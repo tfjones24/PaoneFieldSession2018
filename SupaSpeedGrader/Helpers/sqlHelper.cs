@@ -726,6 +726,36 @@ namespace SupaSpeedGrader.Helpers
         }
 
         /// <summary>
+		/// Function to retrieve a stored rubric JSON, provided a name 
+        public static string getRubricJsonByName(string name)
+        {
+            string rval = string.Empty;
+
+            string sql = "select json from rubrics where name = " + name;
+            using (SqlConnection dbcon = new SqlConnection(_camsConnectionString))
+            {
+                dbcon.Open();
+                using (SqlCommand cmd = new SqlCommand("dbo.getRubricJson", dbcon))
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = sql;
+
+                    DataSet ds = new DataSet();
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    adapter.Fill(ds);
+
+                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        rval = ds.Tables[0].Rows[0][0].ToString();
+                    }
+
+                }
+            }
+
+            return rval;
+        }
+
+        /// <summary>
 		/// Function to retrieve a stored rubric name, provided an id 
 		/// </summary>
         public static string getRubricName(string id)
@@ -748,6 +778,40 @@ namespace SupaSpeedGrader.Helpers
                     if (ds != null && ds.Tables[0].Rows.Count == 1)
                     {
                         rval = ds.Tables[0].Rows[0][0].ToString();
+                    }
+
+                }
+            }
+
+            return rval;
+        }
+
+        /// <summary>
+		/// Function to retrieve a stored rubric name, provided an id 
+		/// </summary>
+        public static List<string> getAllRubricNames()
+        {
+            List<string> rval = new List<string>();
+
+            string sql = "select name from rubrics";
+            using (SqlConnection dbcon = new SqlConnection(_camsConnectionString))
+            {
+                dbcon.Open();
+                using (SqlCommand cmd = new SqlCommand("dbo.getRubricNames", dbcon))
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = sql;
+
+                    DataSet ds = new DataSet();
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    adapter.Fill(ds);
+
+                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        for (int x = 0; x < ds.Tables[0].Rows.Count, x++)
+                        {
+                            rval.Add(ds.Tables[0].Rows[0][0].ToString());
+                        }
                     }
 
                 }
