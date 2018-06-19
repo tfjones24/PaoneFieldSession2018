@@ -272,5 +272,11 @@ namespace SupaSpeedGrader.Controllers
             //TODO: return status of how shit went. Probably just this tbh
             return Json(new {Result = "GOO!"});
         }
+
+        public ActionResult RubricSubmission(string state, string json, string questionCount, string nameBrick)
+        {
+            //TODO: oh god please no
+            return Json(new { Result = "FACK!" });
+        }
     }
 }

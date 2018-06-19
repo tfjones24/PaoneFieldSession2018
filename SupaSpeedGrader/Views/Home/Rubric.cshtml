@@ -1,6 +1,7 @@
 ﻿@model SupaSpeedGrader.Models.RubricModel
 @{
     ViewBag.Title = "Rubric";
+    ViewData["state"] = Model.state;
 }
 <head>
     <style>
@@ -79,7 +80,8 @@
     <form name="jsonForm" action="../api/RubricSubmission">
         <div class="hidden">
             <input type="hidden" type="text" name="state" id="state" value="@Model.state"><br />
-            <input type="hidden" type="text" name="json" id="json" value=""><br />
+            <input type="hidden" type="text" name="nameBrick" id="nameBrick" value=""><br />
+            <input type="hidden" type="text" name="questionCount" id="questionCount" value=""><br />
         </div>
     </form>
 
@@ -214,8 +216,16 @@
 
 
 
-            document.getElementById("json").value = JSON.stringify(rubricData);
+            document.getElementById("json").value = JSON.stringify(map_to_obj(rubricData));
+            document.getElementById("nameBrick").value = rubricName;
+            document.getElementById("questionCount").value = questionNumber;
             document.jsonForm.submit();
         }
+
+        const map_to_obj = (aMap => {
+            const obj = {};
+            aMap.forEach((v, k) => { obj[k] = v });
+            return obj;
+        });
     </script>
 </body>
