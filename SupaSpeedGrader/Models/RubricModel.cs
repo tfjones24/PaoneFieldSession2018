@@ -6,17 +6,17 @@ using System.Web.Mvc;
 
 namespace SupaSpeedGrader.Models
 {
-    public class RubricModel : Controller
+    public class RubricModel
     {
         // GET: RubicModel
         public List<string> questions = new List<string>();
 
+        // State and other junk
+        public string state;
+
         public RubricModel()
         {
         }
-        public ActionResult Index()
-        {
-            return View();
-        }
+
     }
 }
