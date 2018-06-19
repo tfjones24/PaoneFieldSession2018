@@ -17,10 +17,16 @@
                     <h1 style=" color:white">Quick Quiz Grader</h1>
                 </div>
                 <div style=" float:left; width:10%;">
-                    <form action="../Home/Index"> <input type="image" src="https://image.flaticon.com/icons/png/512/61/61972.png" alt="HOME" height="40" width="40" style=" -webkit-filter: invert(100%);" /> </form>
+                    <form action="../Home/Index">
+                        <input type="hidden" type="text" name="state" id="state" value="@ViewData["state"]">
+                        <input type="image" src="https://image.flaticon.com/icons/png/512/61/61972.png" alt="HOME" height="40" width="40" style=" -webkit-filter: invert(100%);" />
+                    </form>
                 </div>
                 <div style=" float:left; width:10%;">
-                    <form action="../Home/Help"> <input type="image" src="https://cdn3.iconfinder.com/data/icons/line/36/question-512.png" alt="HELP" height="40" width="40" style=" -webkit-filter: invert(100%);"/> </form>
+                    <form action="../Home/Help">
+                        <input type="hidden" type="text" name="state" id="state" value="@ViewData["state"]">
+                        <input type="image" src="https://cdn3.iconfinder.com/data/icons/line/36/question-512.png" alt="HELP" height="40" width="40" style=" -webkit-filter: invert(100%);" />
+                    </form>
                 </div>
             </div>
         </div>

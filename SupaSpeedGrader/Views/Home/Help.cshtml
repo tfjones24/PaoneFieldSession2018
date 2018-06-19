@@ -1,13 +1,17 @@
-﻿
+﻿@model SupaSpeedGrader.Models.helpModel
+
 @{
     ViewBag.Title = "Help";
+    ViewData["state"] = Model.state;
 }
+
 <style>
     h3{
         @* This color is Canvas Blue*@
         color: #21314d;
     }
 </style>
+
 <div>
     <h3>Home Page</h3>
     <p> The home page allows you to select a quiz, the sectionns grading and the start question. A rubric could also be added here. </p>
@@ -25,7 +29,7 @@
     <h5> The Answer Bar</h5>
     <p>The Answer Bar contains the Question and the student's answers. The responses are identified by the student ID. </p>
     <h5> The Grading Bar</h5>
-        <ul>
+    <ul>
         <li> Highlight Key Words: Allows tohe user to highlight key phrases in responses</li>
         <li> Jump to: Jumps to a specified student</li>
         <li>Rubric: This contains a clickable rubric that autopopulates grades and comments. </li>

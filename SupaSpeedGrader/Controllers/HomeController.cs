@@ -49,6 +49,12 @@ namespace SupaSpeedGrader.Controllers
                     oauth.accessToken = new userAccessToken("9802~Zvtl4cszHBTBQ9z6aAAQ0Mxn9DnyjdVwEukgemkZViqqwVX8jadCGKSFygMzvz0E", Convert.ToInt64(oauth.custom_canvas_user_id), 15000);
                     letsGo = true;
                 }
+                else if (state != null)
+                {
+                    oauth = Newtonsoft.Json.JsonConvert.DeserializeObject<oauthHelper>(sqlHelper.getStateJson(Guid.Parse(state)));
+                    oauth.accessToken = sqlHelper.getUserAccessToken(long.Parse(oauth.custom_canvas_user_id));
+                    letsGo = true;
+                }
                 else
                 {
                     oauth.accessToken = new userAccessToken("9802~Zvtl4cszHBTBQ9z6aAAQ0Mxn9DnyjdVwEukgemkZViqqwVX8jadCGKSFygMzvz0E", 2033, 15000);
@@ -288,13 +294,13 @@ namespace SupaSpeedGrader.Controllers
         }
 
         //Let's see some help
-        public ActionResult Help()
+        public ActionResult Help(string state)
         {
-            return View();
+            return View(new helpModel(state));
         }
-        public ActionResult Rubric()
+        public ActionResult Rubric(string state)
         {
-            return View(new RubricModel());
+            return View(new RubricModel(state));
 
         }
 
