@@ -695,15 +695,18 @@
 
         }
 
-        function loadRubric() {
-            var rubricMap = json.parse(@Model.rubricJSON);  //just used to get object
-            const mapOfRubrics = (rubricMap => {
-                const mp = new Map;
-                Object.keys(rubricMap).forEach(k => { mp.set(k, rubricMap[k]) });
-                return mp;
-            });
+        const obj_to_map = (obj => {
+            const mp = new Map;
+            Object.keys(obj).forEach(k => { mp.set(k, obj[k]) });
+            return mp;
+        });
 
-            var realQNum = @Model.questionNumber;
+        function loadRubric() {
+            var rubricMap = @Html.Raw(Model.rubricJSON);  //just used to get object
+
+            var mapOfRubrics = obj_to_map(rubricMap);
+
+            var realQNum = @Int32.Parse(Model.questionNumber);
             realQNum--;
 
 
