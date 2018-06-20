@@ -500,6 +500,7 @@
 
 
             var studentScore = document.getElementById("grade" + studentAt).value;
+            studentScore = document.getElementById("grade").value;
             ajaxSave(arrayOfStudents[studentAt], comments[studentAt], studentScore);
         }
 
@@ -637,6 +638,7 @@
 
             document.getElementById("comment").value += (source.value.substr(0, (source.value.indexOf('+'))) + "\n");
             document.getElementById("grade").value = parseInt(document.getElementById("grade").value) + parseInt(source.value.substr(source.value.indexOf('+') + 1));
+            save();
 
         }
 
