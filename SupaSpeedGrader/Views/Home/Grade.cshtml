@@ -219,7 +219,7 @@
                         <div style="float:left;width: @Model.width%; background-color:grey; border:1px solid black" id="@clap" name="@clap">
                             @Model.rubic[i][0]      <!--michelle has the rubric parsing in so the beginning of each row is colored gray as the description of how to grade that part-->
                         </div>
-                        @for (int j = 1; j < Model.rubicCols; ++j)
+                        @for (int j = 1; j < (Model.rubicCols + 1); ++j)
                         {
 
 
@@ -715,7 +715,7 @@
 
             
             for (var row = 0; row < @Model.rubicRows; row++) {
-                var line = document.getElementsByName("rubr" + row);
+                var line = document.querySelectorAll("#rubr" + row);
                 line[0].value = rubric[row][0][0];
 
                 alert(line[0].value + "omg magic");
