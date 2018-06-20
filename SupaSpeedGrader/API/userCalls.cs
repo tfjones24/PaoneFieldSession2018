@@ -351,48 +351,6 @@ namespace SupaSpeedGrader.API
         }
 
 
-        /// <summary>
-		/// Implementation of update quiz scores
-		/// Pass in a dictionary of parameters, use parameters names defined in API documnentation
-		/// </summary>
-		/// <param name="accessToken"></param>
-		/// <param name="baseUrl"></param>
-		/// <param name="courseId"></param>
-        /// <param name="quizId"></param>
-        /// <param name="studentId"></param>
-		/// <param name="vars">List of each API parameter and associated value</param>
-		/// <returns>returns a json object representing a quiz, will throw an exception</returns>
-        /// 
-        /// 
-        /// NOTE: This should be unused, it has bee supersceeded by putQuizQuestionScoreComment()
-        /// 
-		public static async Task<dynamic> putQuizScore(string accessToken, string baseUrl, string courseID, string quizID, string studentID, Dictionary<string, string> vars)
-        {
-            //IF this fails, check https://community.canvaslms.com/thread/6062 for some massively important JSON context information, especially regarding required parameters
-            dynamic result = null;
-            string urlCommand = "/api/v1/courses/:course_id/quizzes/:quiz_id/submissions/:id";
-
-            urlCommand = urlCommand.Replace(":course_id", courseID);
-            urlCommand = urlCommand.Replace(":quiz_id", quizID);
-            urlCommand = urlCommand.Replace(":id", studentID);
-
-            urlCommand = clsHttpMethods.concatenateHttpVars(urlCommand, vars);
-
-            using (HttpResponseMessage response = await clsHttpMethods.httpPUT(baseUrl, urlCommand, accessToken, null))
-            {
-                string rval = await response.Content.ReadAsStringAsync();
-
-                if (!response.IsSuccessStatusCode || (rval.Contains("errors") && rval.Contains("message")))
-                {
-                    throw new HttpRequestException(rval);
-                }
-                result = JsonConvert.DeserializeObject(rval);
-            }
-
-            return result;
-        }
-
-
         /**
          * Gets list of all sections in the current class
          */ 
@@ -490,7 +448,7 @@ namespace SupaSpeedGrader.API
         {
             //IF this fails, check https://community.canvaslms.com/thread/6062 for some massively important JSON context information, especially regarding required parameters
             string urlCommand = "/api/v1/courses/:course_id/quizzes/:quiz_id/submissions/:id";
-            string jsonData = "{\"quiz_submissions\":[{\"attempt\": 1,\"questions\": {\"" + questionID + "\": {\"score\": " + questionScore + ",\"comment\": \"" + questionComment + "\"}}}]}";
+            string jsonData = "{\"quiz_submissions\":[{\"attempt\": 1,\"questions\": {\"" + questionID + "\": {\"score\": " + questionScore + ",\"comment\": " + JsonConvert.ToString(questionComment) + "}}}]}";
 
             urlCommand = urlCommand.Replace(":course_id", courseID);
             urlCommand = urlCommand.Replace(":quiz_id", quizID);

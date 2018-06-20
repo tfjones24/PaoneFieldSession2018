@@ -272,15 +272,19 @@ namespace SupaSpeedGrader.Controllers
 
             model.rubricParsed = 1; // Dammit Tanner, why does 1 mean no rubric?
 
-            model.rubicCols = (int)Convert.ToDouble(sqlHelper.getRubricColsByName(rubric));
-            model.rubicRows = (int)Convert.ToDouble(sqlHelper.getRubricRowsByName(rubric));
-
-            model.rubricJSON = sqlHelper.getRubricJsonByName(rubric);
-
-            if (model.rubricJSON != "")
+            if (!string.IsNullOrEmpty(rubric))
             {
-                model.rubricParsed = 0;
+                model.rubicCols = (int)Convert.ToDouble(sqlHelper.getRubricColsByName(rubric));
+                model.rubicRows = (int)Convert.ToDouble(sqlHelper.getRubricRowsByName(rubric));
+
+                model.rubricJSON = sqlHelper.getRubricJsonByName(rubric);
+
+                if (model.rubricJSON != "")
+                {
+                    model.rubricParsed = 0;
+                }
             }
+
 
             model.buildNavBar((int)Convert.ToDouble(sqlHelper.getNumberQuestions(quiz, oauth.custom_canvas_course_id))); 
             
