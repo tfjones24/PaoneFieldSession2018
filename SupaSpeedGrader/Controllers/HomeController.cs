@@ -286,6 +286,8 @@ namespace SupaSpeedGrader.Controllers
                 if (model.rubricJSON != "")
                 {
                     model.rubricParsed = 0;
+
+                    model.buildRubric();
                 }
             }
 

@@ -27,8 +27,8 @@ GO
 
 CREATE TABLE [dbo].[rubrics](
 	[id]   [integer] PRIMARY KEY,
-	[name] [text] NOT NULL,
-	[json] [text] NOT NULL,
+	[name] varchar(max) ,
+	[json] [text] NOT NULL, 
 	[rubricCols] [text],
 	[rubricRows] [text],
 	[questionCount] [text]
