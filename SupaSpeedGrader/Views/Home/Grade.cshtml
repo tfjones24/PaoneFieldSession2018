@@ -213,17 +213,20 @@
                 <!--rubric container, holds the rubric-->
                 <p>@Model.rubicTitle</p><!--Model.rubicTitle=what the rubric has been named-->
                 @for (int i = 0; i < Model.rubicRows; ++i)
-                {<div style="display: flex">
-                        <div style="float:left;width: @Model.width%; background-color:grey; border:1px solid black">
+                {
+                    string clap = "rubr" + i;   //used to set unique ids for the rubric buttons. i.e. rubr12
+                    <div style="display: flex">
+                        <div style="float:left;width: @Model.width%; background-color:grey; border:1px solid black" id="@clap" name="@clap">
                             @Model.rubic[i][0]      <!--michelle has the rubric parsing in so the beginning of each row is colored gray as the description of how to grade that part-->
                         </div>
                         @for (int j = 1; j < Model.rubicCols; ++j)
                         {
 
-                            string clap = "rubr" + i;   //used to set unique ids for the rubric buttons. i.e. rubr12
+
 
                             <div style="float:left; width:@Model.width%;border:1px solid black">
-                                <input class="rubricButton" onclick=highlightRubic(this) onmouseover="hoverRubric(this)" onmouseout="exitRubric(this)" type="button" style="width:100%; background-color:white; border:none" value="@Model.rubic[i][j]" id='@clap' />
+                                <input class="rubricButton" onclick=highlightRubic(this) onmouseover="hoverRubric(this)" onmouseout="exitRubric(this)" 
+                                       type="button" style="width:100%; background-color:white; border:none" value="@Model.rubic[i][j]" id='@clap' name="@clap"/>
                             </div>
                         }
                     </div>
@@ -700,14 +703,23 @@
                 return mp;
             });
 
-            //var rubric = mapOfRubrics.get()
+            var realQNum = @Model.questionNumber;
+            realQNum--;
+
+
+            var rubric = mapOfRubrics.get(realQNum);
+
+
+
 
 
             for (var row = 0; row < @Model.rubicRows; row++) {
-                for (var col = 0; col < @Model.rubicCols; col++) {
+                var line = document.getElementsByName("rubr" + row);
+                line[0].value = rubric[row][0][0];
 
+                for (var col = 1; col < @Model.rubicCols; col++) {
+                    line[col].value = (rubric[row][col][0] + " +" + rubric[row][col][1]);
                     
-
                 }
             }
 
@@ -716,8 +728,3 @@
 
     </script>
 </body>
-
-
-
-
-
