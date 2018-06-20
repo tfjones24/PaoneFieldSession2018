@@ -97,7 +97,7 @@
         @* these variables stores all the data, the numbers with rubrics are stored in rubric Num and all of the data is stored in the rubric map
             *@
         var rubricNums = [];
-        var rubricData = new Map();
+        var rubricData = [];
         var rubricName;
         var questionNumber;
         var first = 0;
@@ -224,7 +224,7 @@
                     }                 
                     rubricTable.push(row);
                 }
-                rubricData.set(rubricNums[i], rubricTable);
+                rubricData.push(rubricTable);
             }
 
 
