@@ -275,7 +275,6 @@ namespace SupaSpeedGrader.Controllers
 
         public ActionResult RubricSubmission(string state, string json, string questionCount, string nameBrick, string rubricCols, string rubricRows)
         {
-            //TODO: oh god please no
             sqlHelper.storeRubric((new Random()).Next(10000, 99999).ToString(), nameBrick, json, questionCount, rubricCols, rubricRows);
 
             string redirectUrl = string.Format("../Home/Index?state={0}", state);

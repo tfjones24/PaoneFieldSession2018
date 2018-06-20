@@ -178,6 +178,8 @@ namespace SupaSpeedGrader.API
             return rval;
 
         }
+
+        /*
         //I don't think this needs to exist actually TODO
         public static async Task<dynamic> deleteOldQuizReport(string accessToken, string baseUrl, string canvasCourseId, string quizId)
         {
@@ -207,7 +209,7 @@ namespace SupaSpeedGrader.API
             return rval;
 
         }
-
+        
         public static async Task<dynamic> getQuizReports(string accessToken, string baseUrl, string canvasCourseId, string quizId)
         {
             dynamic rval = null;
@@ -233,7 +235,7 @@ namespace SupaSpeedGrader.API
             return rval;
 
         }
-
+        */
         /**
          * Gets a single quiz object, given the courseID and QuizID
          * 
@@ -266,6 +268,7 @@ namespace SupaSpeedGrader.API
          * Gets a single quiz question given the CourseID, QuizID, and QuestionID
          * 
         */ 
+        /*
         public static async Task<dynamic> getQuizQuestion(string accessToken, string baseUrl, string canvasCourseId, string canvasQuizId, string canvasQuizQuestionId)
         {
             dynamic rval = null;
@@ -291,7 +294,7 @@ namespace SupaSpeedGrader.API
             return rval;
 
         }
-
+        */
         public static async Task<dynamic> getQuizSubmissions(string accessToken, string baseUrl, string canvasCourseId, string canvasQuizId)
         {
             dynamic rval = null;
@@ -326,6 +329,7 @@ namespace SupaSpeedGrader.API
          * Quiz submission IDs and student ids need to be tied somehow.  
          * This function should get the answers for a specific quiz submission, which should be tied to the student.  It will also contain the correct answers depending on the question type
         */
+        /*
         public static async Task<dynamic> getQuizSubmissionQuestions(string accessToken, string baseUrl, string canvasQuizSubmissionId)
         {
             dynamic rval = null;
@@ -349,7 +353,7 @@ namespace SupaSpeedGrader.API
             return rval;
 
         }
-
+        */
 
         /**
          * Gets list of all sections in the current class
@@ -377,62 +381,7 @@ namespace SupaSpeedGrader.API
             return rval;
 
         }
-
-        public static async Task<dynamic> getRubricList(string accessToken, string baseUrl, string canvasCourseId)
-        {
-            dynamic rval = null;
-            string urlCommand = "/api/v1/courses/:course_id/rubrics";
-
-            urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
-
-            using (HttpResponseMessage response = await clsHttpMethods.httpGET(baseUrl, urlCommand, accessToken))
-            {
-                string result = await response.Content.ReadAsStringAsync();
-                if (response.IsSuccessStatusCode)
-                {
-                    rval = JsonConvert.DeserializeObject(result);
-                }
-                else
-                {
-                    throw new Exception(result);
-                }
-            }
-
-            return rval;
-
-        }
-
-        public static async Task<dynamic> getRubric(string accessToken, string baseUrl, string canvasCourseId, string rubricId)
-        {
-            dynamic rval = null;
-            string urlCommand = "/api/v1/courses/:course_id/rubrics/:id";
-            //?include=assessments&style=full
-            Dictionary<string, string> vars = new Dictionary<string, string>();
-            vars.Add("include", "assessments");
-            vars.Add("style", "full");
-
-
-            urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
-            urlCommand = urlCommand.Replace(":id", rubricId);
-
-            urlCommand = clsHttpMethods.concatenateHttpVars(urlCommand, vars);
-
-            using (HttpResponseMessage response = await clsHttpMethods.httpGET(baseUrl, urlCommand, accessToken))
-            {
-                string result = await response.Content.ReadAsStringAsync();
-                if (response.IsSuccessStatusCode)
-                {
-                    rval = JsonConvert.DeserializeObject(result);
-                }
-                else
-                {
-                    throw new Exception(result);
-                }
-            }
-
-            return rval;
-
-        }
+        
 
 
 
@@ -464,29 +413,7 @@ namespace SupaSpeedGrader.API
             return response;
         }
 
-        //This is now unused, it was used for making the putQuizQuestionScoreComment() function above
-        //public static async task<dynamic> temptestforput()
-        //{
-        //    dynamic result = null;
-
-        //    var client = new restclient("https://elearning.mines.edu/api/v1/courses/12282/quizzes/6648/submissions/170700");
-        //    var request = new restrequest(method.put);
-        //    request.addheader("postman-token", "56a13d39-3fb9-4db2-859f-33729aac3931");
-        //    request.addheader("cache-control", "no-cache");
-        //    string jsondata = "{\"quiz_submissions\": [{\"attempt\": 1,\"questions\": {\"36113\": {\"score\": 50,\"comment\": \"this is mark trying to change the comment on the first question x3\"}}}]}";
-        //    request.addheader("authorization", "bearer 9802~k2vubhafkypsjia53cn0dzdtbqxc9mw5qmauku6eufxhwxsqcoufieabeqjfxsoy");
-        //    request.addheader("content-type", "application/json");
-        //    request.addparameter("undefined", jsondata, parametertype.requestbody);
-        //    irestresponse response = client.execute(request);
-
-        //    return response;
-        //}
-
-
-
-
-
-
+        
 
         /* OAuth Functions */
         /// <summary>
