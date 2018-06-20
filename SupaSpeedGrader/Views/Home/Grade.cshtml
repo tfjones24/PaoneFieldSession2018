@@ -708,12 +708,12 @@
             var realQNum = @Model.questionNumber;
             //realQNum++;
 
-            alert(rubricMap);
-            alert(realQNum);
+            //alert(rubricMap);
+            //alert(realQNum);
 
             var rubric = mapOfRubrics[realQNum];
 
-            alert(rubric);
+            //alert(rubric);
 
 
             
@@ -722,12 +722,12 @@
                 line[0].value = rubric[row][0][0];
                 line[0].innerHTML = rubric[row][0][0];
 
-                alert(line[0].value + "omg magic");
+                //alert(line[0].value + "omg magic");
 
                 for (var col = 1; col < @Model.rubicCols+1; col++) {
                     line[col].value = (rubric[row][col][1] + " +" + rubric[row][col][0]);
                     //line[col].value = rubric[row][col][0];
-                    alert("omg magic x2");
+                    //alert("omg magic x2");
                 }
             }
 
