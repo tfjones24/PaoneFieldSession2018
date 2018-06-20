@@ -57,7 +57,7 @@
         }
     </style>
 </head>
-<body onload="navBarCheck(); rubricParseCheck();">
+<body onload="navBarCheck(); loadRubric(); rubricParseCheck();">
     <!--navBarCheck basically takes the extra cells that are generated and makes them invisible at the end of the nav list
         rubricParseCheck relies on the rubricParsed variable in model to tell it if we're using a rubric or not. 1 for yes 0 for no-->
 
@@ -690,6 +690,26 @@
 
 
         }
+
+        function loadRubric() {
+            var rubricMap = json.parse(@Model.rubricJSON);  //just used to get object
+            const mapOfRubrics = (rubricMap => {
+                const mp = new Map;
+                Object.keys(rubricMap).forEach(k => { mp.set(k, rubricMap[k]) });
+                return mp;
+            });
+
+            var rubric = mapOfRubrics.get(Model.ques)
+
+
+            for (var row = 0; row < @Model.rubicRows; row++) {
+                for (var col = 0; col < @Model.rubicCols; col++) {
+
+                }
+            }
+
+        }
+
 
     </script>
 </body>

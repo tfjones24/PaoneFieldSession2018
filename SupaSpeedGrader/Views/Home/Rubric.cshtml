@@ -99,6 +99,11 @@
         var rubricName;
         var questionNumber;
         var first = 0;
+
+        var rubricCols = 0; //used for rubricCols, please pass to grade page
+        var rubricRows = 0; //used for rubricRows, please pass to grade page also
+
+
         @* unhides questions *@
         function questionNum(source) {
             var e = source.value;
@@ -130,6 +135,11 @@
             var options = "opt" + a;
             var optionNum = document.getElementById(options).value;
             var criteria = source.value;
+
+            //this code is cancer, to whoever maintains this in the future I'm so goddamn sorry
+            rubricRows = source.value;
+            rubricCols = a;
+
             for (var c = 0; c < criteria; c++) {
                 var box = "box" + c + "," + "0" + "of" + a;
                 document.getElementById(box).className = "yesDisplay";
