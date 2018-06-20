@@ -149,7 +149,7 @@
                 document.getElementById(box).style.border = "1px solid black";
                 @*\this helps with the formatting of the lines wihtout this section it formats incorrectly*@
                 optionNum++;
-                rubricCols++;
+                //rubricCols++;
                 for (var b = optionNum; b < 9; ++b) {
                     box= "box" + c + "," + b + "of" + a;
                     document.getElementById(box).className = "noShow";
@@ -168,6 +168,9 @@
             var criteria = "crit" + a;
             var criteriaNum = document.getElementById(criteria).value;
             var option = source.value;
+
+            rubricCols = source.value;
+
             option++;
             for (var c = 0; c < criteriaNum; c++) {
                 for (var b = 1; b < option; b++) {
