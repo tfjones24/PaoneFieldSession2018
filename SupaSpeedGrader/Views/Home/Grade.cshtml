@@ -718,9 +718,12 @@
                 var line = document.getElementsByName("rubr" + row);
                 line[0].value = rubric[row][0][0];
 
-                for (var col = 1; col < @Model.rubicCols; col++) {
-                    line[col].value = (rubric[row][col][0] + " +" + rubric[row][col][1]);
-                    
+                alert(line[0].value + "omg magic");
+
+                for (var col = 1; col < @Model.rubicCols+1; col++) {
+                    //line[col].value = (rubric[row][col][0] + " +" + rubric[row][col][1]);
+                    line[col].value = rubric[row][col][0];
+                    alert("omg magic x2");
                 }
             }
 
