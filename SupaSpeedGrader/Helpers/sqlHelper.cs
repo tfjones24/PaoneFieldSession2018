@@ -706,7 +706,7 @@ namespace SupaSpeedGrader.Helpers
                     }
 
                     cmd.Parameters.Add("@name", System.Data.SqlDbType.NVarChar, 50);
-                    cmd.Parameters.Add("@feedback", System.Data.SqlDbType.NVarChar, 50000);
+                    cmd.Parameters.Add("@json", System.Data.SqlDbType.NVarChar, 50000);
 
                     cmd.Parameters["@name"].Value = name;
                     cmd.Parameters["@json"].Value = json;
