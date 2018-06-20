@@ -382,13 +382,23 @@ namespace SupaSpeedGrader.Helpers
 
                     if (studentSub == null)
                     {
-                        sql = string.Format("insert into quiz{0}_{1} (questionID, maxScore, response_{2}, score_{2}, comment_{2}, questionText) values ('{3}', '{4}', '{5}', '{6}', '{7}', '{8}')", quizID, courseID, studentID, questionID, maxScore, studentResponse, studentScore, comment, questionText);
+                        sql = string.Format("insert into quiz{0}_{1} (questionID, maxScore, response_{2}, score_{2}, comment_{2}, questionText) values ('{3}', '{4}', @response, @score, @feedback, @qtext)", quizID, courseID, studentID, questionID, maxScore);
                     }
                     else
                     {
-                        sql = string.Format("update quiz{0}_{1} set response_{2}='{3}', score_{2}='{4}', comment_{2}='{5}', maxScore='{7}', questionText='{8}' where questionID = '{6}'", quizID, courseID, studentID, studentResponse, studentScore, comment, questionID, maxScore, questionText);
+                        sql = string.Format("update quiz{0}_{1} set response_{2}=@response, score_{2}=@score, comment_{2}=@feedback, maxScore='{7}', questionText=@qtext where questionID = '{6}'", quizID, courseID, studentID, studentResponse, studentScore, comment, questionID, maxScore, questionText);
                     }
                     cmd.CommandText = sql;
+                    cmd.Parameters.Add("@response", System.Data.SqlDbType.NVarChar, 5000);
+                    cmd.Parameters.Add("@score", System.Data.SqlDbType.NVarChar, 10);
+                    cmd.Parameters.Add("@feedback", System.Data.SqlDbType.NVarChar, 500);
+                    cmd.Parameters.Add("@qtext", System.Data.SqlDbType.NVarChar, 500);
+
+                    cmd.Parameters["@response"].Value = studentResponse;
+                    cmd.Parameters["@score"].Value = studentScore;
+                    cmd.Parameters["@feedback"].Value = comment;
+                    cmd.Parameters["@qtext"].Value = questionText;
+
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -409,9 +419,16 @@ namespace SupaSpeedGrader.Helpers
                 {
                     cmd.CommandType = CommandType.Text;
 
-                    sql = string.Format("update quiz{0}_{1} set score_{2}='{3}', comment_{2}='{4}' where questionID = '{5}'", quizID, courseID, studentID, studentScore, comment, questionID);
+                    sql = string.Format("update quiz{0}_{1} set score_{2}=@score, comment_{2}=@feedback where questionID = '{5}'", quizID, courseID, studentID, studentScore, comment, questionID);
 
                     cmd.CommandText = sql;
+
+                    cmd.Parameters.Add("@score", System.Data.SqlDbType.NVarChar, 10);
+                    cmd.Parameters.Add("@feedback", System.Data.SqlDbType.NVarChar, 500);
+
+                    cmd.Parameters["@score"].Value = studentScore;
+                    cmd.Parameters["@feedback"].Value = comment;
+
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -681,12 +698,19 @@ namespace SupaSpeedGrader.Helpers
 
                     if (string.IsNullOrEmpty(rubricJson))
                     {
-                        sql = string.Format("insert into rubrics (id, name, json, rubricCols, rubricRows, questionCount) values ({2}, '{0}', '{1}', '{3}', '{4}', '{5}')", name, json, id, rubricCols, rubricRows, questionCount);
+                        sql = string.Format("insert into rubrics (id, name, json, rubricCols, rubricRows, questionCount) values ({2}, @name, @json, '{3}', '{4}', '{5}')", name, json, id, rubricCols, rubricRows, questionCount);
                     }
                     else
                     {
-                        sql = string.Format("update rubrics set json = '{0}', name = '{1}', rubricCols = '{3}', rubricRows = '{4}', questionCount = '{5}' where id = {2}", json, name, id, rubricCols, rubricRows, questionCount);
+                        sql = string.Format("update rubrics set json = @json, name = @name, rubricCols = '{3}', rubricRows = '{4}', questionCount = '{5}' where id = {2}", json, name, id, rubricCols, rubricRows, questionCount);
                     }
+
+                    cmd.Parameters.Add("@name", System.Data.SqlDbType.NVarChar, 50);
+                    cmd.Parameters.Add("@feedback", System.Data.SqlDbType.NVarChar, 50000);
+
+                    cmd.Parameters["@name"].Value = name;
+                    cmd.Parameters["@json"].Value = json;
+
                     cmd.CommandText = sql;
                     cmd.ExecuteNonQuery();
                 }
@@ -731,12 +755,16 @@ namespace SupaSpeedGrader.Helpers
         {
             string rval = string.Empty;
 
-            string sql = "select json from rubrics where name = " + name;
+            string sql = "select json from rubrics where name = @name";
+
             using (SqlConnection dbcon = new SqlConnection(_camsConnectionString))
             {
                 dbcon.Open();
                 using (SqlCommand cmd = new SqlCommand("dbo.getRubricJson", dbcon))
                 {
+                    cmd.Parameters.Add("@name", System.Data.SqlDbType.NVarChar, 50);
+                    cmd.Parameters["@name"].Value = name;
+
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandText = sql;
 
@@ -761,12 +789,15 @@ namespace SupaSpeedGrader.Helpers
         {
             string rval = string.Empty;
 
-            string sql = "select rubricCols from rubrics where name = " + name;
+            string sql = "select rubricCols from rubrics where name = @name";
             using (SqlConnection dbcon = new SqlConnection(_camsConnectionString))
             {
                 dbcon.Open();
                 using (SqlCommand cmd = new SqlCommand("dbo.getRubricJson", dbcon))
                 {
+                    cmd.Parameters.Add("@name", System.Data.SqlDbType.NVarChar, 50);
+                    cmd.Parameters["@name"].Value = name;
+
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandText = sql;
 
@@ -791,12 +822,15 @@ namespace SupaSpeedGrader.Helpers
         {
             string rval = string.Empty;
 
-            string sql = "select rubricRows from rubrics where name = " + name;
+            string sql = "select rubricRows from rubrics where name = @name";
             using (SqlConnection dbcon = new SqlConnection(_camsConnectionString))
             {
                 dbcon.Open();
                 using (SqlCommand cmd = new SqlCommand("dbo.getRubricJson", dbcon))
                 {
+                    cmd.Parameters.Add("@name", System.Data.SqlDbType.NVarChar, 50);
+                    cmd.Parameters["@name"].Value = name;
+
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandText = sql;
 
@@ -821,12 +855,15 @@ namespace SupaSpeedGrader.Helpers
         {
             string rval = string.Empty;
 
-            string sql = "select questionCount from rubrics where name = " + name;
+            string sql = "select questionCount from rubrics where name = @name";
             using (SqlConnection dbcon = new SqlConnection(_camsConnectionString))
             {
                 dbcon.Open();
                 using (SqlCommand cmd = new SqlCommand("dbo.getRubricJson", dbcon))
                 {
+                    cmd.Parameters.Add("@name", System.Data.SqlDbType.NVarChar, 50);
+                    cmd.Parameters["@name"].Value = name;
+
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandText = sql;
 

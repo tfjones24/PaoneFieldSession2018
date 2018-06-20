@@ -671,7 +671,7 @@
             var questionId = @Model.questionID;
             var quizId = @Model.quizID;
             //   var userID = userNameToID[studentName];
-            alert("Call sorta made!" + studentName + " " + comment + " " + score);
+            //alert("Call sorta made!" + studentName + " " + comment + " " + score);
 
             var state = "@Model.state";
 
@@ -682,7 +682,8 @@
                 url: "/api/updateScore",
                 data: postData,
                 success: function (data) {
-                    alert(data.Result);
+                    //alert(data.Result);
+                    document.getElementById("action").innerHTML = "Grade for " + studentName + " attempted push. Result: " + data.Result;
                 },
                 dataType: "json",
                 traditional: true
