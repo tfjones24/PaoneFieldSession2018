@@ -140,7 +140,7 @@
 
             //this code is cancer, to whoever maintains this in the future I'm so goddamn sorry
             rubricRows = source.value;
-            rubricCols = a;
+            rubricCols = document.getElementById("opt" + a).value;
 
             for (var c = 0; c < criteria; c++) {
                 var box = "box" + c + "," + "0" + "of" + a;
