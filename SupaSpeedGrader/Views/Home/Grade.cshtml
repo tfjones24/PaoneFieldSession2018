@@ -636,9 +636,9 @@
 
             source.style = "width:100%; background-color:lightgreen; border:none"
 
-            document.getElementById("comment").value += (source.value.substr(0, (source.value.indexOf('+'))) + "\n");
-            document.getElementById("grade").value = parseInt(document.getElementById("grade").value) + parseInt(source.value.substr(source.value.indexOf('+') + 1));
-            document.getElementById("grade" + studentAt).value = parseInt(document.getElementById("grade" + studentAt).value) + parseInt(source.value.substr(source.value.indexOf('+') + 1));
+            document.getElementById("comment").value += (source.value.substr(0, (source.value.indexOf(". +"))) + "\n");
+            document.getElementById("grade").value = parseInt(document.getElementById("grade").value) + parseInt(source.value.substr(source.value.indexOf(". +") + 3));
+            document.getElementById("grade" + studentAt).value = parseInt(document.getElementById("grade" + studentAt).value) + parseInt(source.value.substr(source.value.indexOf(". +") + 3));
             save();
 
         }
@@ -731,7 +731,7 @@
                 //alert(line[0].value + "omg magic");
 
                 for (var col = 1; col < @Model.rubicCols+1; col++) {
-                    line[col].value = (rubric[row][col][1] + " +" + rubric[row][col][0]);
+                    line[col].value = (rubric[row][col][1] + ". +" + rubric[row][col][0]);
                     //line[col].value = rubric[row][col][0];
                     //alert("omg magic x2");
                 }
