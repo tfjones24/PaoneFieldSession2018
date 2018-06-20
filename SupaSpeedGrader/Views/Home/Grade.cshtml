@@ -695,29 +695,25 @@
 
         }
 
-        const obj_to_map = (obj => {
-            const mp = new Map;
-            Object.keys(obj).forEach(k => { mp.set(k, obj[k]) });
-            return mp;
-        });
+
 
         function loadRubric() {
-            var rubricMap = @Html.Raw(Model.rubricJSON);  //just used to get object
+            var rubricMap = JSON.parse('@Html.Raw(Model.rubricJSON)');  //just used to get object
 
-            var mapOfRubrics = obj_to_map(rubricMap);
+            var mapOfRubrics = (rubricMap);
 
             var realQNum = @Model.questionNumber;
             //realQNum++;
 
-            alert(mapOfRubrics.keys().next().value);
+            alert(rubricMap);
             alert(realQNum);
 
-            var rubric = mapOfRubrics["1"];
+            var rubric = mapOfRubrics[realQNum];
 
             alert(rubric);
 
 
-
+            
             for (var row = 0; row < @Model.rubicRows; row++) {
                 var line = document.getElementsByName("rubr" + row);
                 line[0].value = rubric[row][0][0];

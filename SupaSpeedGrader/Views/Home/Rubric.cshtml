@@ -229,7 +229,7 @@
 
 
 
-            document.getElementById("json").value = JSON.stringify(map_to_obj(rubricData));
+            document.getElementById("json").value = JSON.stringify(rubricData);
             document.getElementById("nameBrick").value = rubricName;
             document.getElementById("questionCount").value = questionNumber;
             document.getElementById("rubricCols").value = rubricCols;
@@ -238,10 +238,5 @@
             document.jsonForm.submit();
         }
 
-        const map_to_obj = (aMap => {
-            const obj = {};
-            aMap.forEach((v, k) => { obj[k] = v });
-            return obj;
-        });
     </script>
 </body>
