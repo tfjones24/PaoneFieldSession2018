@@ -706,13 +706,15 @@
 
             var mapOfRubrics = obj_to_map(rubricMap);
 
-            var realQNum = @Int32.Parse(Model.questionNumber);
-            realQNum--;
+            var realQNum = @Model.questionNumber;
+            //realQNum++;
 
+            alert(mapOfRubrics.keys().next().value);
+            alert(realQNum);
 
-            var rubric = mapOfRubrics.get(realQNum);
+            var rubric = mapOfRubrics["1"];
 
-
+            alert(rubric);
 
 
 
