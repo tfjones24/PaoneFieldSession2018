@@ -149,6 +149,7 @@
                 document.getElementById(box).style.border = "1px solid black";
                 @*\this helps with the formatting of the lines wihtout this section it formats incorrectly*@
                 optionNum++;
+                rubricCols++;
                 for (var b = optionNum; b < 9; ++b) {
                     box= "box" + c + "," + b + "of" + a;
                     document.getElementById(box).className = "noShow";
@@ -160,7 +161,7 @@
                     document.getElementById(box).className = "noDisplay";
                 }
             }
-            rubricCols = optionNum;
+            //rubricCols = optionNum;
         }
         @* unhides options based on number given *@ 
         function option(source, a) {
