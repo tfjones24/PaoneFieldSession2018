@@ -83,6 +83,8 @@
             <input type="hidden" type="text" name="nameBrick" id="nameBrick" value="">
             <input type="hidden" type="text" name="questionCount" id="questionCount" value="">
             <input type="hidden" type="text" name="json" id="json" value="">
+            <input type="hidden" type="text" name="rubricCols" id="rubricCols" value="">
+            <input type="hidden" type="text" name="rubricRows" id="rubricRows" value="">
         </div>
     </form>
 
@@ -230,6 +232,9 @@
             document.getElementById("json").value = JSON.stringify(map_to_obj(rubricData));
             document.getElementById("nameBrick").value = rubricName;
             document.getElementById("questionCount").value = questionNumber;
+            document.getElementById("rubricCols").value = rubricCols;
+            document.getElementById("rubricRows").value = rubricRows;
+
             document.jsonForm.submit();
         }
 

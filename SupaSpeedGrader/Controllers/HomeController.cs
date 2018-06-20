@@ -272,6 +272,9 @@ namespace SupaSpeedGrader.Controllers
 
             model.rubricParsed = 1; // Dammit Tanner, why does 1 mean no rubric?
 
+            model.rubicCols = (int)Convert.ToDouble(sqlHelper.getRubricColsByName(rubric));
+            model.rubicRows = (int)Convert.ToDouble(sqlHelper.getRubricRowsByName(rubric));
+
             model.rubricJSON = sqlHelper.getRubricJsonByName(rubric);
 
             if (model.rubricJSON != "")

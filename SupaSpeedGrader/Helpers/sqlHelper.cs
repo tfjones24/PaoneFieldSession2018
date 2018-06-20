@@ -665,7 +665,7 @@ namespace SupaSpeedGrader.Helpers
         /// <summary>
         /// Function to store a rubric name and JSON, provided an id
         /// </summary>
-        public static bool storeRubric(string id, string name, string json, string questionCount)
+        public static bool storeRubric(string id, string name, string json, string questionCount, string rubricCols, string rubricRows)
         {
             bool rval = true;
 
@@ -681,11 +681,11 @@ namespace SupaSpeedGrader.Helpers
 
                     if (string.IsNullOrEmpty(rubricJson))
                     {
-                        sql = string.Format("insert into rubrics (id, name, json) values ({2}, '{0}', '{1}')", name, json, id);
+                        sql = string.Format("insert into rubrics (id, name, json, rubricCols, rubricRows, questionCount) values ({2}, '{0}', '{1}', '{3}', '{4}', '{5}')", name, json, id, rubricCols, rubricRows, questionCount);
                     }
                     else
                     {
-                        sql = string.Format("update rubrics set json = '{0}', name = '{1}' where id = {2}", json, name, id);
+                        sql = string.Format("update rubrics set json = '{0}', name = '{1}', rubricCols = '{3}', rubricRows = '{4}', questionCount = '{5}' where id = {2}", json, name, id, rubricCols, rubricRows, questionCount);
                     }
                     cmd.CommandText = sql;
                     cmd.ExecuteNonQuery();
@@ -754,6 +754,98 @@ namespace SupaSpeedGrader.Helpers
 
             return rval;
         }
+
+        /// <summary>
+		/// Function to retrieve a stored rubric JSON, provided a name 
+        public static string getRubricColsByName(string name)
+        {
+            string rval = string.Empty;
+
+            string sql = "select rubricCols from rubrics where name = " + name;
+            using (SqlConnection dbcon = new SqlConnection(_camsConnectionString))
+            {
+                dbcon.Open();
+                using (SqlCommand cmd = new SqlCommand("dbo.getRubricJson", dbcon))
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = sql;
+
+                    DataSet ds = new DataSet();
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    adapter.Fill(ds);
+
+                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        rval = ds.Tables[0].Rows[0][0].ToString();
+                    }
+
+                }
+            }
+
+            return rval;
+        }
+
+        /// <summary>
+		/// Function to retrieve a stored rubric JSON, provided a name 
+        public static string getRubricRowsByName(string name)
+        {
+            string rval = string.Empty;
+
+            string sql = "select rubricRows from rubrics where name = " + name;
+            using (SqlConnection dbcon = new SqlConnection(_camsConnectionString))
+            {
+                dbcon.Open();
+                using (SqlCommand cmd = new SqlCommand("dbo.getRubricJson", dbcon))
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = sql;
+
+                    DataSet ds = new DataSet();
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    adapter.Fill(ds);
+
+                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        rval = ds.Tables[0].Rows[0][0].ToString();
+                    }
+
+                }
+            }
+
+            return rval;
+        }
+
+        /// <summary>
+		/// Function to retrieve a stored rubric JSON, provided a name 
+        public static string getRubricQCountByName(string name)
+        {
+            string rval = string.Empty;
+
+            string sql = "select questionCount from rubrics where name = " + name;
+            using (SqlConnection dbcon = new SqlConnection(_camsConnectionString))
+            {
+                dbcon.Open();
+                using (SqlCommand cmd = new SqlCommand("dbo.getRubricJson", dbcon))
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = sql;
+
+                    DataSet ds = new DataSet();
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    adapter.Fill(ds);
+
+                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        rval = ds.Tables[0].Rows[0][0].ToString();
+                    }
+
+                }
+            }
+
+            return rval;
+        }
+
+
 
         /// <summary>
 		/// Function to retrieve a stored rubric name, provided an id 
