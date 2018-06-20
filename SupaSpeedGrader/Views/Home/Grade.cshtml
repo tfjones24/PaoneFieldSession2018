@@ -635,6 +635,9 @@
 
             source.style = "width:100%; background-color:lightgreen; border:none"
 
+            document.getElementById("comment").value += (source.value.substr(0, (source.value.indexOf('+'))) + "\n");
+            document.getElementById("grade").value += parseInt(source.value.substr(source.value.indexOf('+') + 1));
+
         }
 
 
