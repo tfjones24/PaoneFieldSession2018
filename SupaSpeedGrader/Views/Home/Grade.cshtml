@@ -214,22 +214,25 @@
                 <p>@Model.rubicTitle</p><!--Model.rubicTitle=what the rubric has been named-->
                 @for (int i = 0; i < Model.rubicRows; ++i)
                 {
-                    string clap = "rubr" + i;   //used to set unique ids for the rubric buttons. i.e. rubr12
-                    <div style="display: flex">
-                        <div style="float:left;width: @Model.width%; background-color:grey; border:1px solid black" id="@clap" name="@clap">
-                            @Model.rubic[i][0]      <!--michelle has the rubric parsing in so the beginning of each row is colored gray as the description of how to grade that part-->
-                        </div>
-                        @for (int j = 1; j < (Model.rubicCols + 1); ++j)
-                        {
 
-
-
-                            <div style="float:left; width:@Model.width%;border:1px solid black">
-                                <input class="rubricButton" onclick=highlightRubic(this) onmouseover="hoverRubric(this)" onmouseout="exitRubric(this)" 
-                                       type="button" style="width:100%; background-color:white; border:none" value="@Model.rubic[i][j]" id='@clap' name="@clap"/>
-                            </div>
-                        }
+                <div style="display: flex">
+                    @{
+                        string clap = "rubr" + i; //used to set unique ids for the rubric buttons. i.e. rubr12
+                    }  
+                    <div style="float:left;width: @Model.width%; background-color:grey; border:1px solid black" id="@clap" name="@clap">
+                              <!--michelle has the rubric parsing in so the beginning of each row is colored gray as the description of how to grade that part-->
                     </div>
+                    @for (int j = 1; j < (Model.rubicCols + 1); ++j)
+                    {
+
+
+
+                        <div style="float:left; width:@Model.width%;border:1px solid black">
+                            <input class="rubricButton" onclick=highlightRubic(this) onmouseover="hoverRubric(this)" onmouseout="exitRubric(this)"
+                                   type="button" style="width:100%; background-color:white; border:none" value="" id='@clap' name="@clap" />
+                        </div>
+                    }
+                </div>
 
                 }
 
@@ -717,12 +720,13 @@
             for (var row = 0; row < @Model.rubicRows; row++) {
                 var line = document.querySelectorAll("#rubr" + row);
                 line[0].value = rubric[row][0][0];
+                line[0].innerHTML = rubric[row][0][0];
 
                 alert(line[0].value + "omg magic");
 
                 for (var col = 1; col < @Model.rubicCols+1; col++) {
-                    //line[col].value = (rubric[row][col][0] + " +" + rubric[row][col][1]);
-                    line[col].value = rubric[row][col][0];
+                    line[col].value = (rubric[row][col][1] + " +" + rubric[row][col][0]);
+                    //line[col].value = rubric[row][col][0];
                     alert("omg magic x2");
                 }
             }
