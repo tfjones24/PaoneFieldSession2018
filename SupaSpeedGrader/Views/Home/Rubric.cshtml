@@ -140,7 +140,7 @@
 
             //this code is cancer, to whoever maintains this in the future I'm so goddamn sorry
             rubricRows = source.value;
-            rubricCols = document.getElementById("opt" + a).value;
+
 
             for (var c = 0; c < criteria; c++) {
                 var box = "box" + c + "," + "0" + "of" + a;
@@ -160,7 +160,7 @@
                     document.getElementById(box).className = "noDisplay";
                 }
             }
-
+            rubricCols = optionNum;
         }
         @* unhides options based on number given *@ 
         function option(source, a) {
