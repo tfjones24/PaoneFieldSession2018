@@ -161,7 +161,7 @@
                         sel.options.length = 0;
 
                         for (var i = 0; i < obj.questionArray.length; i++) {
-                            sel.options[i] = new Option((i+1) + ": " + obj.questionArray[i].name, obj.questionArray[i].id, false, false);
+                            sel.options[i] = new Option((i+1) + ": " + obj.questionArray[i].name, obj.questionArray[i].id + "-"+ i, false, false);
                         }
 
                     },

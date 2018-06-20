@@ -266,9 +266,13 @@ namespace SupaSpeedGrader.Controllers
             model.questionName = sqlHelper.getQuestionName(quiz, oauth.custom_canvas_course_id, question); 
             model.questionID = question;
             string stuff = sqlHelper.getQuestionMaxScore(quiz, oauth.custom_canvas_course_id, question);
-            model.gradeOutOf = (int)Convert.ToDouble(sqlHelper.getQuestionMaxScore(quiz, oauth.custom_canvas_course_id, question)); 
+            model.gradeOutOf = (int)Convert.ToDouble(sqlHelper.getQuestionMaxScore(quiz, oauth.custom_canvas_course_id, question));
 
             // TODO: implement the rubric...somehow? NOT NOW 
+
+            // Remove everything after : including :
+            model.questionNumber = question.Substring(question.IndexOf("-") + 1);
+            question = question.Substring(0, question.IndexOf("-"));
 
             model.rubricParsed = 1; // Dammit Tanner, why does 1 mean no rubric?
 
