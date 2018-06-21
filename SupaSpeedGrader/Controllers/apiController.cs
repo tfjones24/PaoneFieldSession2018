@@ -285,8 +285,6 @@ namespace SupaSpeedGrader.Controllers
 
             //put score in canvas!
             RestSharp.RestResponse finalSubmitTest = await userCalls.putQuizQuestionScoreComment(oauth.accessToken.accessToken, "https://" + oauth.host, oauth.custom_canvas_course_id, quiz, submissionID, question, score, comment);
-
-            //TODO: return status of how shit went. Probably just this tbh
             return Json(new {Result = "GOO!"});
         }
 
