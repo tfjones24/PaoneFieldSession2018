@@ -332,12 +332,15 @@
 
         function hkReveal() {
             var searchBar = document.getElementById("buttonInputBar");                      //fucntion to reveal highlight search bar
+
             searchBar.style = "";
             highlight = 1;
             jumpto = 0;
             autograde = 0;                                                                      //working
             document.getElementById("searchBar").placeholder = "Word to highlight...";
             document.getElementById("searchBar").value = "";
+            document.getElementById("searchBar").type = "text";
+        }
         }
 
         function jtReveal() {
@@ -359,6 +362,8 @@
             autograde = 1;
             document.getElementById("searchBar").placeholder = 'Autograde value...';            //not working
             document.getElementById("searchBar").value = "";
+            document.getElementById("searchBar").type = "text";
+
         }
 
 
