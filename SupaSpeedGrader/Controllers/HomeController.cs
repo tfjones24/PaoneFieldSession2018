@@ -17,7 +17,10 @@ namespace SupaSpeedGrader.Controllers
 {
     public class HomeController : Controller
     {
+        // If you're not using the full workflow with a dev key, this should be set to true.
         public static bool devMode = true;
+
+        public const string acToken = "9802~Zvtl4cszHBTBQ9z6aAAQ0Mxn9DnyjdVwEukgemkZViqqwVX8jadCGKSFygMzvz0E"; // Use only if devMode = true
 
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
@@ -31,9 +34,11 @@ namespace SupaSpeedGrader.Controllers
 
         public async Task<ActionResult> Index(string state = null)
         {
+            // Beginning of the OAuth workflow
             oauthHelper oauth = new oauthHelper(Request);
             bool letsGo = false;
 
+            // Useful for development in a local Canvas Instance while hosted on local machine. 
             if (devMode || state == null)
             {
                 if (!oauth.verifySignature() && !devMode)
@@ -46,7 +51,7 @@ namespace SupaSpeedGrader.Controllers
 
                 if (oauth.verifySignature())
                 {
-                    oauth.accessToken = new userAccessToken("9802~Zvtl4cszHBTBQ9z6aAAQ0Mxn9DnyjdVwEukgemkZViqqwVX8jadCGKSFygMzvz0E", Convert.ToInt64(oauth.custom_canvas_user_id), 15000);
+                    oauth.accessToken = new userAccessToken(acToken, Convert.ToInt64(oauth.custom_canvas_user_id), 15000);
                     letsGo = true;
                 }
                 else if (state != null)
@@ -57,8 +62,7 @@ namespace SupaSpeedGrader.Controllers
                 }
                 else
                 {
-                    oauth.accessToken = new userAccessToken("9802~Zvtl4cszHBTBQ9z6aAAQ0Mxn9DnyjdVwEukgemkZViqqwVX8jadCGKSFygMzvz0E", 2033, 15000);
-                    //letsGo = true;
+                    oauth.accessToken = new userAccessToken(acToken, 2033, 15000);
                 }
 
                 if (devMode && state == null)
@@ -115,50 +119,50 @@ namespace SupaSpeedGrader.Controllers
                 string course_id = oauth.custom_canvas_course_id;
                 Uri testUri = oauth.Url;
 
-                //TODO: Get user key from storage
-                //TODO: Get all questions or something
+                // Get user key from storage
+                // Get all questions or something
                 JArray sectionsJSON = await userCalls.getSectionList(oauth.accessToken.accessToken, "https://" + oauth.host, course_id);
                 JArray quizListJSON = await userCalls.getListQuizzesInCourse(oauth.accessToken.accessToken, "https://" + oauth.host, course_id);
 
-                //TODO: Get quesiton data ready to go
+                // Get quesiton data ready to go
                 NavigationModel nav = new NavigationModel();
 
-                //Objects for section names and IDs to pass in
+                // Objects for section names and IDs to pass in
                 List<string> sections = new List<string>();
                 Dictionary<string, string> sectionIDs = new Dictionary<string, string>();
 
-                //Objects for quiz names and IDs to pass in
+                // Objects for quiz names and IDs to pass in
                 List<string> quizzes = new List<string>();
                 Dictionary<string, string> quizIDs = new Dictionary<string, string>();
 
-                //Get section data extracted
+                // Get section data extracted
                 JToken token = sectionsJSON.First;
                 List<JToken> tokens = new List<JToken>();
 
-                //Get all tokens from section data
+                // Get all tokens from section data
                 do
                 {
                     tokens.Add(token);
                     token = token.Next;
                 } while (token != null);
-                //Parse out name and ID for use later
+                // Parse out name and ID for use later
                 for (int i = 0; i < tokens.Count; i++)
                 {
                     sections.Add(tokens[i].Value<string>("name"));
                     sectionIDs.Add(tokens[i].Value<string>("name"), tokens[i].Value<string>("id"));
                 }
 
-                //Now do quiz data
+                // Now do quiz data
                 token = quizListJSON.First;
                 tokens = new List<JToken>();
 
-                //Get all tokens from quiz data
+                // Get all tokens from quiz data
                 while (token != null)
                 {
                     tokens.Add(token);
                     token = token.Next;
                 }
-                //Parse out name and ID for use later
+                // Parse out name and ID for use later
                 for (int i = 0; i < tokens.Count; i++)
                 {
                     if (tokens[i].Value<string>("published").ToLower() == "true")
@@ -169,10 +173,10 @@ namespace SupaSpeedGrader.Controllers
                     }
                 }
 
-                //TODO: Put rubric stuff in model
+                // Put rubric stuff in model
                 nav.rubic = sqlHelper.getAllRubricNames();
                 
-                //Put section and quiz info into nav model
+                // Put section and quiz info into nav model
                 nav.sections = sections;
                 nav.sectionID = sectionIDs;
 
@@ -185,7 +189,7 @@ namespace SupaSpeedGrader.Controllers
             }
 
             _logger.Error("Bad Index Login attempt! " + state);
-            //Oops, not canvas or someone trying to breach our shit. Give em good test data.
+            // Oops, not canvas or someone trying to breach our shit. Give em good test data.
             NavigationModel nav2 = new NavigationModel();
             nav2.addHardValue();
             nav2.state = state;
@@ -194,7 +198,7 @@ namespace SupaSpeedGrader.Controllers
             return View(nav2);
         }
 
-        //Returns the grading page with the selected question
+        // Returns the grading page with the selected question
         // quiz - quizID passed from previous page
         // section[] - array of all sections selected, can include "all" as section
         // question - questionID to grade
@@ -211,7 +215,7 @@ namespace SupaSpeedGrader.Controllers
             oauth.accessToken = sqlHelper.getUserAccessToken(long.Parse(oauth.custom_canvas_user_id));
             _logger.Error("State loaded: " + state);
 
-            // Refresh token time! just keeps shit updated
+            // Refresh token time! just keeps stuff updated
             if (oauth.accessToken != null)
             {
                 _logger.Error("Checking token validity for state: " + state);
@@ -273,9 +277,7 @@ namespace SupaSpeedGrader.Controllers
             string stuff = sqlHelper.getQuestionMaxScore(quiz, oauth.custom_canvas_course_id, question);
             model.gradeOutOf = (int)Convert.ToDouble(sqlHelper.getQuestionMaxScore(quiz, oauth.custom_canvas_course_id, question));
 
-            // TODO: implement the rubric...somehow? NOT NOW 
-
-
+            // Here's some rubric stuff
             model.rubricParsed = 1; // Dammit Tanner, why does 1 mean no rubric?
 
             if (!string.IsNullOrEmpty(rubric))
@@ -298,7 +300,7 @@ namespace SupaSpeedGrader.Controllers
             
             // Load some student data
 
-            //loop to add all student IDs as names along with creating entry with answer, grade, comment in namesGrades
+            // loop to add all student IDs as names along with creating entry with answer, grade, comment in namesGrades
             string[] students = sqlHelper.getStudentListSQL(quiz, oauth.custom_canvas_course_id, question);
 
             for (int x = 0; x < students.Length; x++)
@@ -311,38 +313,22 @@ namespace SupaSpeedGrader.Controllers
             }
 
             model.numStudent = model.names.Count; //TODO: fix it so this is NOT needed CODE CLEANUP
-            //TODO: make sure this is it...
 
-
+            // Return that model
             return View(model);
         }
 
-        //Let's see some help
+        // Let's see some help
         public ActionResult Help(string state)
         {
             return View(new helpModel(state));
         }
 
+        // Let's make a rubric
         public ActionResult Rubric(string state)
         {
             return View(new RubricModel(state));
 
-        }
-
-
-        public ActionResult FileUpload()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult Upload(HttpPostedFileBase myFile)
-        {
-            var fileName = Path.GetFileName(myFile.FileName);
-            myFile.SaveAs(Path.Combine(@"c:\projects", fileName));
-
-            HttpFileCollectionBase files = Request.Files;
-            return View("FileUpload");
         }
 
         // Following code copied in as a base, then modified for our own use

@@ -149,11 +149,7 @@
                    url: "/api/getQuestions",
                    data: postData,
                     success: function (data) {
-                        //alert(data.Result);
-                        //alert(data.Questions);
-
                         obj = JSON.parse(data.Questions);
-                        //alert(obj.questionArray.length);
 
                         /* Remove all options from the select list */
                         var sel = document.getElementById("questionDrop");

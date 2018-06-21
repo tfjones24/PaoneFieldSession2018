@@ -193,8 +193,6 @@
 
                 <button onclick="hkReveal()">Highlight Keyword</button>
                 <button onclick="jtReveal()">Jump to...</button>
-                @*<button onclick="afReveal()">Autograde and Filter</button>*@
-
 
             </div>
 
@@ -299,25 +297,12 @@
 
 
 
-    <!--just random text things we used for debugging. nothing should reference these by the end-->
-    <p id="action"></p>
-    <p id="action1"></p>
-    <p id="action2"></p>
-    <p id="action3"></p>
-
-
-
-
-
-
-
 
     <script>
         var questionSetCurrent = 0; //used to check if we can move up or down in the nav bar. represents the number of the set of questions displayed (0-10=0, 11-20=1, so on)
         var studentAt = 0;          //tracks the current student response that is being referenced. initializes the first response at studentAt=0
         var comments = [];          //Holds the comments for each student respones. Array position is equal to the studentAt number of each response
         var arrayOfStudents = @Html.Raw(Json.Encode(Model.names.ToArray()));
-        //var userNameToID = @Model.userNameToID;
 
         for (var x = 0; x < @Model.names.Count(); x++) {
             comments[x]="";                           //function used to populate comment array with empty comments for every response
@@ -524,7 +509,7 @@
 
 
 
-        function save() {                       //need ajax call to upload this to canvas**********
+        function save() {                     
             updateComments(document.getElementById("comment"));
 
 
@@ -581,7 +566,6 @@
 
 
             studentAt = parseInt(source.id.substr(8));  //update studentAt
-            //document.getElementById("action").innerHTML = "studentAt is set to " + studentAt;       //doublecheck we right
 
 
             //CLEAR RIGHT HAND SIDE
@@ -594,7 +578,7 @@
 
             //Correctly add in things on right side
             document.getElementById("grade").value = document.getElementById("grade"+studentAt).value;
-            document.getElementById("comment").value = comments[studentAt]; //TODO comment is returning as undefined still
+            document.getElementById("comment").value = comments[studentAt]; 
 
 
 
@@ -625,7 +609,6 @@
 
 
 
-           // document.getElementById("action").innerHTML = "You pressed save&next with " + (studentAt+1) + " out of @Model.names.Count()";    //only says 0, will update only to 0
             if (studentAt != (@Model.names.Count()-1)) {
 
 
@@ -675,8 +658,6 @@
 
 
         function highlightRubic(source) {               //function used to highlight rubric piece,
-                                                        //TODO: add grade value from rubric piece to grade boxes**********************************************************************
-
             var buttons = document.querySelectorAll('#' + source.id);
 
 
@@ -701,23 +682,19 @@
 
 
             //make ajax call to change page to question of this number(reference value of button)
-            document.getElementById("action").innerHTML = "Button pressed to move to question " + source.value;
+           
         }
 
 
 
         //not needed right now until implementing the parsing rubric check. currently not working. going to comment error message
         function rubricParseCheck() {
-            //rando code to auto select comment on page load
-           // var input = document.getElementById('comment');
-           // input.focus();
-           // input.select();
 
 
 
-           //alert("RUBRIC CHECK RUN with rubricParsed as " + @Model.rubricParsed);
+
             var source = document.getElementById("rubricWhole");
-           // document.getElementById("rubricParseWarning").style = "display:none";
+
 
             if (@Model.rubricParsed == 1) {
 
@@ -740,8 +717,7 @@
 
             var questionId = @Model.questionID;
             var quizId = @Model.quizID;
-            //   var userID = userNameToID[studentName];
-            //alert("Call sorta made!" + studentName + " " + comment + " " + score);
+
 
             var state = "@Model.state";
 
@@ -752,7 +728,6 @@
                 url: "/api/updateScore",
                 data: postData,
                 success: function (data) {
-                    //alert(data.Result);
                     document.getElementById("action").innerHTML = "Grade for " + studentName + " attempted push. Result: " + data.Result;
                 },
                 dataType: "json",
@@ -770,14 +745,9 @@
             var mapOfRubrics = (rubricMap);
 
             var realQNum = @Model.questionNumber;
-            //realQNum++;
-
-            //alert(rubricMap);
-            //alert(realQNum);
 
             var rubric = mapOfRubrics[realQNum];
 
-            //alert(rubric);
 
 
             
@@ -786,12 +756,9 @@
                 line[0].value = rubric[row][0][0];
                 line[0].innerHTML = rubric[row][0][0];
 
-                //alert(line[0].value + "omg magic");
 
                 for (var col = 1; col < @Model.rubicCols+1; col++) {
                     line[col].value = (rubric[row][col][1] + ". +" + rubric[row][col][0]);
-                    //line[col].value = rubric[row][col][0];
-                    //alert("omg magic x2");
                 }
             }
 
