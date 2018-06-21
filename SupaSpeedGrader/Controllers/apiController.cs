@@ -234,7 +234,8 @@ namespace SupaSpeedGrader.Controllers
             }
             else
             {
-                //TODO: No submissions....
+                //TODO: No submissions, need to handle this somehow
+
                 _logger.Error("We goo! Quiz: " + quiz);
 
                 return Json(new { Result = "SUCCESS", Questions = new { } });
@@ -285,6 +286,8 @@ namespace SupaSpeedGrader.Controllers
 
             //put score in canvas!
             RestSharp.RestResponse finalSubmitTest = await userCalls.putQuizQuestionScoreComment(oauth.accessToken.accessToken, "https://" + oauth.host, oauth.custom_canvas_course_id, quiz, submissionID, question, score, comment);
+            
+            //TODO: return status of how stuff went. Probably just this tbh, but more varied reports would be good
             return Json(new {Result = "GOO!"});
         }
 
