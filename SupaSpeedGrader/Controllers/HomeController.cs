@@ -496,8 +496,7 @@ namespace SupaSpeedGrader.Controllers
                 {
                     /***********************************************************/
                     //	If we're here Canvas should have returned an access token, 
-                    //  let's display in the browser for testing purposes
-                    //  again you never want to return this data to the client in production
+                    //  let's pass that off to the rest of the app!
                     /***********************************************************/
                     model.accessToken = oauth.accessToken.accessToken;
                     model.refreshToken = oauth.accessToken.refreshToken;
@@ -519,7 +518,7 @@ namespace SupaSpeedGrader.Controllers
                 model.message = "Uh-oh looks like Canvas responded with an error.";
             }
 
-            //TODO: store new token, pass off to rest of app
+
 
             return View("result", model);
         }
