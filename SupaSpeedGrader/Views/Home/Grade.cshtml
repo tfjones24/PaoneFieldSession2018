@@ -185,7 +185,7 @@
             <div id="buttonInputBar" style="display:none">
                 <input id="searchBar" type="text" name="search" onchange="tripleTrigger(this)">
                 <!--tripleTrigger is a function for the search bar that is revealed on button press to
-                    make the button functionality work-->
+            make the button functionality work-->
             </div>
 
             <div class="btn-group">
@@ -215,24 +215,24 @@
                 @for (int i = 0; i < Model.rubicRows; ++i)
                 {
 
-                <div style="display: flex">
-                    @{
-                        string clap = "rubr" + i; //used to set unique ids for the rubric buttons. i.e. rubr12
-                    }  
-                    <div style="float:left;width: @Model.width%; background-color:grey; border:1px solid black" id="@clap" name="@clap">
-                              <!--michelle has the rubric parsing in so the beginning of each row is colored gray as the description of how to grade that part-->
-                    </div>
-                    @for (int j = 1; j < (Model.rubicCols + 1); ++j)
-                    {
-
-
-
-                        <div style="float:left; width:@Model.width%;border:1px solid black">
-                            <input class="rubricButton" onclick=highlightRubic(this) onmouseover="hoverRubric(this)" onmouseout="exitRubric(this)"
-                                   type="button" style="width:100%; background-color:white; border:none" value="" id='@clap' name="@clap" />
+                    <div style="display: flex">
+                        @{
+                            string clap = "rubr" + i; //used to set unique ids for the rubric buttons. i.e. rubr12
+                        }
+                        <div style="float:left;width: @Model.width%; background-color:grey; border:1px solid black" id="@clap" name="@clap">
+                            <!--michelle has the rubric parsing in so the beginning of each row is colored gray as the description of how to grade that part-->
                         </div>
-                    }
-                </div>
+                        @for (int j = 1; j < (Model.rubicCols + 1); ++j)
+                        {
+
+
+
+                            <div style="float:left; width:@Model.width%;border:1px solid black">
+                                <input class="rubricButton" onclick=highlightRubic(this) onmouseover="hoverRubric(this)" onmouseout="exitRubric(this)"
+                                       type="button" style="width:100%; background-color:white; border:none" value="" id='@clap' name="@clap" />
+                            </div>
+                        }
+                    </div>
 
                 }
 
@@ -242,19 +242,7 @@
 
 
 
-            <!--- button row--->
-            <div style="display: flex">
-                <div style="float:left; width:33%;">
-                    <form><input type="button" style="width:100%; background-color:#D3D3D3" value=" Revert" onclick="revert()" /></form><!--just the button for revert-->
-                </div>
-                <div style="float:left; width:33%;">
-                    <form><input type="button" style="width:100%; background-color:#D3D3D3" value="Save" onclick=save() /></form><!--button for save-->
-                </div>
-                <div style="float:left; width:33%;">
-                    <form><input type="button" style="width:100%; background-color:#D3D3D3" value="Save&Next" onclick=saveNext() /></form><!--button for save and next-->
-                </div>
-            </div>
-            <p></p>
+
 
 
 
@@ -262,8 +250,9 @@
             <!--- Comment Box--->
             <div>
                 <form>
-                    <textarea style="height:100px; width:100%; border:1px solid black; border-radius:5px" onchange="updateComments(this)" id="comment" value=""> </textarea>
                     <input type="reset" value="Clear">  <!--clear button with no need for a function. heckin yeah thanks stackoverflow-->
+                    <textarea style="height:100px; width:100%; border:1px solid black; border-radius:5px" onchange="updateComments(this)" id="comment" value=""> </textarea>
+
                 </form>
             </div>
             <!--clear box-->
@@ -280,8 +269,34 @@
                 <p>Grade : <input type="number" style="height:20px; width:100px; border:1px solid black;overflow:visible " id="grade" value="@Model.namesGrades[Model.names[Model.studentAt]][1]" onchange="myGrade()" /> /@Model.gradeOutOf </p>
             </div>
             <p id="graded"></p>
-        </div>
-    </div>
+
+            
+        
+        
+        
+        
+        
+        <!--- button row--->
+            <div style="display: flex">
+                <div style="float:left; width:33%;">
+                    <form><input type="button" style="width:100%; background-color:#D3D3D3" value=" Revert" onclick="revert()" /></form><!--just the button for revert-->
+                </div>
+                <div style="float:left; width:33%;">
+                    <form><input type="button" style="width:100%; background-color:#D3D3D3" value="Save" onclick=save() /></form><!--button for save-->
+                </div>
+                <div style="float:left; width:33%;">
+                    <form><input type="button" style="width:100%; background-color:#D3D3D3" value="Save&Next" onclick=saveNext() /></form><!--button for save and next-->
+                </div>
+            </div>
+            <p></p>
+
+
+
+        </div> <!--right column div-->
+    
+    </div>  <!--whole thing div-->
+
+
 
 
     <!--just random text things we used for debugging. nothing should reference these by the end-->
@@ -314,6 +329,20 @@
         var highlight = 0;
         var jumpto = 0;
         var autograde = 0;
+
+
+
+        //function for making enter key in grade input on right trigger save and next
+        var gradeRight = document.getElementById("grade");
+        gradeRight.addEventListener("keyup", function (event) {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                saveNext();
+            }
+
+        });
+
+
 
 
         function hkReveal() {
@@ -568,6 +597,12 @@
             document.getElementById("comment").value = comments[studentAt]; //TODO comment is returning as undefined still
 
 
+
+            //highlight and select comment
+            var input = document.getElementById('comment');
+            input.focus();
+            input.select();
+
         }
 
 
@@ -575,6 +610,12 @@
 
 
         function saveNext() {               //used for save and next button for next question highlighting
+
+
+
+
+
+
 
             //ajax save old state
             var studentScore = document.getElementById("grade" + studentAt).value;
@@ -620,6 +661,15 @@
 
             document.getElementById("grade").value = document.getElementById(grade).value;
             document.getElementById("comment").value = comments[studentAt]; //this works now
+
+
+
+            //highlight and select comment
+            var input = document.getElementById('comment');
+            input.focus();
+            input.select();
+
+
         }
 
 
@@ -660,6 +710,12 @@
 
         //not needed right now until implementing the parsing rubric check. currently not working. going to comment error message
         function rubricParseCheck() {
+            //rando code to auto select comment on page load
+            var input = document.getElementById('comment');
+            input.focus();
+            input.select();
+
+
 
            //alert("RUBRIC CHECK RUN with rubricParsed as " + @Model.rubricParsed);
             var source = document.getElementById("rubricWhole");
@@ -680,6 +736,10 @@
 
 
         function ajaxSave(studentName, comment, score) {
+            
+
+
+
             var questionId = @Model.questionID;
             var quizId = @Model.quizID;
             //   var userID = userNameToID[studentName];
