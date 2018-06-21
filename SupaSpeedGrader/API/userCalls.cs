@@ -18,39 +18,10 @@ namespace SupaSpeedGrader.API
     public class userCalls
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
-        /// <summary>
-		/// Implementation of Get User profile data
-		/// </summary>
-		/// <param name="accessToken"></param>
-		/// <param name="baseUrl"></param>
-		/// <param name="canvasUserId"></param>
-		/// <returns>returns a dynamic json object, will throw exception</returns>
-		public static async Task<dynamic> getUserData(string accessToken, string baseUrl, string canvasUserId)
-        {
-            dynamic rval = null;
-            string urlCommand = "api/v1/users/:id";
-
-            urlCommand = urlCommand.Replace(":id", canvasUserId);
-
-
-            using (HttpResponseMessage response = await clsHttpMethods.httpGET(baseUrl, urlCommand, accessToken))
-            {
-                string result = await response.Content.ReadAsStringAsync();
-                if (response.IsSuccessStatusCode)
-                {
-                    rval = JsonConvert.DeserializeObject(result);
-                }
-                else
-                {
-                    throw new Exception(result);
-                }
-            }
-
-            return rval;
-        }
+        
         /**
          * Gets a list of all the quizes in the given course, to be used for quiz selection.  
-         * TODO we need to taransfer the quiz ID that is selected into the next function to get that specific quiz
+         * 
         */
         public static async Task<dynamic> getListQuizzesInCourse(string accessToken, string baseUrl, string canvasCourseId)
         {
@@ -58,55 +29,6 @@ namespace SupaSpeedGrader.API
             string urlCommand = "/api/v1/courses/:course_id/quizzes?per_page=100";
 
             urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
-
-            using (HttpResponseMessage response = await clsHttpMethods.httpGET(baseUrl, urlCommand, accessToken))
-            {
-                string result = await response.Content.ReadAsStringAsync();
-                if (response.IsSuccessStatusCode)
-                {
-                    rval = JsonConvert.DeserializeObject(result);
-                }
-                else
-                {
-                    throw new Exception(result);
-                }
-            }
-
-            return rval;
-
-        }
-
-        public static async Task<dynamic> getListQuizzesAssignmentsInCourse(string accessToken, string baseUrl, string canvasCourseId)
-        {
-            dynamic rval = null;
-            string urlCommand = "/api/v1/courses/:course_id/assignments?per_page=100";
-
-            urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
-
-            using (HttpResponseMessage response = await clsHttpMethods.httpGET(baseUrl, urlCommand, accessToken))
-            {
-                string result = await response.Content.ReadAsStringAsync();
-                if (response.IsSuccessStatusCode)
-                {
-                    rval = JsonConvert.DeserializeObject(result);
-                }
-                else
-                {
-                    throw new Exception(result);
-                }
-            }
-
-            return rval;
-
-        }
-
-        public static async Task<dynamic> getQuizzesAssignmentsSubmissions(string accessToken, string baseUrl, string canvasCourseId, string assignmentId)
-        {
-            dynamic rval = null;
-            string urlCommand = "/api/v1/courses/:course_id/assignments/:assignment_id/submissions?include[]=submission_comments&per_page=500";
-
-            urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
-            urlCommand = urlCommand.Replace(":assignment_id", assignmentId);
 
             using (HttpResponseMessage response = await clsHttpMethods.httpGET(baseUrl, urlCommand, accessToken))
             {
@@ -179,63 +101,7 @@ namespace SupaSpeedGrader.API
 
         }
 
-        /*
-        //I don't think this needs to exist actually TODO
-        public static async Task<dynamic> deleteOldQuizReport(string accessToken, string baseUrl, string canvasCourseId, string quizId)
-        {
-            dynamic rval = null;
-            JObject rval2 = await getQuizReports(accessToken, "https://" + baseUrl, canvasCourseId, quizId);
-            string reportId = rval2.First.Value<string>("id");
-
-            string urlCommand = "/api/v1/courses/:course_id/quizzes/:quiz_id/reports/:id";
-
-            urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
-            urlCommand = urlCommand.Replace(":quiz_id", quizId);
-            urlCommand = urlCommand.Replace(":id", reportId);
-
-            using (HttpResponseMessage response = await clsHttpMethods.httpPOST(baseUrl, urlCommand, accessToken, null))
-            {
-                string result = await response.Content.ReadAsStringAsync();
-                if (response.IsSuccessStatusCode)
-                {
-                    rval = JsonConvert.DeserializeObject(result);
-                }
-                else
-                {
-                    throw new Exception(result);
-                }
-            }
-
-            return rval;
-
-        }
         
-        public static async Task<dynamic> getQuizReports(string accessToken, string baseUrl, string canvasCourseId, string quizId)
-        {
-            dynamic rval = null;
-            string urlCommand = "/api/v1/courses/:course_id/quizzes/:quiz_id/reports";
-
-            urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
-            urlCommand = urlCommand.Replace(":quiz_id", quizId);
-            
-
-            using (HttpResponseMessage response = await clsHttpMethods.httpGET(baseUrl, urlCommand, accessToken))
-            {
-                string result = await response.Content.ReadAsStringAsync();
-                if (response.IsSuccessStatusCode)
-                {
-                    rval = JsonConvert.DeserializeObject(result);
-                }
-                else
-                {
-                    throw new Exception(result);
-                }
-            }
-
-            return rval;
-
-        }
-        */
         /**
          * Gets a single quiz object, given the courseID and QuizID
          * 
@@ -264,37 +130,8 @@ namespace SupaSpeedGrader.API
             return rval;
 
         }
-        /**
-         * Gets a single quiz question given the CourseID, QuizID, and QuestionID
-         * 
-        */ 
-        /*
-        public static async Task<dynamic> getQuizQuestion(string accessToken, string baseUrl, string canvasCourseId, string canvasQuizId, string canvasQuizQuestionId)
-        {
-            dynamic rval = null;
-            string urlCommand = "/api/v1/courses/:course_id/quizzes/:quiz_id/questions/:id";
 
-            urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
-            urlCommand = urlCommand.Replace(":quiz_id", canvasQuizId);
-            urlCommand = urlCommand.Replace(":id", canvasQuizQuestionId);
 
-            using (HttpResponseMessage response = await clsHttpMethods.httpGET(baseUrl, urlCommand, accessToken))
-            {
-                string result = await response.Content.ReadAsStringAsync();
-                if (response.IsSuccessStatusCode)
-                {
-                    rval = JsonConvert.DeserializeObject(result);
-                }
-                else
-                {
-                    throw new Exception(result);
-                }
-            }
-
-            return rval;
-
-        }
-        */
         public static async Task<dynamic> getQuizSubmissions(string accessToken, string baseUrl, string canvasCourseId, string canvasQuizId)
         {
             dynamic rval = null;
@@ -304,9 +141,6 @@ namespace SupaSpeedGrader.API
             urlCommand = urlCommand.Replace(":quiz_id", canvasQuizId);
             Dictionary<string, string> vars = new Dictionary<string, string>();
             vars.Add("include[]", "submission");
-            //vars.Add("include[]", "quiz");
-            //vars.Add("include[]", "user");
-            //urlCommand = clsHttpMethods.concatenateHttpVars(urlCommand, vars);
 
             using (HttpResponseMessage response = await clsHttpMethods.httpGET(baseUrl, urlCommand, accessToken))
             {
@@ -324,36 +158,6 @@ namespace SupaSpeedGrader.API
             return rval;
 
         }
-
-        /**
-         * Quiz submission IDs and student ids need to be tied somehow.  
-         * This function should get the answers for a specific quiz submission, which should be tied to the student.  It will also contain the correct answers depending on the question type
-        */
-        /*
-        public static async Task<dynamic> getQuizSubmissionQuestions(string accessToken, string baseUrl, string canvasQuizSubmissionId)
-        {
-            dynamic rval = null;
-            string urlCommand = "/api/v1/quiz_submissions/:quiz_submission_id/questions?per_page=150";
-
-            urlCommand = urlCommand.Replace(":quiz_submission_id", canvasQuizSubmissionId);
-
-            using (HttpResponseMessage response = await clsHttpMethods.httpGET(baseUrl, urlCommand, accessToken))
-            {
-                string result = await response.Content.ReadAsStringAsync();
-                if (response.IsSuccessStatusCode)
-                {
-                    rval = JsonConvert.DeserializeObject(result);
-                }
-                else
-                {
-                    throw new Exception(result);
-                }
-            }
-
-            return rval;
-
-        }
-        */
 
         /**
          * Gets list of all sections in the current class
@@ -377,14 +181,8 @@ namespace SupaSpeedGrader.API
                     throw new Exception(result);
                 }
             }
-
             return rval;
-
         }
-        
-
-
-
 
         //FUNCTION FOR POSTING QUESTION COMMENTS AND GRADES
         //NOTE: THIS WILL ONLY WORK FOR SINGLE SUBMISSION/ATTEMPT QUIZZES
@@ -392,10 +190,7 @@ namespace SupaSpeedGrader.API
 #pragma warning disable IDE1006 // Naming Styles
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public static async Task<dynamic> putQuizQuestionScoreComment(string accessToken, string baseUrl, string courseID, string quizID, string submissionID, string questionID, string questionScore, string questionComment)
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
-#pragma warning restore IDE1006 // Naming Styles
         {
-            //IF this fails, check https://community.canvaslms.com/thread/6062 for some massively important JSON context information, especially regarding required parameters
             string urlCommand = "/api/v1/courses/:course_id/quizzes/:quiz_id/submissions/:id";
             string jsonData = "{\"quiz_submissions\":[{\"attempt\": 1,\"questions\": {\"" + questionID + "\": {\"score\": " + questionScore + ",\"comment\": " + JsonConvert.ToString(questionComment) + "}}}]}";
 
@@ -412,7 +207,8 @@ namespace SupaSpeedGrader.API
 
             return response;
         }
-
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+#pragma warning restore IDE1006 // Naming Styles
         
 
         /* OAuth Functions */
@@ -488,10 +284,7 @@ namespace SupaSpeedGrader.API
                 _logger.Error(err, "Request for user token failed");
                 rval = false;
             }
-
             return rval;
         }
-
-
     }
 }

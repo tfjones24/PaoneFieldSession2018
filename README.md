@@ -1,2 +1,2 @@
 # PaoneFieldSession2018
-Our field session project to extend the functionality of Canvas quiz grading
+Quick Quiz Grader: a much better Canvas grading system extension that uses the Blackboard grading system setup. ACTUALLY PULLS STUDENT RESPONSES
