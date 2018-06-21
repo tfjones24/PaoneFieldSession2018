@@ -41,7 +41,7 @@ namespace SupaSpeedGrader.Models
         public int rubicRows;   //number of rows of the rubric
         public int rubicCols;   //number of columns of the rubric
         public int width;       //a variable used for setting the width of some element. not sure what michelle did here
-        public List<List<string>> rubic = new List<List<string>>(); //the actual 2d list to store the rubric things.        TODO:need to rework to fit with michelle's page
+        public List<List<string>> rubic = new List<List<string>>(); //the actual 2d list to store the rubric things.        
 
         public string rubicTitle = "Rubric";        //title of rubric, needs to be updated to set name
         public int studentAt;                   //basically useless but we have it. don't change this?

@@ -412,7 +412,7 @@ namespace SupaSpeedGrader.Controllers
                         model.refreshToken = oauth.accessToken.refreshToken;
                         model.tokenLife = oauth.accessToken.tokenLife.ToString();
 
-                        //TODO: redirect since token is GOOD!
+                        //Redirect since token is GOOD!
                         string redirectUrl = string.Format("https://canvas.packamoon.com/Home/Index?state={0}", stateId.ToString());
                         Response.Redirect(redirectUrl, true);
                     }
