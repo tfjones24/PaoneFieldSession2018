@@ -307,10 +307,11 @@ namespace SupaSpeedGrader.Controllers
             {
                 string[] studentshit = sqlHelper.getStudentSubmissionSQL(quiz, oauth.custom_canvas_course_id, question, students[x]);
 
-                model.names.Add(students[x]); //TODO: real name?
+                model.names.Add(students[x]); //TODO: If using the student's real name is a desired feature, that needs to be done here
                 model.namesGrades.Add(students[x], studentshit);
-                model.userNameToID.Add(students[x], students[x]); //TODO:real name?
+                model.userNameToID.Add(students[x], students[x]); //TODO:If using the student's real name is a desired feature, that needs to be done here
             }
+            //TODO: for the TODO statements above, make sure that implementing real names into the app complies to FERPA regulations and guidelines befoer adding
 
             model.numStudent = model.names.Count; //TODO: fix it so this is NOT needed CODE CLEANUP
 
