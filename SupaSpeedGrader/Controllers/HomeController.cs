@@ -189,7 +189,7 @@ namespace SupaSpeedGrader.Controllers
             }
 
             _logger.Error("Bad Index Login attempt! " + state);
-            // Oops, not canvas or someone trying to breach our shit. Give em good test data.
+            
             NavigationModel nav2 = new NavigationModel();
             nav2.addHardValue();
             nav2.state = state;
