@@ -18,7 +18,7 @@ namespace SupaSpeedGrader.Controllers
     public class HomeController : Controller
     {
         // If you're not using the full workflow with a dev key, this should be set to true.
-        public static bool devMode = true;
+        public static bool devMode = false;
 
         public const string acToken = "9802~Zvtl4cszHBTBQ9z6aAAQ0Mxn9DnyjdVwEukgemkZViqqwVX8jadCGKSFygMzvz0E"; // Use only if devMode = true
 
