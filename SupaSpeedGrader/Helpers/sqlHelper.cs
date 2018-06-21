@@ -443,10 +443,8 @@ namespace SupaSpeedGrader.Helpers
             string sql = string.Empty;
             string[] studentSub = getStudentSubmissionSQL(quizID, courseID, questionID, students[0]);
 
-            //TODO: convert students to studentJSON or something
+            // convert students to studentJSON or something
             string studentsJSON = Newtonsoft.Json.JsonConvert.SerializeObject(students);
-
-            //string[] test = Newtonsoft.Json.JsonConvert.DeserializeObject<string[]>(studentsJSON);
 
             using (SqlConnection dbcon = new SqlConnection(_camsConnectionString))
             {

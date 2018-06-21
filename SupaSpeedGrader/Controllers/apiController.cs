@@ -139,9 +139,6 @@ namespace SupaSpeedGrader.Controllers
                 }
             }
 
-            //JToken maybechilds = rval4.First.First[0];
-            //JToken maybemore = rval4.First.First[1];
-
             //Parse CSV into SQL database
             //SQL flow pseudocode:
             /*  drop table of quizid_courseid
@@ -231,7 +228,7 @@ namespace SupaSpeedGrader.Controllers
 
 
 
-                //TODO: Return a list of questions in order w/ names and ids
+                // Return a list of questions in order w/ names and ids
                 return Json(new { Result = "SUCCESS", Questions = toReturn });
                 //return Content(toReturn, "application/json");
             }
@@ -240,7 +237,6 @@ namespace SupaSpeedGrader.Controllers
                 //TODO: No submissions....
                 _logger.Error("We goo! Quiz: " + quiz);
 
-                //TODO: Return a list of questions in order w/ names and ids
                 return Json(new { Result = "SUCCESS", Questions = new { } });
             }
 
@@ -280,7 +276,6 @@ namespace SupaSpeedGrader.Controllers
 
             }
 
-            //TODO: upload grade BY TEST
 
             //get submission ID (SQL)
             string submissionID = sqlHelper.getSubmissionID(quiz, oauth.custom_canvas_course_id, question, student);
