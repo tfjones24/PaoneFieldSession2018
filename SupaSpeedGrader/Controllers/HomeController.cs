@@ -481,7 +481,6 @@ namespace SupaSpeedGrader.Controllers
                 // https://canvas.instructure.com/doc/api/file.oauth.html#oauth2-flow-3
                 // this is the [code] parameter called for in Step 3 of the document 
                 model.oauth2Code = code;
-//
                 // this is the [state] identifier that we created in the launch request and sent to Canvas in the redirect to get use authorization
                 // we will use this value below to retrieve those launch parameters
                 model.oauth2State = state;
@@ -538,105 +537,5 @@ namespace SupaSpeedGrader.Controllers
 
             return View("result", model);
         }
-
-
-
-        // OH GOD WILLS authentication token: REMOVED EYYY
-        // Just a good reference for post-token creation work, inclduign sample API call
-        public async Task<ActionResult> willName()
-        {
-            oauthHelper oauth = new oauthHelper(Request);
-            
-            //	Make sure the LTI signature is valid
-            /***********************************************************/
-            if (oauth.verifySignature())
-            {
-                string user_id = Request.Form.Get("custom_canvas_user_id");
-                string course_id = Request.Form.Get("custom_canvas_course_id");
-
-                Uri testUri = Request.Url;
-                //Changed these API keys to Mark's
-                JObject rval = await userCalls.getUserData("9802~K2vUBhafkYpSjiA53Cn0dzdTbQxc9mw5QMauku6eUFxhWXSqcoUfIeaBeqjfxSOy", "https://" + Request.UrlReferrer.Host, user_id);
-
-                //RestSharp.RestResponse ifThisWorks = await userCalls.tempTestForPut();
-                
-
-
-                JArray rval2 = await userCalls.getListQuizzesInCourse("9802~K2vUBhafkYpSjiA53Cn0dzdTbQxc9mw5QMauku6eUFxhWXSqcoUfIeaBeqjfxSOy", "https://" + Request.UrlReferrer.Host, course_id);
-                string quizId = rval2.First.Next.Next.Value<string>("id");
-
-                JArray rvalQuestions = await userCalls.getListQuestionsInQuiz(oauth.accessToken.accessToken, "https://" + oauth.host, oauth.custom_canvas_course_id, quizId);
-
-                JObject rvalQuizReportMake = await userCalls.createQuizReport("9802~K2vUBhafkYpSjiA53Cn0dzdTbQxc9mw5QMauku6eUFxhWXSqcoUfIeaBeqjfxSOy", "https://" + Request.UrlReferrer.Host, course_id, quizId);
-
-
-                string quizName = rvalQuestions.First.Value<string>("question_name");
-                if (quizName == "Question")
-                {
-                    quizName = "";
-                }
-
-                
-                
-                string reportLink = rvalQuizReportMake.Last.Previous.First.Value<string>("url");
-                //rvalQuizReportLink = await userCalls.getQuizReportLink(("9802~K2vUBhafkYpSjiA53Cn0dzdTbQxc9mw5QMauku6eUFxhWXSqcoUfIeaBeqjfxSOy", "https://" + Request.UrlReferrer.Host, course_id, quizId, reportLink);
-
-                //This is the file directory/name for the quiz report .csv file
-                string localFileName = "D:\\putShitHere\\"+ quizId + "_data.csv";
-                //string remoteFileUrl = rvalQuizReportMake
-
-                //This downloads the generated report file for parsing
-                WebClient webClient = new WebClient();
-                webClient.DownloadFile(reportLink, localFileName);
-
-                //JObject rvalSub = await userCalls.getQuizSubmissions("9802~K2vUBhafkYpSjiA53Cn0dzdTbQxc9mw5QMauku6eUFxhWXSqcoUfIeaBeqjfxSOy", "https://" + Request.UrlReferrer.Host, course_id, quizId);
-
-                //JArray rval3 = await userCalls.getListQuestionsInQuiz("9802~XGk8BJGRorTVCHIH4fY3bSgqLQabhXoVi7DkY1aO36kBCA0pupuuhS1hVWiWboko", "https://" + Request.UrlReferrer.Host, course_id, quizId);
-                //The quiz submission id needed for getQuizSubmissionQuestions (which gives the 
-                JObject rval4 = await userCalls.getQuizSubmissions("9802~K2vUBhafkYpSjiA53Cn0dzdTbQxc9mw5QMauku6eUFxhWXSqcoUfIeaBeqjfxSOy", "https://" + Request.UrlReferrer.Host, course_id, quizId);
-
-                string submissionId = rval4.First.First.First.Value<string>("id");
-                //For the following function execution "36113" is the question id, "100" is the question score and the last param is the comment for the question
-                RestSharp.RestResponse finalSubmitTest = await userCalls.putQuizQuestionScoreComment("9802~K2vUBhafkYpSjiA53Cn0dzdTbQxc9mw5QMauku6eUFxhWXSqcoUfIeaBeqjfxSOy", "https://" + Request.UrlReferrer.Host, course_id, quizId, submissionId, "36113", "100", "Just for funziez");
-
-                JArray getListQuizzesAssignmentsInCourse = await userCalls.getListQuizzesAssignmentsInCourse("9802~K2vUBhafkYpSjiA53Cn0dzdTbQxc9mw5QMauku6eUFxhWXSqcoUfIeaBeqjfxSOy", "https://" + Request.UrlReferrer.Host, course_id);
-                string quizAssignmentId = getListQuizzesAssignmentsInCourse.Last.Value<string>("id");
-                JArray rvalQuizSubmissionThroughAssignments = await userCalls.getQuizzesAssignmentsSubmissions("9802~K2vUBhafkYpSjiA53Cn0dzdTbQxc9mw5QMauku6eUFxhWXSqcoUfIeaBeqjfxSOy", "https://" + Request.UrlReferrer.Host, course_id, quizAssignmentId);
-
-                //This will parse the given .csv file into an array of size (Rows x Cols)
-                //Reminder: each row (other than the first) corresponds to a student's quiz submission, following the format for collumns of 
-                //var parser = new Microsoft.VisualBasic.FileIO.TextFieldParser(localFileName);
-                //parser.TextFieldType = Microsoft.VisualBasic.FileIO.FieldType.Delimited;
-                //parser.SetDelimiters(new string[] { "," });
-                //List<string[]> dataToParse = new List<string[]>();
-                //while (!parser.EndOfData)
-                //{
-                //    string[] row = parser.ReadFields();
-                //    /* do something */
-                //    _logger.Error("Here's a row: " + row.ToString());
-                //    dataToParse.Add(row);
-                //}
-
-
-                willNameModel model = new willNameModel();
-                //string submissionId = rval4.First.First.First.Value<string>("id");
-
-                //string questionId = rval3.First.Value<string>("id");
-                //Console.WriteLine("submission ID is " + submissionId);
-                //JObject rval5 = await userCalls.getQuizSubmissionQuestions("9802~K2vUBhafkYpSjiA53Cn0dzdTbQxc9mw5QMauku6eUFxhWXSqcoUfIeaBeqjfxSOy", "https://" + Request.UrlReferrer.Host, submissionId);
-
-                JArray rval6 = await userCalls.getListQuestionsInQuiz("9802~K2vUBhafkYpSjiA53Cn0dzdTbQxc9mw5QMauku6eUFxhWXSqcoUfIeaBeqjfxSOy", "https://" + Request.UrlReferrer.Host, course_id, quizId);
-
-                
-
-
-                model.name = "SUCCESS!  Data.csv has been downloaded to the D: drive at location " + localFileName;
-                model.id = jsonHelpers.GetJObjectValue(rval, "name");
-                return View(model);
-            }
-            return View(new willNameModel());
-        }
-
-        
     }
 }
