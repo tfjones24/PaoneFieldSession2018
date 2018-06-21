@@ -281,11 +281,13 @@ namespace SupaSpeedGrader.Controllers
                 model.rubicCols = (int)Convert.ToDouble(sqlHelper.getRubricColsByName(rubric));
                 model.rubicRows = (int)Convert.ToDouble(sqlHelper.getRubricRowsByName(rubric));
 
-                model.rubricJSON = sqlHelper.getRubricJsonByName(rubric);
+                model.rubricJSON = HttpUtility.HtmlDecode(sqlHelper.getRubricJsonByName(rubric));
 
                 if (model.rubricJSON != "")
                 {
                     model.rubricParsed = 0;
+
+                    model.buildRubric();
                 }
             }
 

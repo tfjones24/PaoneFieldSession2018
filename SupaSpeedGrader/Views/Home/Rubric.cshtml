@@ -97,7 +97,7 @@
         @* these variables stores all the data, the numbers with rubrics are stored in rubric Num and all of the data is stored in the rubric map
             *@
         var rubricNums = [];
-        var rubricData = new Map();
+        var rubricData = [];
         var rubricName;
         var questionNumber;
         var first = 0;
@@ -140,7 +140,7 @@
 
             //this code is cancer, to whoever maintains this in the future I'm so goddamn sorry
             rubricRows = source.value;
-            rubricCols = a;
+
 
             for (var c = 0; c < criteria; c++) {
                 var box = "box" + c + "," + "0" + "of" + a;
@@ -149,6 +149,7 @@
                 document.getElementById(box).style.border = "1px solid black";
                 @*\this helps with the formatting of the lines wihtout this section it formats incorrectly*@
                 optionNum++;
+                //rubricCols++;
                 for (var b = optionNum; b < 9; ++b) {
                     box= "box" + c + "," + b + "of" + a;
                     document.getElementById(box).className = "noShow";
@@ -160,13 +161,16 @@
                     document.getElementById(box).className = "noDisplay";
                 }
             }
-
+            //rubricCols = optionNum;
         }
         @* unhides options based on number given *@ 
         function option(source, a) {
             var criteria = "crit" + a;
             var criteriaNum = document.getElementById(criteria).value;
             var option = source.value;
+
+            rubricCols = source.value;
+
             option++;
             for (var c = 0; c < criteriaNum; c++) {
                 for (var b = 1; b < option; b++) {
@@ -224,12 +228,12 @@
                     }                 
                     rubricTable.push(row);
                 }
-                rubricData.set(rubricNums[i], rubricTable);
+                rubricData.push(rubricTable);
             }
 
 
 
-            document.getElementById("json").value = JSON.stringify(map_to_obj(rubricData));
+            document.getElementById("json").value = JSON.stringify(rubricData);
             document.getElementById("nameBrick").value = rubricName;
             document.getElementById("questionCount").value = questionNumber;
             document.getElementById("rubricCols").value = rubricCols;
@@ -238,10 +242,5 @@
             document.jsonForm.submit();
         }
 
-        const map_to_obj = (aMap => {
-            const obj = {};
-            aMap.forEach((v, k) => { obj[k] = v });
-            return obj;
-        });
     </script>
 </body>

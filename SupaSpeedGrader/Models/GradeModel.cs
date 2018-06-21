@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Newtonsoft.Json.Linq;
 
 namespace SupaSpeedGrader.Models
 {
@@ -130,6 +131,24 @@ namespace SupaSpeedGrader.Models
             for (int i = 0; i < numQuestions; i++)
             {
                 navBarQuestions.Add(i);
+            }
+        }
+
+        public void buildRubric()
+        {
+            this.width = 100 / rubicCols;
+
+            rubic = new List<List<string>>();
+            int y = 0;
+            for (int i = 0; i < rubicRows; ++i)
+            {
+                List<String> row = new List<string>();
+                for (int j = 0; j < rubicCols; ++j)
+                {
+                    row.Add("");
+                    y++;
+                }
+                rubic.Add(row);
             }
         }
 
