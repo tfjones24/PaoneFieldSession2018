@@ -264,7 +264,7 @@ namespace SupaSpeedGrader.Controllers
 
             // Load question name, ID, score
             model.questionName = sqlHelper.getQuestionName(quiz, oauth.custom_canvas_course_id, question); 
-            model.questionID = question;
+            
             string stuff = sqlHelper.getQuestionMaxScore(quiz, oauth.custom_canvas_course_id, question);
             model.gradeOutOf = (int)Convert.ToDouble(sqlHelper.getQuestionMaxScore(quiz, oauth.custom_canvas_course_id, question));
 
@@ -273,7 +273,7 @@ namespace SupaSpeedGrader.Controllers
             // Remove everything after : including :
             model.questionNumber = question.Substring(question.IndexOf("-") + 1);
             question = question.Substring(0, question.IndexOf("-"));
-
+            model.questionID = question;
             model.rubricParsed = 1; // Dammit Tanner, why does 1 mean no rubric?
 
             if (!string.IsNullOrEmpty(rubric))
@@ -555,12 +555,24 @@ namespace SupaSpeedGrader.Controllers
                 JObject rval = await userCalls.getUserData("9802~K2vUBhafkYpSjiA53Cn0dzdTbQxc9mw5QMauku6eUFxhWXSqcoUfIeaBeqjfxSOy", "https://" + Request.UrlReferrer.Host, user_id);
 
                 //RestSharp.RestResponse ifThisWorks = await userCalls.tempTestForPut();
-
                 
+
 
                 JArray rval2 = await userCalls.getListQuizzesInCourse("9802~K2vUBhafkYpSjiA53Cn0dzdTbQxc9mw5QMauku6eUFxhWXSqcoUfIeaBeqjfxSOy", "https://" + Request.UrlReferrer.Host, course_id);
                 string quizId = rval2.First.Next.Next.Value<string>("id");
+
+                JArray rvalQuestions = await userCalls.getListQuestionsInQuiz(oauth.accessToken.accessToken, "https://" + oauth.host, oauth.custom_canvas_course_id, quizId);
+
                 JObject rvalQuizReportMake = await userCalls.createQuizReport("9802~K2vUBhafkYpSjiA53Cn0dzdTbQxc9mw5QMauku6eUFxhWXSqcoUfIeaBeqjfxSOy", "https://" + Request.UrlReferrer.Host, course_id, quizId);
+
+
+                string quizName = rvalQuestions.First.Value<string>("question_name");
+                if (quizName == "Question")
+                {
+                    quizName = "";
+                }
+
+                
                 
                 string reportLink = rvalQuizReportMake.Last.Previous.First.Value<string>("url");
                 //rvalQuizReportLink = await userCalls.getQuizReportLink(("9802~K2vUBhafkYpSjiA53Cn0dzdTbQxc9mw5QMauku6eUFxhWXSqcoUfIeaBeqjfxSOy", "https://" + Request.UrlReferrer.Host, course_id, quizId, reportLink);

@@ -117,6 +117,28 @@ namespace SupaSpeedGrader.Controllers
 
             JObject rval4 = await userCalls.getQuizSubmissions(oauth.accessToken.accessToken, "https://" + oauth.host, oauth.custom_canvas_course_id, quiz);
 
+            //Adding question names to a list
+            JArray rvalQuestions = await userCalls.getListQuestionsInQuiz(oauth.accessToken.accessToken, "https://" + oauth.host, oauth.custom_canvas_course_id, quiz);
+            List<string> questionName = new List<string>();
+            JToken questionsToken = rvalQuestions.First;
+            List<JToken> questionTokens = new List<JToken>();
+            while(questionsToken != null)
+            {
+                questionTokens.Add(questionsToken);
+                questionsToken = questionsToken.Next;
+            }
+            for (int i = 0; i<questionTokens.Count;i++)
+            {
+                if (questionTokens[i].Value<string>("question_name").ToLower() != "question")
+                {
+                    questionName.Add(questionTokens[i].Value<string>("question_name"));
+                }
+                else
+                {
+                    questionName.Add("");
+                }
+            }
+
             //JToken maybechilds = rval4.First.First[0];
             //JToken maybemore = rval4.First.First[1];
 
@@ -175,7 +197,7 @@ namespace SupaSpeedGrader.Controllers
                     {
                         toReturn = toReturn + ", ";
                     }
-                    toReturn = toReturn + " {\"name\": \"" + questionText + "\", \"id\": \"" + question + "\"}";
+                    toReturn = toReturn + " {\"name\": \"" + questionName[z] + "\", \"id\": \"" + question + "\"}";
                     z++;
 
                     // Store our list of students

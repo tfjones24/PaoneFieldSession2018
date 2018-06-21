@@ -55,7 +55,7 @@ namespace SupaSpeedGrader.API
         public static async Task<dynamic> getListQuizzesInCourse(string accessToken, string baseUrl, string canvasCourseId)
         {
             dynamic rval = null;
-            string urlCommand = "/api/v1/courses/:course_id/quizzes?per_page=150";
+            string urlCommand = "/api/v1/courses/:course_id/quizzes?per_page=100";
 
             urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
 
@@ -79,7 +79,7 @@ namespace SupaSpeedGrader.API
         public static async Task<dynamic> getListQuizzesAssignmentsInCourse(string accessToken, string baseUrl, string canvasCourseId)
         {
             dynamic rval = null;
-            string urlCommand = "/api/v1/courses/:course_id/assignments?per_page=150";
+            string urlCommand = "/api/v1/courses/:course_id/assignments?per_page=100";
 
             urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
 
@@ -103,7 +103,7 @@ namespace SupaSpeedGrader.API
         public static async Task<dynamic> getQuizzesAssignmentsSubmissions(string accessToken, string baseUrl, string canvasCourseId, string assignmentId)
         {
             dynamic rval = null;
-            string urlCommand = "/api/v1/courses/:course_id/assignments/:assignment_id/submissions?include[]=submission_comments&per_page=150";
+            string urlCommand = "/api/v1/courses/:course_id/assignments/:assignment_id/submissions?include[]=submission_comments&per_page=500";
 
             urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
             urlCommand = urlCommand.Replace(":assignment_id", assignmentId);
@@ -298,7 +298,7 @@ namespace SupaSpeedGrader.API
         public static async Task<dynamic> getQuizSubmissions(string accessToken, string baseUrl, string canvasCourseId, string canvasQuizId)
         {
             dynamic rval = null;
-            string urlCommand = "/api/v1/courses/:course_id/quizzes/:quiz_id/submissions?per_page=150";
+            string urlCommand = "/api/v1/courses/:course_id/quizzes/:quiz_id/submissions?per_page=500";
 
             urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
             urlCommand = urlCommand.Replace(":quiz_id", canvasQuizId);
@@ -361,7 +361,7 @@ namespace SupaSpeedGrader.API
         public static async Task<dynamic> getSectionList(string accessToken, string baseUrl, string canvasCourseId)
         {
             dynamic rval = null;
-            string urlCommand = "/api/v1/courses/:course_id/sections";
+            string urlCommand = "/api/v1/courses/:course_id/sections?per_page=100";
 
             urlCommand = urlCommand.Replace(":course_id", canvasCourseId);
 
