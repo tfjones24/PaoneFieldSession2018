@@ -262,6 +262,11 @@ namespace SupaSpeedGrader.Controllers
 
             model.state = state;
 
+            // Remove everything after : including :
+            model.questionNumber = question.Substring(question.IndexOf("-") + 1);
+            question = question.Substring(0, question.IndexOf("-"));
+            model.questionID = question;
+
             // Load question name, ID, score
             model.questionName = sqlHelper.getQuestionName(quiz, oauth.custom_canvas_course_id, question); 
             
@@ -270,10 +275,7 @@ namespace SupaSpeedGrader.Controllers
 
             // TODO: implement the rubric...somehow? NOT NOW 
 
-            // Remove everything after : including :
-            model.questionNumber = question.Substring(question.IndexOf("-") + 1);
-            question = question.Substring(0, question.IndexOf("-"));
-            model.questionID = question;
+
             model.rubricParsed = 1; // Dammit Tanner, why does 1 mean no rubric?
 
             if (!string.IsNullOrEmpty(rubric))
